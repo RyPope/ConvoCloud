@@ -1,15 +1,20 @@
 package ryan.pope.textcloud.application;
 
 import ryan.pope.textcloud.R;
-import ryan.pope.textcloud.R.layout;
+import ryan.pope.textcloud.business.ListenerManager;
+import ryan.pope.textcloud.objects.Contact;
+import ryan.pope.textcloud.persistance.ContactDataAccess;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
 public class MainActivity extends Activity 
 {
-
+	private static ListenerManager _listenerManager;
+	private ContactDataAccess _contactDataAccess;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -26,6 +31,20 @@ public class MainActivity extends Activity
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
 		setContentView(R.layout.activity_main);
+		
+		/* Create all click listeners */
+		_listenerManager = new ListenerManager();
+		_listenerManager.setup(this);
+		
+		_contactDataAccess = new ContactDataAccess();
+		
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
+	{
+		_contactDataAccess.fetchContact(this, requestCode, resultCode, data);
+
 	}
 
 }
