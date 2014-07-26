@@ -65,8 +65,8 @@ public class ContactFetchThread implements Runnable
 					
 					if(number != null)
 					{
-	
-						if(number.contains(contactNumber) && !threadFound)
+						
+						if(number.equalsIgnoreCase(contactNumber) && !threadFound)
 						{
 							if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Correct thread found with ID: " + thread_id);
 							
@@ -75,9 +75,12 @@ public class ContactFetchThread implements Runnable
 						}
 					}
 				}
-	
-				/* Get all messages from that thread */
-				String selection = "thread_id = " + threadID;
+			}
+			
+			/* Get all messages from that thread */
+			if(!threadID.equals(""))
+			{
+				String selection = "thread_id=" + threadID;
 				Cursor findThreadCursor = _mainActivity.getContentResolver().query(Uri.parse("content://sms/"), projection, selection, null, null);
 				if(findThreadCursor != null && findThreadCursor.moveToFirst())
 				{
@@ -90,7 +93,7 @@ public class ContactFetchThread implements Runnable
 						
 						if(number != null)
 						{
-
+							if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Message: " + sms);
 							//parse message
 	
 						}
@@ -107,10 +110,16 @@ public class ContactFetchThread implements Runnable
 
 	private Contact fetchContact() 
 	{
-		Uri contactURI = _data.getData();
-		Contact contactToFetch = null;
 		
-		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _data.getDataString());
+		Contact contactToFetch = null;
+		Uri contactURI = null;
+		
+		if(_data != null)
+		{
+			contactURI = _data.getData();
+			
+			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _data.getDataString());
+		}
 
 		if (contactURI != null) 
 		{

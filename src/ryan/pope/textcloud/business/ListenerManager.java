@@ -1,8 +1,8 @@
 package ryan.pope.textcloud.business;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -34,7 +34,7 @@ public class ListenerManager
 			@Override
 			public void onClick(View v) 
 			{
-				Intent intent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+				Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
 				intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
 				_mainActivity.startActivityForResult(intent, 1);
 			}

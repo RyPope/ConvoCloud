@@ -13,9 +13,14 @@ public class Contact
 	public Contact(String id, String number, int type, String name)
 	{
 		_id = id;
-		_phoneNumber = number;
+		_phoneNumber = stripNumber(number);
 		_numberType = type;
 		_name = name;
+	}
+
+	private String stripNumber(String number) 
+	{
+		return number.replaceAll("[^0-9]", "");
 	}
 
 	public String getPhoneNumber() 
