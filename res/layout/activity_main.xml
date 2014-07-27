@@ -16,7 +16,7 @@
             android:text="Button" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/create_text_cloud_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".5"

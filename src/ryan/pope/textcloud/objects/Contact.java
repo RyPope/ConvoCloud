@@ -1,9 +1,12 @@
 package ryan.pope.textcloud.objects;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import ryan.pope.textcloud.business.WordFrequency;
 
 public class Contact 
 {
@@ -36,7 +39,7 @@ public class Contact
 	{
 		/* Parse each word and count them */
 		String parsedSMS = sms.replaceAll("[^A-Za-z0-9 ]+", "");
-		String[] splitSMS = parsedSMS.toUpperCase().split("\\s+");
+		String[] splitSMS = parsedSMS.toUpperCase(Locale.getDefault()).split("\\s+");
 		for(String s : splitSMS)
 		{
 			if(_allMessages.get(s) == null)
@@ -55,5 +58,16 @@ public class Contact
 		}
 		
 		return allMessages;
+	}
+
+	public List<WordFrequency> getWordFrequencies() 
+	{
+		ArrayList<WordFrequency> _wordFreqList = new ArrayList<WordFrequency>();
+		for (Map.Entry<String, Integer> entry : _allMessages.entrySet())
+		{
+			_wordFreqList.add(new WordFrequency(entry.getKey(), entry.getValue()));
+		}
+		
+		return _wordFreqList;
 	}
 }

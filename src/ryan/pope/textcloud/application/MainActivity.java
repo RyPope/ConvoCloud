@@ -1,7 +1,10 @@
 package ryan.pope.textcloud.application;
 
+import java.util.List;
+
 import ryan.pope.textcloud.R;
 import ryan.pope.textcloud.business.ListenerManager;
+import ryan.pope.textcloud.business.WordFrequency;
 import ryan.pope.textcloud.objects.Contact;
 import ryan.pope.textcloud.persistance.ContactDataAccess;
 import android.app.Activity;
@@ -14,6 +17,8 @@ public class MainActivity extends Activity
 {
 	private static ListenerManager _listenerManager;
 	private ContactDataAccess _contactDataAccess;
+	
+	private Contact selectedContact;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -38,6 +43,8 @@ public class MainActivity extends Activity
 		
 		_contactDataAccess = new ContactDataAccess();
 		
+		selectedContact = null;
+		
 	}
 	
 	@Override
@@ -45,6 +52,16 @@ public class MainActivity extends Activity
 	{
 		_contactDataAccess.fetchContact(this, requestCode, resultCode, data);
 
+	}
+
+	public void setContact(Contact contactToFetch)
+	{
+		selectedContact = contactToFetch;
+	}
+	
+	public List<WordFrequency> getWordFrequencies() 
+	{
+		return selectedContact.getWordFrequencies();
 	}
 
 }

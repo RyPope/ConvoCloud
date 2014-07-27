@@ -12,15 +12,11 @@ import ryan.pope.textcloud.objects.Contact;
 public class ContactFetchThread implements Runnable 
 {
 	private MainActivity _mainActivity;
-	private int _requestCode;
-	private int _resultCode;
 	private Intent _data;
 	
 	public ContactFetchThread(MainActivity mainActivity, int requestCode, int resultCode, Intent data) 
 	{
 		_mainActivity = mainActivity;
-		_requestCode = requestCode;
-		_resultCode = resultCode;
 		_data = data;
 	}
 
@@ -33,6 +29,8 @@ public class ContactFetchThread implements Runnable
 		{
 			fetchContactMessages(contactToFetch);
 		}
+		
+		_mainActivity.setContact(contactToFetch);
 
 	}
 
