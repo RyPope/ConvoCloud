@@ -94,10 +94,12 @@ public class ContactFetchThread implements Runnable
 						if(number != null)
 						{
 							if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Message: " + sms);
-							//parse message
+							contactToFetch.addMessage(sms);
 	
 						}
 					}
+					
+					if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, contactToFetch.getMessages());
 	
 				}
 				else
