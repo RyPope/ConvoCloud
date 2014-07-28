@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import ryan.pope.textcloud.business.WordFrequency;
+import ryan.pope.textcloud.application.Globals;
+import ryan.pope.textcloud.cloud.objects.WordFrequency;
 
 public class Contact 
 {
@@ -42,10 +43,13 @@ public class Contact
 		String[] splitSMS = parsedSMS.toUpperCase(Locale.getDefault()).split("\\s+");
 		for(String s : splitSMS)
 		{
-			if(_allMessages.get(s) == null)
-				_allMessages.put(s, 1);
-			else
-				_allMessages.put(s, _allMessages.get(s) + 1);
+			if(s.length() >= Globals.MIN_MESSAGE_SIZE)
+			{
+				if(_allMessages.get(s) == null)
+					_allMessages.put(s, 1);
+				else
+					_allMessages.put(s, _allMessages.get(s) + 1);
+			}
 		}
 	}
 	

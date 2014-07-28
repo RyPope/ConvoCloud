@@ -4,7 +4,7 @@ import java.util.List;
 
 import ryan.pope.textcloud.R;
 import ryan.pope.textcloud.business.ListenerManager;
-import ryan.pope.textcloud.business.WordFrequency;
+import ryan.pope.textcloud.cloud.objects.WordFrequency;
 import ryan.pope.textcloud.objects.Contact;
 import ryan.pope.textcloud.persistance.ContactDataAccess;
 import android.app.Activity;

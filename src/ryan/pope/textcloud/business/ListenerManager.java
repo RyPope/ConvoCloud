@@ -14,9 +14,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import ryan.pope.textcloud.R;
 import ryan.pope.textcloud.application.MainActivity;
-import ryan.pope.textcloud.business.bg.RectangleBackground;
-import ryan.pope.textcloud.business.font.scale.LinearFontScalar;
-import ryan.pope.textcloud.business.palette.ColorPalette;
+import ryan.pope.textcloud.cloud.background.RectangleBackground;
+import ryan.pope.textcloud.cloud.font.scale.LinearFontScalar;
+import ryan.pope.textcloud.cloud.objects.CollisionMode;
+import ryan.pope.textcloud.cloud.objects.WordCloud;
+import ryan.pope.textcloud.cloud.objects.WordFrequency;
+import ryan.pope.textcloud.cloud.palette.ColorPalette;
 
 public class ListenerManager 
 {
@@ -46,11 +49,11 @@ public class ListenerManager
 			{
 				final List<WordFrequency> wordFrequencies = _mainActivity.getWordFrequencies();
 
-				final WordCloud wordCloud = new WordCloud(600, 600, CollisionMode.RECTANGLE);
+				final WordCloud wordCloud = new WordCloud(600, 600, CollisionMode.PIXEL_PERFECT);
 				wordCloud.setPadding(0);
 				wordCloud.setBackground(new RectangleBackground(600, 600));
 				wordCloud.setColorPalette(new ColorPalette(Color.RED, Color.BLACK));
-				wordCloud.setFontScalar(new LinearFontScalar(10, 40));
+				wordCloud.setFontScalar(new LinearFontScalar(10, 100));
 				wordCloud.build(wordFrequencies);
 				
 				File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
