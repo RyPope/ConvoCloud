@@ -1,7 +1,7 @@
 package ryan.pope.textcloud.business;
 
 import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -47,11 +48,15 @@ public class ListenerManager
 			@Override
 			public void onClick(View v) 
 			{
-				final List<WordFrequency> wordFrequencies = _mainActivity.getWordFrequencies();
+				Display display = _mainActivity.getWindowManager().getDefaultDisplay(); 
+				int width = display.getWidth();
+				int height = display.getHeight();
+				
+				ArrayList<WordFrequency> wordFrequencies = _mainActivity.getWordFrequencies();
 
-				final WordCloud wordCloud = new WordCloud(600, 600, CollisionMode.PIXEL_PERFECT);
+				WordCloud wordCloud = new WordCloud(width, height, CollisionMode.PIXEL_PERFECT);
 				wordCloud.setPadding(0);
-				wordCloud.setBackground(new RectangleBackground(600, 600));
+				wordCloud.setBackground(new RectangleBackground(width, height));
 				wordCloud.setColorPalette(new ColorPalette(Color.RED, Color.BLACK));
 				wordCloud.setFontScalar(new LinearFontScalar(10, 100));
 				wordCloud.build(wordFrequencies);

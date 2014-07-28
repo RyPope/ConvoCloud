@@ -3,30 +3,31 @@ package ryan.pope.textcloud.cloud.background;
 import ryan.pope.textcloud.cloud.collide.Collidable;
 import ryan.pope.textcloud.cloud.collide.Vector2d;
 
-/**
- * Created by kenny on 6/30/14.
- */
-public class CircleBackground implements Background {
+public class CircleBackground implements Background 
+{
 
-    private final int radius;
+    private final int _radius;
 
-    public CircleBackground(int radius) {
-        this.radius = radius;
+    public CircleBackground(int radius)
+    {
+        _radius = radius;
     }
 
     @Override
-    public boolean isInBounds(Collidable collidable) {
-        final Vector2d position = collidable.getPosition();
+    public boolean inBounds(Collidable collidable) 
+    {
+        Vector2d position = collidable.getPosition();
         return inCircle(position.getX(), position.getY()) &&
                 inCircle(position.getX() + collidable.getWidth(), position.getY()) &&
                 inCircle(position.getX(), position.getY() + collidable.getHeight()) &&
                 inCircle(position.getX() + collidable.getWidth(), position.getY() + collidable.getHeight());
     }
 
-    private boolean inCircle(int x, int y) {
-        x -= radius ;
-        y -= radius;
-        return  x * x + y * y <= radius * radius;
+    private boolean inCircle(int x, int y) 
+    {
+        x -= _radius ;
+        y -= _radius;
+        return  x * x + y * y <= _radius * _radius;
     }
 
 }

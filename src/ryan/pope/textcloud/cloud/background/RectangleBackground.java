@@ -3,27 +3,27 @@ package ryan.pope.textcloud.cloud.background;
 import ryan.pope.textcloud.cloud.collide.Collidable;
 import ryan.pope.textcloud.cloud.collide.Vector2d;
 
-/**
- * Created by kenny on 6/30/14.
- */
-public class RectangleBackground implements Background {
+public class RectangleBackground implements Background 
+{
 
-    private final int width;
+    private int _width;
 
-    private final int height;
+    private int _height;
 
-    public RectangleBackground(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public RectangleBackground(int width, int height) 
+    {
+        _width = width;
+        _height = height;
     }
 
     @Override
-    public boolean isInBounds(Collidable collidable) {
-        final Vector2d position = collidable.getPosition();
+    public boolean inBounds(Collidable collidable) 
+    {
+        Vector2d position = collidable.getPosition();
         return position.getX() >= 0 &&
-                position.getX() + collidable.getWidth() < width &&
+                position.getX() + collidable.getWidth() < _width &&
                 position.getY() >= 0 &&
-                position.getY() + collidable.getHeight() < height;
+                position.getY() + collidable.getHeight() < _height;
     }
 
 }

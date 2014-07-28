@@ -3,50 +3,59 @@ package ryan.pope.textcloud.cloud.collide;
 import ryan.pope.textcloud.cloud.collide.checkers.RectanglePixelCollisionChecker;
 import ryan.pope.textcloud.cloud.collide.image.CollisionRaster;
 
-public class RectanglePixelCollidable implements Collidable {
+public class RectanglePixelCollidable implements Collidable 
+{
 
-    private static final RectanglePixelCollisionChecker RECTANGLE_PIXEL_COLLISION_CHECKER = new RectanglePixelCollisionChecker();
+    private static RectanglePixelCollisionChecker RECTANGLE_PIXEL_COLLISION_CHECKER = new RectanglePixelCollisionChecker();
 
-    private final Vector2d position;
+    private Vector2d _position;
 
-    private final CollisionRaster collisionRaster;
+    private CollisionRaster _collisionRaster;
 
-    public RectanglePixelCollidable(CollisionRaster collisionRaster, int x, int y) {
-        this.collisionRaster = collisionRaster;
-        this.position = new Vector2d(x, y);
+    public RectanglePixelCollidable(CollisionRaster collisionRaster, int x, int y) 
+    {
+        _collisionRaster = collisionRaster;
+        _position = new Vector2d(x, y);
     }
 
-    public int getX() {
-        return position.getX();
+    public int getX() 
+    {
+        return _position.getX();
     }
 
-    public int getY() {
-        return position.getY();
+    public int getY() 
+    {
+        return _position.getY();
     }
 
     @Override
-    public boolean collide(Collidable collidable) {
+    public boolean collide(Collidable collidable) 
+    {
         return RECTANGLE_PIXEL_COLLISION_CHECKER.collide(this, collidable);
     }
 
     @Override
-    public Vector2d getPosition() {
-        return position;
+    public Vector2d getPosition() 
+    {
+        return _position;
     }
 
     @Override
-    public int getWidth() {
-        return collisionRaster.getWidth();
+    public int getWidth() 
+    {
+        return _collisionRaster.getWidth();
     }
 
     @Override
-    public int getHeight() {
-        return collisionRaster.getHeight();
+    public int getHeight() 
+    {
+        return _collisionRaster.getHeight();
     }
 
     @Override
-    public CollisionRaster getCollisionRaster() {
-        return collisionRaster;
+    public CollisionRaster getCollisionRaster() 
+    {
+        return _collisionRaster;
     }
 
 }

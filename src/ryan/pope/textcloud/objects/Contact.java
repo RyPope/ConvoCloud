@@ -2,7 +2,6 @@ package ryan.pope.textcloud.objects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -64,7 +63,7 @@ public class Contact
 		return allMessages;
 	}
 
-	public List<WordFrequency> getWordFrequencies() 
+	public ArrayList<WordFrequency> getWordFrequencies() 
 	{
 		ArrayList<WordFrequency> _wordFreqList = new ArrayList<WordFrequency>();
 		for (Map.Entry<String, Integer> entry : _allMessages.entrySet())

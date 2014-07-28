@@ -1,7 +1,6 @@
 package ryan.pope.textcloud.application;
 
-import java.util.List;
-
+import java.util.ArrayList;
 import ryan.pope.textcloud.R;
 import ryan.pope.textcloud.business.ListenerManager;
 import ryan.pope.textcloud.cloud.objects.WordFrequency;
@@ -59,7 +58,7 @@ public class MainActivity extends Activity
 		selectedContact = contactToFetch;
 	}
 	
-	public List<WordFrequency> getWordFrequencies() 
+	public ArrayList<WordFrequency> getWordFrequencies() 
 	{
 		return selectedContact.getWordFrequencies();
 	}

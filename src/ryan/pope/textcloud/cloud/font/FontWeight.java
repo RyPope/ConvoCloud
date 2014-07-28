@@ -8,14 +8,16 @@ public enum FontWeight
     BOLD(Typeface.BOLD),
     ITALIC(Typeface.ITALIC);
 
-    private final int weight;
+    private int _weight;
 
-    FontWeight(int weight) {
-        this.weight = weight;
+    FontWeight(int weight) 
+    {
+        _weight = weight;
     }
 
-    public int getWeight() {
-        return weight;
+    public int getWeight() 
+    {
+        return _weight;
     }
 
 }

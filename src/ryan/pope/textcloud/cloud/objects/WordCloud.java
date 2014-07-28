@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -33,74 +32,61 @@ import ryan.pope.textcloud.cloud.padding.RectanglePadder;
 import ryan.pope.textcloud.cloud.padding.WordPixelPadder;
 import ryan.pope.textcloud.cloud.palette.ColorPalette;
 
-public class WordCloud {
+public class WordCloud 
+{
     protected static final Random RANDOM = new Random();
+    protected int _width;
+    protected int _height;
+    protected CollisionMode _collisionMode;
+    protected CollisionChecker _collisionChecker;
+    protected Padder _padder;
+    protected int _padding = 0;
+    protected Background _background;
+    protected RectanglePixelCollidable _backgroundCollidable;
+    protected int _backgroundColor = Color.WHITE;
+    protected FontScalar _fontScalar = new LinearFontScalar(10, 40);
+    protected CloudFont _cloudFont = new CloudFont("Comic Sans MS", FontWeight.BOLD);
+    protected AngleGenerator _angleGenerator = new AngleGenerator();
+    protected CollisionRaster _collisionRaster;
+    protected Bitmap _imageBitmap;
+    protected Set<Word> _placedWords = new HashSet<Word>();
+    protected Set<Word> _skippedWords = new HashSet<Word>();
+    protected ColorPalette _colorPalette = new ColorPalette(Color.RED, Color.BLACK, Color.YELLOW, Color.GRAY, Color.GREEN);
 
-    protected final int width;
-
-    protected final int height;
-
-    protected final CollisionMode collisionMode;
-
-    protected final CollisionChecker collisionChecker;
-
-    protected final Padder padder;
-
-    protected int padding = 0;
-
-    protected Background background;
-
-    protected final RectanglePixelCollidable backgroundCollidable;
-
-    protected int backgroundColor = Color.WHITE;
-
-    protected FontScalar fontScalar = new LinearFontScalar(10, 40);
-
-    protected CloudFont cloudFont = new CloudFont("Comic Sans MS", FontWeight.BOLD);
-
-    protected AngleGenerator angleGenerator = new AngleGenerator();
-
-    protected final CollisionRaster collisionRaster;
-
-    protected final Bitmap bufferedImage;
-
-    protected final Set<Word> placedWords = new HashSet<Word>();
-
-    protected final Set<Word> skipped = new HashSet<Word>();
-
-    protected ColorPalette colorPalette = new ColorPalette(Color.RED, Color.WHITE, Color.YELLOW, Color.GRAY, Color.GREEN);
-
-    public WordCloud(int width, int height, CollisionMode collisionMode) {
-        this.width = width;
-        this.height = height;
-        this.collisionMode = collisionMode;
-        switch(collisionMode) {
+    public WordCloud(int width, int height, CollisionMode collisionMode) 
+    {
+        _width = width;
+        _height = height;
+        _collisionMode = collisionMode;
+        switch(collisionMode) 
+        {
             case PIXEL_PERFECT:
-                this.padder = new WordPixelPadder();
-                this.collisionChecker = new RectanglePixelCollisionChecker();
+                _padder = new WordPixelPadder();
+                _collisionChecker = new RectanglePixelCollisionChecker();
                 break;
 
             case RECTANGLE:
             default:
-                this.padder = new RectanglePadder();
-                this.collisionChecker = new RectangleCollisionChecker();
+                _padder = new RectanglePadder();
+                _collisionChecker = new RectangleCollisionChecker();
                 break;
         }
-        this.collisionRaster = new CollisionRaster(width, height);
-        this.bufferedImage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        this.backgroundCollidable = new RectanglePixelCollidable(collisionRaster, 0, 0);
-        this.background = new RectangleBackground(width, height);
+        _collisionRaster = new CollisionRaster(width, height);
+        _imageBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        _backgroundCollidable = new RectanglePixelCollidable(_collisionRaster, 0, 0);
+        _background = new RectangleBackground(width, height);
     }
 
-    public void build(List<WordFrequency> wordFrequencies) {
+    public void build(ArrayList<WordFrequency> wordFrequencies) 
+    {
         Collections.sort(wordFrequencies);
-        drawForgroundToBackground();
+        drawForegroundToBackground();
         int i = 1;
-        for(final Word word : buildwords(wordFrequencies, this.colorPalette)) 
+        for(Word word : buildwords(wordFrequencies, _colorPalette)) 
         {
         	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
-            final int startX = RANDOM.nextInt(Math.max(width - word.getWidth(), width));
-            final int startY = RANDOM.nextInt(Math.max(height - word.getHeight(), height));
+            int startX = RANDOM.nextInt(Math.max(_width - word.getWidth(), _width));
+            int startY = RANDOM.nextInt(Math.max(_height - word.getHeight(), _height));
             place(word, startX, startY);
             i++;
         }
@@ -113,70 +99,76 @@ public class WordCloud {
         try 
         {
                out = new FileOutputStream(outputFileName);
-               bufferedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
-        } catch (Exception e) 
+               _imageBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+        } 
+        catch (Exception e) 
         {
             e.printStackTrace();
-        } finally 
+        } 
+        finally 
         {
                try
                {
                    out.close();
                } 
-               catch(Throwable ignore) 
+               catch(Exception e) 
                {
             	   
                }
         }
     }
 
-    protected void drawForgroundToBackground() 
+    protected void drawForegroundToBackground() 
     {
-        final Bitmap backgroundBufferedImage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        final Canvas graphics = new Canvas(backgroundBufferedImage);
+        Bitmap backgroundBufferedImage = Bitmap.createBitmap(_width, _height, Bitmap.Config.ARGB_8888);
+        Canvas graphics = new Canvas(backgroundBufferedImage);
 
-        // draw current color
         Paint fillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        fillPaint.setColor(backgroundColor);
-        graphics.drawRect(0, 0, width, height, fillPaint);
+        fillPaint.setColor(_backgroundColor);
+        graphics.drawRect(0, 0, _width, _height, fillPaint);
 
-        // draw back to original
-        final Canvas graphics2 = new Canvas(bufferedImage);
+        Canvas graphics2 = new Canvas(_imageBitmap);
         graphics2.drawBitmap(backgroundBufferedImage, 0, 0, null);
     }
 
-    /**
-     * try to place in center, build out in a spiral trying to place words for N steps
-     * @param word
-     */
-    protected void place(final Word word, final int startX, final int startY) {
-        final Canvas graphics = new Canvas(this.bufferedImage);
+    protected void place(final Word word, final int startX, final int startY) 
+    {
+        Canvas graphics = new Canvas(_imageBitmap);
 
-        final int maxRadius = width;
+        int maxRadius = _width;
 
-        for(int r = 0; r < maxRadius; r += 2) {
-            for(int x = -r; x <= r; x++) {
-                if(startX + x < 0) { continue; }
-                if(startX + x >= width) { continue; }
+        for(int r = 0; r < maxRadius; r += 2) 
+        {
+            for(int x = -r; x <= r; x++) 
+            {
+                if(startX + x < 0) 
+                { 
+                	continue; 
+                }
+                if(startX + x >= _width) 
+                { 
+                	continue; 
+                }
 
                 boolean placed = false;
                 word.setX(startX + x);
 
-                // try positive root
                 int y1 = (int) Math.sqrt(r * r - x * x);
-                if(startY + y1 >= 0 && startY + y1 < height) {
+                if(startY + y1 >= 0 && startY + y1 < _height)
+                {
                     word.setY(startY + y1);
                     placed = tryToPlace(word);
                 }
-                // try negative root
+
                 int y2 = -y1;
-                if(!placed && startY + y2 >= 0 && startY + y2 < height) {
+                if(!placed && startY + y2 >= 0 && startY + y2 < _height) 
+                {
                     word.setY(startY + y2);
                     placed = tryToPlace(word);
                 }
                 if(placed) 
                 {
-                    collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
+                    _collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
                     graphics.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
                 	return;
                 }
@@ -184,60 +176,78 @@ public class WordCloud {
             }
         }
 
-        skipped.add(word);
+        _skippedWords.add(word);
     }
 
-    private boolean tryToPlace(final Word word) {
-        if(!background.isInBounds(word)) { return false; }
+    private boolean tryToPlace(Word word) 
+    {
+        if(!_background.inBounds(word)) 
+        { 
+        	return false; 
+        }
 
-        switch(this.collisionMode) {
+        switch(this._collisionMode) 
+        {
             case RECTANGLE:
-                for(Word placeWord : this.placedWords) {
-                    if(placeWord.collide(word)) {
+                for(Word placeWord : this._placedWords) 
+                {
+                    if(placeWord.collide(word)) 
+                    {
                         return false;
                     }
                 }
-                placedWords.add(word);
+                _placedWords.add(word);
                 return true;
 
             case PIXEL_PERFECT:
-                if(backgroundCollidable.collide(word)) { return false; }
-                placedWords.add(word);
+                if(_backgroundCollidable.collide(word)) 
+                { 
+                	return false; 
+                }
+                _placedWords.add(word);
                 return true;
 
         }
         return false;
     }
 
-    protected List<Word> buildwords(final List<WordFrequency> wordFrequencies, final ColorPalette colorPalette) {
+    protected ArrayList<Word> buildwords(ArrayList<WordFrequency> wordFrequencies, ColorPalette colorPalette) 
+    {
         final int maxFrequency = maxFrequency(wordFrequencies);
 
-        final List<Word> words = new ArrayList<Word>();
-        for(final WordFrequency wordFrequency : wordFrequencies) 
+        final ArrayList<Word> words = new ArrayList<Word>();
+        for(WordFrequency wordFrequency : wordFrequencies) 
         {
             words.add(buildWord(wordFrequency, maxFrequency, colorPalette));
         }
         return words;
     }
 
-    private Word buildWord(final WordFrequency wordFrequency, int maxFrequency, final ColorPalette colorPalette) {
+    private Word buildWord(WordFrequency wordFrequency, int maxFrequency, ColorPalette colorPalette) 
+    {
 
-        final int frequency = wordFrequency.getFrequency();
-        final float fontHeight = this.fontScalar.scale(frequency, 0, maxFrequency);
-        final Word word = new Word(wordFrequency.getWord(), colorPalette.next(), (int) fontHeight, this.collisionChecker);
+        int frequency = wordFrequency.getFrequency();
+        float fontHeight = _fontScalar.scale(frequency, 0, maxFrequency);
+        Word word = new Word(wordFrequency.getWord(), colorPalette.next(), (int) fontHeight, _collisionChecker);
 
-        final double theta = angleGenerator.randomNext();
-        if(theta != 0) {
+        double theta = _angleGenerator.randomNext();
+        if(theta != 0) 
+        {
             word.setBufferedImage(ImageRotation.rotate(word.getBufferedImage(), theta));
         }
-        if(padding > 0) {
-            padder.pad(word, padding);
+        if(_padding > 0) 
+        {
+            _padder.pad(word, _padding);
         }
         return word;
     }
 
-    private int maxFrequency(final Collection<WordFrequency> wordFrequencies) {
-        if(wordFrequencies.isEmpty()) { return 1; }
+    private int maxFrequency(Collection<WordFrequency> wordFrequencies) 
+    {
+        if(wordFrequencies.isEmpty()) 
+        { 
+        	return 1; 
+        }
         
         int max = 1;
         for(WordFrequency f : wordFrequencies)
@@ -251,39 +261,48 @@ public class WordCloud {
         return max;
     }
 
-    public void setBackgroundColor(int backgroundColor) {
-        this.backgroundColor = backgroundColor;
+    public void setBackgroundColor(int backgroundColor) 
+    {
+        _backgroundColor = backgroundColor;
     }
 
-    public void setPadding(int padding) {
-        this.padding = padding;
+    public void setPadding(int padding) 
+    {
+        _padding = padding;
     }
 
-    public void setColorPalette(ColorPalette colorPalette) {
-        this.colorPalette = colorPalette;
+    public void setColorPalette(ColorPalette colorPalette) 
+    {
+        _colorPalette = colorPalette;
     }
 
-    public void setBackground(Background background) {
-        this.background = background;
+    public void setBackground(Background background) 
+    {
+        _background = background;
     }
 
-    public void setFontScalar(FontScalar fontScalar) {
-        this.fontScalar = fontScalar;
+    public void setFontScalar(FontScalar fontScalar) 
+    {
+        _fontScalar = fontScalar;
     }
 
-    public void setCloudFont(CloudFont cloudFont) {
-        this.cloudFont = cloudFont;
+    public void setCloudFont(CloudFont cloudFont) 
+    {
+        _cloudFont = cloudFont;
     }
 
-    public void setAngleGenerator(AngleGenerator angleGenerator) {
-        this.angleGenerator = angleGenerator;
+    public void setAngleGenerator(AngleGenerator angleGenerator)
+    {
+        _angleGenerator = angleGenerator;
     }
 
-    public Bitmap getBufferedImage() {
-        return bufferedImage;
+    public Bitmap getBufferedImage() 
+    {
+        return _imageBitmap;
     }
 
-    public Set<Word> getSkipped() {
-        return skipped;
+    public Set<Word> getSkipped() 
+    {
+        return _skippedWords;
     }
 }

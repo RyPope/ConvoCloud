@@ -1,27 +1,25 @@
 package ryan.pope.textcloud.cloud.font.scale;
 
-/**
- * Created by kenny on 6/30/14.
- */
-public class SqrtFontScalar implements FontScalar {
+public class SqrtFontScalar implements FontScalar 
+{
 
-    private final int minFont;
-    private final int maxFont;
+    private int _minFont;
+    private int _maxFont;
 
-    public SqrtFontScalar(int minFont, int maxFont) {
-        this.minFont = minFont;
-        this.maxFont = maxFont;
+    public SqrtFontScalar(int minFont, int maxFont) 
+    {
+        _minFont = minFont;
+        _maxFont = maxFont;
     }
 
     @Override
-    public float scale(int value, int minValue, int maxValue) {
+    public float scale(int value, int minValue, int maxValue) 
+    {
         double leftSpan = Math.sqrt(maxValue) - Math.sqrt(minValue);
-        double rightSpan = maxFont - minFont;
+        double rightSpan = _maxFont - _minFont;
 
-        // Convert the left range into a 0-1 range
         double valueScaled = (Math.sqrt(value) - Math.sqrt(minValue)) / leftSpan;
-
-        // Convert the 0-1 range into a value in the right range.
-        return (float)(minFont + (valueScaled * rightSpan));
+        
+        return (float)(_minFont + (valueScaled * rightSpan));
     }
 }

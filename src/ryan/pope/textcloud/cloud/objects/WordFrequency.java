@@ -1,30 +1,32 @@
 package ryan.pope.textcloud.cloud.objects;
 
-/**
- * Created by kenny on 6/29/14.
- */
-public class WordFrequency implements Comparable<WordFrequency> {
+public class WordFrequency implements Comparable<WordFrequency> 
+{
 
-    private final String word;
+    private String _word;
 
-    private final int frequency;
+    private int _frequency;
 
-    public WordFrequency(String word, int frequency) {
-        this.word = word;
-        this.frequency = frequency;
+    public WordFrequency(String word, int frequency) 
+    {
+        _word = word;
+        _frequency = frequency;
     }
 
-    public String getWord() {
-        return word;
+    public String getWord() 
+    {
+        return _word;
     }
 
-    public int getFrequency() {
-        return frequency;
+    public int getFrequency() 
+    {
+        return _frequency;
     }
 
     @Override
-    public int compareTo(WordFrequency wordFrequency) {
-        return wordFrequency.frequency - frequency;
+    public int compareTo(WordFrequency wordFrequency) 
+    {
+        return wordFrequency._frequency - _frequency;
     }
 
 }

@@ -7,19 +7,21 @@ public class CloudFont
 
     private static final int DEFAULT_WEIGHT = 10;
 
-    private final Typeface font;
+    private final Typeface _font;
 
     public CloudFont(String type, FontWeight weight) 
     {
-        this.font = Typeface.create(type, DEFAULT_WEIGHT);
+        _font = Typeface.create(type, DEFAULT_WEIGHT);
     }
 
-    public CloudFont(Typeface font) {
-        this.font = font;
+    public CloudFont(Typeface font) 
+    {
+        _font = font;
     }
 
-    public Typeface getFont() {
-        return this.font;
+    public Typeface getFont() 
+    {
+        return _font;
     }
 
 }

@@ -3,56 +3,55 @@ package ryan.pope.textcloud.cloud.collide;
 public class Vector2d 
 {
 
-    private int x;
+    private int _x;
 
-    private int y;
+    private int _y;
 
-    public Vector2d(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Vector2d(int x, int y) 
+    {
+        _x = x;
+        _y = y;
     }
 
-    public int getX() {
-        return x;
+    public int getX() 
+    {
+        return _x;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setX(int x) 
+    {
+        _x = x;
     }
 
-    public int getY() {
-        return y;
+    public int getY() 
+    {
+        return _y;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setY(int y) 
+    {
+        this._y = y;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) 
+    {
         if (this == o) return true;
         if (!(o instanceof Vector2d)) return false;
 
         Vector2d vector2d = (Vector2d) o;
 
-        if (x != vector2d.x) return false;
-        if (y != vector2d.y) return false;
+        if (_x != vector2d._x) return false;
+        if (_y != vector2d._y) return false;
 
         return true;
     }
 
     @Override
-    public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
+    public int hashCode() 
+    {
+        int result = _x;
+        result = 31 * result + _y;
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Vector2d{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
     }
 }

@@ -14,24 +14,19 @@ import ryan.pope.textcloud.cloud.collide.image.CollisionRaster;
 public class Word implements Collidable
 {
 
-    private final CollisionChecker collisionChecker;
+    private CollisionChecker _collisionChecker;
+    private String _word;
+    private int _textColor;
+    private Vector2d _textPosition = new Vector2d(0, 0);
+    private Bitmap.Config _conf = Bitmap.Config.ARGB_8888;
+    private Bitmap _imageBitmap;
+    private CollisionRaster _collisionRaster;
 
-    private final String word;
-
-    private final int color;
-
-    private Vector2d position = new Vector2d(0, 0);
-    
-    private Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-
-    private Bitmap bufferedImage;
-
-    private CollisionRaster collisionRaster;
-
-    public Word(String word, int color, int fontHeight, CollisionChecker collisionChecker) {
-        this.word = word;
-        this.color = color;
-        this.collisionChecker = collisionChecker;
+    public Word(String word, int color, int fontHeight, CollisionChecker collisionChecker) 
+    {
+        _word = word;
+        _textColor = color;
+        _collisionChecker = collisionChecker;
         
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
 
@@ -44,14 +39,14 @@ public class Word implements Collidable
         textPaint.getTextBounds(word, 0, word.length(), bounds);
         int width = bounds.width();
         
-        this.bufferedImage = Bitmap.createBitmap(width, fontHeight, conf);
+        _imageBitmap = Bitmap.createBitmap(width, fontHeight, _conf);
        
-        Canvas canvas = new Canvas(this.bufferedImage);
+        Canvas canvas = new Canvas(_imageBitmap);
 
         canvas.drawColor(Color.TRANSPARENT);
         canvas.drawText(word, 0, fontHeight, textPaint);
 
-        this.collisionRaster = new CollisionRaster(this.bufferedImage);
+        _collisionRaster = new CollisionRaster(_imageBitmap);
     }
     
     private static void setTextSizeForWidth(Paint paint, float desiredWidth, String text) {
@@ -80,71 +75,71 @@ public class Word implements Collidable
         paint.setTextSize(desiredTextSize);
     }
 
-    public Bitmap getBufferedImage() {
-        return bufferedImage;
+    public Bitmap getBufferedImage() 
+    {
+        return _imageBitmap;
     }
 
-    public void setBufferedImage(Bitmap bufferedImage) {
-        this.bufferedImage = bufferedImage;
-        this.collisionRaster = new CollisionRaster(bufferedImage);
+    public void setBufferedImage(Bitmap imageBitmap) 
+    {
+        _imageBitmap = imageBitmap;
+        _collisionRaster = new CollisionRaster(imageBitmap);
     }
 
-    public String getWord() {
-        return word;
+    public String getWord() 
+    {
+        return _word;
     }
 
-    public Vector2d getPosition() {
-        return position;
+    public Vector2d getPosition() 
+    {
+        return _textPosition;
     }
 
-    public int getX() {
-        return position.getX();
+    public int getX() 
+    {
+        return _textPosition.getX();
     }
 
-    public void setX(int x) {
-        position.setX(x);
+    public void setX(int x) 
+    {
+        _textPosition.setX(x);
     }
 
-    public int getY() {
-        return position.getY();
+    public int getY() 
+    {
+        return _textPosition.getY();
     }
 
-    public void setY(int y) {
-        position.setY(y);
+    public void setY(int y) 
+    {
+        _textPosition.setY(y);
     }
 
-    public int getWidth() {
-        return bufferedImage.getWidth();
+    public int getWidth() 
+    {
+        return _imageBitmap.getWidth();
     }
 
-    public int getHeight() {
-        return bufferedImage.getHeight();
-    }
-
-    @Override
-    public CollisionRaster getCollisionRaster() {
-        return collisionRaster;
-    }
-
-    @Override
-    public boolean collide(Collidable collidable) {
-        return collisionChecker.collide(this, collidable);
-    }
-
-    public void draw(CollisionRaster collisionRaster) {
-        collisionRaster.mask(collisionRaster, position.getX(), position.getY());
+    public int getHeight() 
+    {
+        return _imageBitmap.getHeight();
     }
 
     @Override
-    public String toString() {
-        return "WordRectangle{" +
-                "word='" + word + '\'' +
-                ", color=" + color +
-                ", x=" + getX() +
-                ", y=" + getY() +
-                ", width=" + bufferedImage.getWidth() +
-                ", height=" + bufferedImage.getHeight() +
-                '}';
+    public CollisionRaster getCollisionRaster() 
+    {
+        return _collisionRaster;
     }
 
+    @Override
+    public boolean collide(Collidable collidable) 
+    {
+        return _collisionChecker.collide(this, collidable);
+    }
+
+    public void draw(CollisionRaster collisionRaster) 
+    {
+        collisionRaster.mask(collisionRaster, _textPosition.getX(), _textPosition.getY());
+    }
 }

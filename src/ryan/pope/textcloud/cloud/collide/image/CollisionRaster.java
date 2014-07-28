@@ -5,59 +5,72 @@ import android.graphics.Bitmap;
 public class CollisionRaster 
 {
 
-    private final int[][] data;
+    private int[][] _data;
 
-    private final int width;
+    private int _width;
 
-    private final int height;
+    private int _height;
 
-    public CollisionRaster(final Bitmap bufferedImage) {
-        this.width = bufferedImage.getWidth();
-        this.height = bufferedImage.getHeight();
-        data = new int[width][height];
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
-                data[x][y] = bufferedImage.getPixel(x, y);
+    public CollisionRaster(final Bitmap bufferedImage) 
+    {
+        _width = bufferedImage.getWidth();
+        _height = bufferedImage.getHeight();
+        _data = new int[_width][_height];
+        for(int y = 0; y < _height; y++) 
+        {
+            for(int x = 0; x < _width; x++) 
+            {
+                _data[x][y] = bufferedImage.getPixel(x, y);
             }
         }
     }
 
-    public CollisionRaster(int width, int height) {
-        this.width = width;
-        this.height = height;
-        data = new int[width][height];
+    public CollisionRaster(int width, int height) 
+    {
+        _width = width;
+        _height = height;
+        _data = new int[width][height];
     }
 
-    public int getRGB(int x, int y) {
-        return data[x][y];
+    public int getRGB(int x, int y) 
+    {
+        return _data[x][y];
     }
 
-    public void setRGB(int x, int y, int rgb) {
-        data[x][y] = rgb;
+    public void setRGB(int x, int y, int rgb) 
+    {
+        _data[x][y] = rgb;
     }
 
-    public void mask(final CollisionRaster collisionRaster, int x, int y) {
-        final int maxHeight = Math.min(y + collisionRaster.getHeight(), height);
-        final int maxWidth = Math.min(x + collisionRaster.getWidth(), width);
-        for(int offY = y, offY2 = 0; offY < maxHeight; offY++, offY2++) {
-            for(int offX = x, offX2 = 0; offX < maxWidth; offX++, offX2++) {
-                if(!collisionRaster.isTransparent(offX2, offY2)) {
-                    data[offX][offY] = collisionRaster.getRGB(offX2, offY2);
+    public void mask(final CollisionRaster collisionRaster, int x, int y) 
+    {
+        int maxHeight = Math.min(y + collisionRaster.getHeight(), _height);
+        int maxWidth = Math.min(x + collisionRaster.getWidth(), _width);
+        for(int offY = y, offY2 = 0; offY < maxHeight; offY++, offY2++) 
+        {
+            for(int offX = x, offX2 = 0; offX < maxWidth; offX++, offX2++) 
+            {
+                if(!collisionRaster.isTransparent(offX2, offY2)) 
+                {
+                    _data[offX][offY] = collisionRaster.getRGB(offX2, offY2);
                 }
             }
         }
     }
 
-    public boolean isTransparent(int x, int y) {
-        return (data[x][y] & 0xFF000000) == 0x00000000;
+    public boolean isTransparent(int x, int y) 
+    {
+        return (_data[x][y] & 0xFF000000) == 0x00000000;
     }
 
-    public int getWidth() {
-        return width;
+    public int getWidth() 
+    {
+        return _width;
     }
 
-    public int getHeight() {
-        return height;
+    public int getHeight() 
+    {
+        return _height;
     }
 
 }

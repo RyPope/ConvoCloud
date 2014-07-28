@@ -9,40 +9,43 @@ import ryan.pope.textcloud.cloud.collide.Collidable;
 import ryan.pope.textcloud.cloud.collide.Vector2d;
 import ryan.pope.textcloud.cloud.collide.image.CollisionRaster;
 
-/**
- * Created by kenny on 6/30/14.
- */
-public class PixelBoundryBackground implements Background {
+public class PixelBoundryBackground implements Background 
+{
 
-    private final CollisionRaster collisionRaster;
+    private CollisionRaster _collisionRaster;
 
-    private final RectangleBackground rectangleBackground;
+    private RectangleBackground _rectangleBackground;
 
-    public PixelBoundryBackground(final InputStream imageInputStream) throws IOException 
+    public PixelBoundryBackground(InputStream imageInputStream) throws IOException 
     {
-        final Bitmap bufferedImage = BitmapFactory.decodeStream(imageInputStream);
-        this.collisionRaster = new CollisionRaster(bufferedImage);
-        this.rectangleBackground = new RectangleBackground(bufferedImage.getWidth(), bufferedImage.getHeight());
+        Bitmap bufferedImage = BitmapFactory.decodeStream(imageInputStream);
+        _collisionRaster = new CollisionRaster(bufferedImage);
+        _rectangleBackground = new RectangleBackground(bufferedImage.getWidth(), bufferedImage.getHeight());
     }
 
     @Override
-    public boolean isInBounds(Collidable collidable) {
+    public boolean inBounds(Collidable collidable) 
+    {
         // check if bounding boxes intersect
-        if(!this.rectangleBackground.isInBounds(collidable)) {
+        if(!_rectangleBackground.inBounds(collidable)) 
+        {
             return false;
         }
-        final Vector2d position = collidable.getPosition();
-        // get the overlapping box
+        
+        Vector2d position = collidable.getPosition();
+
         int startX = Math.max(position.getX(), 0);
-        int endX = Math.min(position.getX() + collidable.getWidth(), collisionRaster.getWidth());
+        int endX = Math.min(position.getX() + collidable.getWidth(), _collisionRaster.getWidth());
 
         int startY = Math.max(position.getY(), 0);
-        int endY = Math.min(position.getY() + collidable.getHeight(), collisionRaster.getHeight());
+        int endY = Math.min(position.getY() + collidable.getHeight(), _collisionRaster.getHeight());
 
-        for(int y = startY ; y < endY ; y++) {
-            for(int x = startX ; x < endX ; x++) {
+        for(int y = startY ; y < endY ; y++) 
+        {
+            for(int x = startX ; x < endX ; x++) 
+            {
                 // compute offsets for surface
-                if(collisionRaster.isTransparent(x - 0, y - 0) &&
+                if(_collisionRaster.isTransparent(x - 0, y - 0) &&
                         !collidable.getCollisionRaster().isTransparent(x - position.getX(), y - position.getY())) {
                     return false;
                 }

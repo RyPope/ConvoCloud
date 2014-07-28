@@ -1,6 +1,7 @@
 package ryan.pope.textcloud.cloud.objects;
 
-public enum PolarBlendMode {
+public enum PolarBlendMode 
+{
     EVEN,
     BLUR
 }
