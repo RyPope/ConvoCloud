@@ -1,9 +1,12 @@
 package ryan.pope.textcloud.business;
 
+import java.io.File;
 import java.util.List;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.view.View;
@@ -46,10 +49,18 @@ public class ListenerManager
 				final WordCloud wordCloud = new WordCloud(600, 600, CollisionMode.RECTANGLE);
 				wordCloud.setPadding(0);
 				wordCloud.setBackground(new RectangleBackground(600, 600));
-				wordCloud.setColorPalette(new ColorPalette(Color.BLACK, Color.BLUE));
+				wordCloud.setColorPalette(new ColorPalette(Color.RED, Color.WHITE));
 				wordCloud.setFontScalar(new LinearFontScalar(10, 40));
 				wordCloud.build(wordFrequencies);
-				wordCloud.writeToFile("output/wordcloud_rectangle.png");
+				
+				File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+				File file = new File(path, "/" + "wordcloud.png");
+				wordCloud.writeToFile(file.getAbsolutePath());
+				
+				Intent intent = new Intent();
+				intent.setAction(Intent.ACTION_VIEW);
+				intent.setDataAndType(Uri.parse("file://" + file.getAbsolutePath()), "image/*");
+				_mainActivity.startActivity(intent);
 			}
 		});
 	}

@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetrics;
 import ryan.pope.textcloud.business.bg.Background;
 import ryan.pope.textcloud.business.bg.RectangleBackground;
@@ -51,7 +52,7 @@ public class WordCloud {
 
     protected final RectanglePixelCollidable backgroundCollidable;
 
-    protected int backgroundColor = Color.BLACK;
+    protected int backgroundColor = Color.WHITE;
 
     protected FontScalar fontScalar = new LinearFontScalar(10, 40);
 
@@ -93,14 +94,13 @@ public class WordCloud {
 
     public void build(List<WordFrequency> wordFrequencies) {
         Collections.sort(wordFrequencies);
-
+        drawForgroundToBackground();
         for(final Word word : buildwords(wordFrequencies, this.colorPalette)) {
             final int startX = RANDOM.nextInt(Math.max(width - word.getWidth(), width));
             final int startY = RANDOM.nextInt(Math.max(height - word.getHeight(), height));
             place(word, startX, startY);
 
         }
-        drawForgroundToBackground();
     }
 
     public void writeToFile(final String outputFileName) {
@@ -174,10 +174,16 @@ public class WordCloud {
                     word.setY(startY + y2);
                     placed = tryToPlace(word);
                 }
-                if(placed) {
+                if(placed) 
+                {
                     collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
                     graphics.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
-                    return;
+//                    Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//                    textPaint.setTextSize(20);
+//                    textPaint.setColor(Color.BLACK);
+//                    textPaint.setTextAlign(Align.LEFT);
+//                	graphics.drawText(word.getWord(), word.getX(), word.getY(), textPaint);
+                	return;
                 }
 
             }

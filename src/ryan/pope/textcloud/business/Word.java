@@ -3,6 +3,7 @@ package ryan.pope.textcloud.business;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetrics;
 import android.graphics.Rect;
 import ryan.pope.textcloud.business.collide.Collidable;
@@ -38,17 +39,33 @@ public class Word implements Collidable
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
         textPaint.getTextBounds(word,0,word.length(),bounds);
         final int width = bounds.width();
+        final int height = bounds.height();
 
-        this.bufferedImage = Bitmap.createBitmap(width, (int) maxAscent, conf);
+        this.bufferedImage = Bitmap.createBitmap(width, height, conf);
        
         Canvas canvas = new Canvas(this.bufferedImage);
         
         textPaint.setColor(color);
-        textPaint.setTextSize(10);
+        //textPaint.setTextSize(10);
+        setTextSizeForWidth(textPaint, width, word);
+        textPaint.setTextAlign(Align.LEFT);
 
-        canvas.drawText(word, 0, maxAscent - maxDescent, textPaint);
+        canvas.drawText(word, 0, 0, textPaint);
 
         this.collisionRaster = new CollisionRaster(this.bufferedImage);
+    }
+    
+    private static void setTextSizeForWidth(Paint paint, float desiredWidth, String text) {
+
+        final float testTextSize = 48f;
+
+        paint.setTextSize(testTextSize);
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        float desiredTextSize = testTextSize * desiredWidth / bounds.width();
+
+        paint.setTextSize(desiredTextSize);
     }
 
     public Bitmap getBufferedImage() {
