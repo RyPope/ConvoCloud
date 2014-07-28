@@ -2,6 +2,7 @@ package ryan.pope.textcloud.business;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.FontMetrics;
@@ -28,29 +29,24 @@ public class Word implements Collidable
 
     private CollisionRaster collisionRaster;
 
-    public Word(String word, int color, FontMetrics fontMetrics, CollisionChecker collisionChecker) {
+    public Word(String word, int color, int fontHeight, CollisionChecker collisionChecker) {
         this.word = word;
         this.color = color;
         this.collisionChecker = collisionChecker;
-        final float maxDescent = fontMetrics.descent;
-        final float maxAscent = fontMetrics.ascent;
         
-        Rect bounds = new Rect();
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
-        textPaint.getTextBounds(word,0,word.length(),bounds);
-        final int width = bounds.width();
-        final int height = bounds.height();
 
-        this.bufferedImage = Bitmap.createBitmap(width, height, conf);
+        this.bufferedImage = Bitmap.createBitmap(200, fontHeight, conf);
        
         Canvas canvas = new Canvas(this.bufferedImage);
         
         textPaint.setColor(color);
-        //textPaint.setTextSize(10);
-        setTextSizeForWidth(textPaint, width, word);
+
+        setTextSizeForHeight(textPaint, fontHeight, word);
         textPaint.setTextAlign(Align.LEFT);
 
-        canvas.drawText(word, 0, 0, textPaint);
+        canvas.drawColor(Color.TRANSPARENT);
+        canvas.drawText(word, 0, fontHeight, textPaint);
 
         this.collisionRaster = new CollisionRaster(this.bufferedImage);
     }
@@ -64,6 +60,19 @@ public class Word implements Collidable
         paint.getTextBounds(text, 0, text.length(), bounds);
 
         float desiredTextSize = testTextSize * desiredWidth / bounds.width();
+
+        paint.setTextSize(desiredTextSize);
+    }
+    
+    private static void setTextSizeForHeight(Paint paint, float desiredHeight, String text) {
+
+        final float testTextSize = 48f;
+
+        paint.setTextSize(testTextSize);
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        float desiredTextSize = testTextSize * desiredHeight / bounds.height();
 
         paint.setTextSize(desiredTextSize);
     }

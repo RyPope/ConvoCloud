@@ -229,11 +229,7 @@ public class WordCloud {
 
         final int frequency = wordFrequency.getFrequency();
         final float fontHeight = this.fontScalar.scale(frequency, 0, maxFrequency);
-        //final Font font = cloudFont.getFont().deriveFont(fontHeight);
-
-        final FontMetrics fontMetrics = new FontMetrics();
-        
-        final Word word = new Word(wordFrequency.getWord(), colorPalette.next(), fontMetrics, this.collisionChecker);
+        final Word word = new Word(wordFrequency.getWord(), colorPalette.next(), (int) fontHeight, this.collisionChecker);
 
         final double theta = angleGenerator.randomNext();
         if(theta != 0) {

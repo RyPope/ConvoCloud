@@ -49,7 +49,7 @@ public class ListenerManager
 				final WordCloud wordCloud = new WordCloud(600, 600, CollisionMode.RECTANGLE);
 				wordCloud.setPadding(0);
 				wordCloud.setBackground(new RectangleBackground(600, 600));
-				wordCloud.setColorPalette(new ColorPalette(Color.RED, Color.WHITE));
+				wordCloud.setColorPalette(new ColorPalette(Color.RED, Color.BLACK));
 				wordCloud.setFontScalar(new LinearFontScalar(10, 40));
 				wordCloud.build(wordFrequencies);
 				
