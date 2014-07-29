@@ -23,6 +23,14 @@ public class ContactFetchThread implements Runnable
 	@Override
 	public void run() 
 	{
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+		      @Override
+		      public void run()
+		      {
+		    	  _mainActivity.getProgressHelper().showProgressDialog("Fetching Conversation", "Finding conversation...");
+		      }
+		});
 		Contact contactToFetch = fetchContact();
 		
 		if(contactToFetch != null)
@@ -31,6 +39,15 @@ public class ContactFetchThread implements Runnable
 		}
 		
 		_mainActivity.setContact(contactToFetch);
+		
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+		      @Override
+		      public void run()
+		      {
+		  		_mainActivity.getProgressHelper().dismissProgressDialog();
+		      }
+		});
 
 	}
 
@@ -79,7 +96,7 @@ public class ContactFetchThread implements Runnable
 			if(!threadID.equals(""))
 			{
 				String selection = "thread_id=" + threadID;
-				Cursor findThreadCursor = _mainActivity.getContentResolver().query(Uri.parse("content://sms/"), projection, selection, null, null);
+				final Cursor findThreadCursor = _mainActivity.getContentResolver().query(Uri.parse("content://sms/"), projection, selection, null, null);
 				if(findThreadCursor != null && findThreadCursor.moveToFirst())
 				{
 					for(int i = 0; i < findThreadCursor.getCount(); i++)
@@ -93,6 +110,19 @@ public class ContactFetchThread implements Runnable
 						{
 							if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Message: " + sms);
 							contactToFetch.addMessage(sms);
+							
+							if(i % 10 == 0)
+							{
+								final int msgCount = i;
+								_mainActivity.runOnUiThread(new Runnable() 
+								{
+								      @Override
+								      public void run()
+								      {
+								  		_mainActivity.getProgressHelper().changeMessage("Fetching message " + msgCount + " of " + findThreadCursor.getCount());
+								      }
+								});
+							}
 	
 						}
 					}

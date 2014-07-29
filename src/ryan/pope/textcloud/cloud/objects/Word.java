@@ -37,7 +37,7 @@ public class Word implements Collidable
         
         Rect bounds = new Rect();
         textPaint.getTextBounds(word, 0, word.length(), bounds);
-        int width = bounds.width();
+        int width = bounds.width() + 2;
         
         _imageBitmap = Bitmap.createBitmap(width, fontHeight, _conf);
        

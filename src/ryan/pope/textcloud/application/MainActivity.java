@@ -1,11 +1,13 @@
 package ryan.pope.textcloud.application;
 
 import java.util.ArrayList;
+
 import ryan.pope.textcloud.R;
 import ryan.pope.textcloud.business.ListenerManager;
 import ryan.pope.textcloud.cloud.objects.WordFrequency;
 import ryan.pope.textcloud.objects.Contact;
 import ryan.pope.textcloud.persistance.ContactDataAccess;
+import ryan.pope.textcloud.presentation.ProgressDialogHelper;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ public class MainActivity extends Activity
 {
 	private static ListenerManager _listenerManager;
 	private ContactDataAccess _contactDataAccess;
+	private ProgressDialogHelper _progressHelper;
 	
 	private Contact selectedContact;
 	
@@ -42,6 +45,8 @@ public class MainActivity extends Activity
 		
 		_contactDataAccess = new ContactDataAccess();
 		
+		_progressHelper = new ProgressDialogHelper(this);
+		
 		selectedContact = null;
 		
 	}
@@ -50,12 +55,16 @@ public class MainActivity extends Activity
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
 		_contactDataAccess.fetchContact(this, requestCode, resultCode, data);
-
 	}
 
 	public void setContact(Contact contactToFetch)
 	{
 		selectedContact = contactToFetch;
+	}
+	
+	public ProgressDialogHelper getProgressHelper()
+	{
+		return _progressHelper;
 	}
 	
 	public ArrayList<WordFrequency> getWordFrequencies() 

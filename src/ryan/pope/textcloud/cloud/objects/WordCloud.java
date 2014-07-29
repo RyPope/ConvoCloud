@@ -81,6 +81,7 @@ public class WordCloud
     {
         Collections.sort(wordFrequencies);
         drawForegroundToBackground();
+        insertWatermark();
         int i = 1;
         for(Word word : buildwords(wordFrequencies, _colorPalette)) 
         {
@@ -92,7 +93,14 @@ public class WordCloud
         }
     }
 
-    public void writeToFile(final String outputFileName) 
+    private void insertWatermark() 
+    {
+		Word watermark = new Word("#TextCloud", Color.BLACK, _imageBitmap.getHeight()/20, _collisionChecker);
+		place(watermark, _imageBitmap.getWidth() - 120, _imageBitmap.getHeight() - 50);
+		
+	}
+
+	public void writeToFile(final String outputFileName) 
     {
         
         FileOutputStream out = null;
@@ -213,9 +221,9 @@ public class WordCloud
 
     protected ArrayList<Word> buildwords(ArrayList<WordFrequency> wordFrequencies, ColorPalette colorPalette) 
     {
-        final int maxFrequency = maxFrequency(wordFrequencies);
+        int maxFrequency = maxFrequency(wordFrequencies);
 
-        final ArrayList<Word> words = new ArrayList<Word>();
+        ArrayList<Word> words = new ArrayList<Word>();
         for(WordFrequency wordFrequency : wordFrequencies) 
         {
             words.add(buildWord(wordFrequency, maxFrequency, colorPalette));
