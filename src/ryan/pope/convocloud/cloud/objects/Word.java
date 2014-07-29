@@ -51,7 +51,8 @@ public class Word implements Collidable
         _collisionRaster = new CollisionRaster(_imageBitmap);
     }
     
-    private static void setTextSizeForWidth(Paint paint, float desiredWidth, String text) {
+    private static void setTextSizeForWidth(Paint paint, float desiredWidth, String text) 
+    {
 
         final float testTextSize = 48f;
 
@@ -64,7 +65,8 @@ public class Word implements Collidable
         paint.setTextSize(desiredTextSize);
     }
     
-    private static void setTextSizeForHeight(Paint paint, float desiredHeight, String text) {
+    private static void setTextSizeForHeight(Paint paint, float desiredHeight, String text) 
+    {
 
         final float testTextSize = 48f;
 

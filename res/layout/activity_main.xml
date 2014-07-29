@@ -1,28 +1,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_image" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp" >
 
         <Button
             android:id="@+id/contact_selection_button"
+            style="@style/btnStyleBlackpearl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:alpha=".5"
+            android:layout_marginRight="1dp"
+            android:layout_weight=".25"
+            android:alpha=".75"
+            android:background="@drawable/button_left"
             android:text="Button" />
 
         <Button
             android:id="@+id/create_text_cloud_button"
+            style="@style/btnStyleBlackpearl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:alpha=".5"
+            android:layout_marginLeft="1dp"
+            android:layout_weight=".25"
+            android:alpha=".75"
+            android:background="@drawable/button_right"
             android:text="Button" />
 
     </LinearLayout>
@@ -35,9 +43,9 @@
         android:layout_alignParentTop="true"
         android:layout_margin="5dp"
         android:adjustViewBounds="true"
-        android:alpha=".5"
-        android:maxHeight="50dp"
-        android:maxWidth="50dp"
+        android:alpha=".35"
+        android:maxHeight="40dp"
+        android:maxWidth="40dp"
         android:src="@drawable/settingsicon" />
 
 </RelativeLayout>

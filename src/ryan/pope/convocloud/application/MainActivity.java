@@ -1,5 +1,6 @@
 package ryan.pope.convocloud.application;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import ryan.pope.convocloud.R;
@@ -10,7 +11,12 @@ import ryan.pope.convocloud.persistance.ContactDataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -70,6 +76,16 @@ public class MainActivity extends Activity
 	public ArrayList<WordFrequency> getWordFrequencies() 
 	{
 		return selectedContact.getWordFrequencies();
+	}
+
+	public void setBackground(File file) 
+	{
+        Resources res = getResources();
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+        View view = findViewById(R.id.main_layout);
+        view.setBackground(bd);
+		
 	}
 
 }

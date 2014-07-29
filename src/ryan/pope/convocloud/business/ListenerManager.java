@@ -44,6 +44,7 @@ public class ListenerManager
 		createTextCloudButton = (Button) _mainActivity.findViewById(R.id.create_text_cloud_button);
 		createTextCloudButton.setOnClickListener( new OnClickListener() 
 		{
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onClick(View v) 
 			{
@@ -65,10 +66,12 @@ public class ListenerManager
 				File file = new File(path, "/" + "wordcloud.png");
 				wordCloud.writeToFile(file.getAbsolutePath());
 				
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_VIEW);
-				intent.setDataAndType(Uri.parse("file://" + file.getAbsolutePath()), "image/*");
-				_mainActivity.startActivity(intent);
+//				Intent intent = new Intent();
+//				intent.setAction(Intent.ACTION_VIEW);
+//				intent.setDataAndType(Uri.parse("file://" + file.getAbsolutePath()), "image/*");
+//				_mainActivity.startActivity(intent);
+				
+				_mainActivity.setBackground(file);
 			}
 		});
 	}
