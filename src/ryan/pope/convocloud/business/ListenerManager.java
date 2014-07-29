@@ -58,18 +58,13 @@ public class ListenerManager
 				wordCloud.setPadding(0);
 				wordCloud.setBackground(new RectangleBackground(width, height));
 				//wordCloud.setColorPalette(new ColorPalette(Color.RED, Color.BLACK));
-				wordCloud.setFontScalar(new LinearFontScalar(10, 100));
+				wordCloud.setFontScalar(new LinearFontScalar(10, 70));
 				wordCloud.setTypeface(Typeface.createFromAsset(_mainActivity.getAssets(), "neue.otf"));
 				wordCloud.build(wordFrequencies);
 				
 				File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 				File file = new File(path, "/" + "wordcloud.png");
 				wordCloud.writeToFile(file.getAbsolutePath());
-				
-//				Intent intent = new Intent();
-//				intent.setAction(Intent.ACTION_VIEW);
-//				intent.setDataAndType(Uri.parse("file://" + file.getAbsolutePath()), "image/*");
-//				_mainActivity.startActivity(intent);
 				
 				_mainActivity.setBackground(file);
 			}

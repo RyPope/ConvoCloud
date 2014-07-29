@@ -95,7 +95,7 @@ public class WordCloud
         }
     }
 
-    private void insertWatermark() 
+	private void insertWatermark() 
     {
 		Word watermark = new Word("#TextCloud", Color.BLACK,_imageBitmap.getHeight()/20, _mainTypeface, _collisionChecker);
 		place(watermark, _imageBitmap.getWidth() - 120, _imageBitmap.getHeight() - 50);

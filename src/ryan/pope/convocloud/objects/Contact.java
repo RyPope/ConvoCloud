@@ -36,7 +36,7 @@ public class Contact
 		String[] splitSMS = parsedSMS.toUpperCase(Locale.getDefault()).split("\\s+");
 		for(String s : splitSMS)
 		{
-			if(s.length() >= Globals.MIN_MESSAGE_SIZE)
+			if(s.length() >= Globals.MIN_MESSAGE_SIZE && !Globals.STOP_WORDS.contains(s))
 			{
 				if(_allMessages.get(s) == null)
 					_allMessages.put(s, 1);
