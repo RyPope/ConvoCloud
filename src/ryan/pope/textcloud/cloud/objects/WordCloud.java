@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.util.Log;
 import ryan.pope.textcloud.application.Globals;
 import ryan.pope.textcloud.cloud.background.Background;
@@ -51,8 +52,9 @@ public class WordCloud
     protected Bitmap _imageBitmap;
     protected Set<Word> _placedWords = new HashSet<Word>();
     protected Set<Word> _skippedWords = new HashSet<Word>();
+    protected Typeface _mainTypeface;
     protected ColorPalette _colorPalette = new ColorPalette(Color.RED, Color.BLACK, Color.YELLOW, Color.GRAY, Color.GREEN);
-
+    
     public WordCloud(int width, int height, CollisionMode collisionMode) 
     {
         _width = width;
@@ -95,7 +97,7 @@ public class WordCloud
 
     private void insertWatermark() 
     {
-		Word watermark = new Word("#TextCloud", Color.BLACK, _imageBitmap.getHeight()/20, _collisionChecker);
+		Word watermark = new Word("#TextCloud", Color.BLACK,_imageBitmap.getHeight()/20, _mainTypeface, _collisionChecker);
 		place(watermark, _imageBitmap.getWidth() - 120, _imageBitmap.getHeight() - 50);
 		
 	}
@@ -236,7 +238,7 @@ public class WordCloud
 
         int frequency = wordFrequency.getFrequency();
         float fontHeight = _fontScalar.scale(frequency, 0, maxFrequency);
-        Word word = new Word(wordFrequency.getWord(), colorPalette.next(), (int) fontHeight, _collisionChecker);
+        Word word = new Word(wordFrequency.getWord(), colorPalette.next(), (int) fontHeight, _mainTypeface, _collisionChecker);
 
         double theta = _angleGenerator.randomNext();
         if(theta != 0) 
@@ -272,6 +274,11 @@ public class WordCloud
     public void setBackgroundColor(int backgroundColor) 
     {
         _backgroundColor = backgroundColor;
+    }
+    
+    public void setTypeface(Typeface typeface)
+    {
+    	_mainTypeface = typeface;
     }
 
     public void setPadding(int padding) 

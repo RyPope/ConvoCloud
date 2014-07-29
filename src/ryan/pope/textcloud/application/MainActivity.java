@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 public class MainActivity extends Activity 
 {
@@ -30,7 +31,7 @@ public class MainActivity extends Activity
 		doStartUp();
 
 	}
-
+	
 	private void doStartUp() 
 	{
 		/* Remove title and menu bar */

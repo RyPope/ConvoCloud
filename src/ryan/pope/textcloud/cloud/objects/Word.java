@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import ryan.pope.textcloud.cloud.collide.Collidable;
 import ryan.pope.textcloud.cloud.collide.Vector2d;
 import ryan.pope.textcloud.cloud.collide.checkers.CollisionChecker;
@@ -22,7 +23,7 @@ public class Word implements Collidable
     private Bitmap _imageBitmap;
     private CollisionRaster _collisionRaster;
 
-    public Word(String word, int color, int fontHeight, CollisionChecker collisionChecker) 
+    public Word(String word, int color, int fontHeight, Typeface typeface, CollisionChecker collisionChecker) 
     {
         _word = word;
         _textColor = color;
@@ -31,6 +32,9 @@ public class Word implements Collidable
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
 
         textPaint.setColor(color);
+        
+        if(typeface != null)
+        	textPaint.setTypeface(typeface);
 
         setTextSizeForHeight(textPaint, fontHeight, word);
         textPaint.setTextAlign(Align.LEFT);
