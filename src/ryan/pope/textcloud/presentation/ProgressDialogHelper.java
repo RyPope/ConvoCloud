@@ -22,7 +22,7 @@ public class ProgressDialogHelper
 		_progressDialog = new ProgressDialog(_mainActivity);
 		_progressDialog.setTitle(title);
 		_progressDialog.setMessage(message);
-		_progressDialog.setIcon(R.drawable.ic_launcher);
+		_progressDialog.setIcon(R.drawable.smallicon);
 		_progressDialog.show();
 		//_progressDialog = ProgressDialog.show(_mainActivity, title, message, true);
 	}
