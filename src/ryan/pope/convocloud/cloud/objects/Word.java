@@ -68,20 +68,6 @@ public class Word implements Collidable
 
         paint.setTextSize(desiredTextSize);
     }
-    
-    private static void setTextSizeForHeight(Paint paint, float desiredHeight, String text) 
-    {
-
-        final float testTextSize = 48f;
-
-        paint.setTextSize(testTextSize);
-        Rect bounds = new Rect();
-        paint.getTextBounds(text, 0, text.length(), bounds);
-
-        float desiredTextSize = testTextSize * desiredHeight / bounds.height();
-
-        paint.setTextSize(desiredTextSize);
-    }
 
     public Bitmap getBufferedImage() 
     {

@@ -11,12 +11,14 @@ import ryan.pope.convocloud.cloud.objects.WordFrequency;
 public class Contact 
 {
 	private String _phoneNumber;
+	private String _name;
 	private HashMap<String, Integer> _allMessages;
 	
 	public Contact(String id, String number, int type, String name)
 	{
 		_phoneNumber = stripNumber(number);
 		_allMessages = new HashMap<String, Integer>();
+		_name = name;
 	}
 
 	private String stripNumber(String number) 
@@ -66,5 +68,15 @@ public class Contact
 		}
 		
 		return _wordFreqList;
+	}
+	
+	public void setName(String name)
+	{
+		_name = name;
+	}
+	
+	public String getName()
+	{
+		return _name;
 	}
 }

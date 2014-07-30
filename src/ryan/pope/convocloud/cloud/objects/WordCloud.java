@@ -87,9 +87,9 @@ public class WordCloud
         
         /* Starter width */
         int fontWidthPixel = _imageBitmap.getWidth();
-        int fontStepsPixel = fontWidthPixel / 20;
+        int fontSteps = fontWidthPixel / 15;
         int i = 1;
-        //for(Word word : buildwords(wordFrequencies, _colorPalette)) 
+
         for (WordFrequency wordFreq : wordFrequencies)
         {
             Word word = new Word(wordFreq.getWord(), _colorPalette.next(), fontWidthPixel, _mainTypeface, _collisionChecker);
@@ -103,8 +103,6 @@ public class WordCloud
         	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
         	while(true)
         	{
-	            int startX = RANDOM.nextInt(Math.max(_width - word.getWidth(), _width));
-	            int startY = RANDOM.nextInt(Math.max(_height - word.getHeight(), _height));
 	            if(testPlace(word))
 	            {
 	            	i++;
@@ -112,21 +110,23 @@ public class WordCloud
 	            }
 	            else
 	            {
+	            	fontWidthPixel *= .5;
 	            	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Lowering text size to: " + fontWidthPixel);
-	            	fontWidthPixel -= fontStepsPixel;
 	        		word.setTextPixelSize(fontWidthPixel);
 	            }
 	            
-	            if(fontWidthPixel <= 50)
+	            if(fontWidthPixel <= fontSteps)
+	            {
 	            	break;
+	            }
         	}
         }
     }
 
 	private void insertWatermark() 
     {
-		Word watermark = new Word("#TextCloud", Color.BLACK,_imageBitmap.getHeight()/20, _mainTypeface, _collisionChecker);
-		place(watermark, _imageBitmap.getWidth() - 120, _imageBitmap.getHeight() - 50);
+		Word watermark = new Word("#TextCloud", Color.BLACK,_width / 2, _mainTypeface, _collisionChecker);
+		place(watermark, _width - watermark.getWidth(), _height - watermark.getHeight());
 		
 	}
 

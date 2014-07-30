@@ -5,6 +5,7 @@
     android:background="@drawable/main_image" >
 
     <LinearLayout
+        android:id="@+id/button_layout"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
@@ -20,7 +21,7 @@
             android:layout_weight=".25"
             android:alpha=".75"
             android:background="@drawable/button_left"
-            android:text="Button" />
+            android:text="@string/select_contact" />
 
         <Button
             android:id="@+id/create_text_cloud_button"
@@ -31,8 +32,7 @@
             android:layout_weight=".25"
             android:alpha=".75"
             android:background="@drawable/button_right"
-            android:text="Button" />
-
+            android:text="@string/create_convocloud" />
     </LinearLayout>
 
     <ImageView
@@ -47,5 +47,16 @@
         android:maxHeight="40dp"
         android:maxWidth="40dp"
         android:src="@drawable/settingsicon" />
+
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:background="@android:color/black"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

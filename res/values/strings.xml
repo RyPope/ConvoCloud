@@ -3,5 +3,7 @@
 
     <string name="app_name">Text Cloud</string>
     <string name="main_textcloud_description">Place Holder</string>
+    <string name="select_contact">Select Contact</string>
+    <string name="create_convocloud">Create ConvoCloud</string>
 
 </resources>
