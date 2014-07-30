@@ -58,7 +58,7 @@ public class ListenerManager
 				wordCloud.setPadding(0);
 				wordCloud.setBackground(new RectangleBackground(width, height));
 				//wordCloud.setColorPalette(new ColorPalette(Color.RED, Color.BLACK));
-				wordCloud.setFontScalar(new LinearFontScalar(10, 70));
+				//wordCloud.setFontScalar(new LinearFontScalar(10, 70));
 				wordCloud.setTypeface(Typeface.createFromAsset(_mainActivity.getAssets(), "neue.otf"));
 				wordCloud.build(wordFrequencies);
 				

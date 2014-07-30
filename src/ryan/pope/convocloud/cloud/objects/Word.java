@@ -21,32 +21,36 @@ public class Word implements Collidable
     private Bitmap.Config _conf = Bitmap.Config.ARGB_8888;
     private Bitmap _imageBitmap;
     private CollisionRaster _collisionRaster;
+    private Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+	private int _color;
+	private Typeface _typeface;
 
-    public Word(String word, int color, int fontHeight, Typeface typeface, CollisionChecker collisionChecker) 
+    public Word(String word, int color, int fontWidth, Typeface typeface, CollisionChecker collisionChecker) 
     {
         _word = word;
         _collisionChecker = collisionChecker;
-        
-        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+        _color = color;
+        _typeface = typeface;
 
         textPaint.setColor(color);
         
         if(typeface != null)
         	textPaint.setTypeface(typeface);
 
-        setTextSizeForHeight(textPaint, fontHeight, word);
+        setTextSizeForWidth(textPaint, fontWidth, word);
         textPaint.setTextAlign(Align.LEFT);
         
         Rect bounds = new Rect();
         textPaint.getTextBounds(word, 0, word.length(), bounds);
         int width = bounds.width() + 2;
+        int height = bounds.height() + 2;
         
-        _imageBitmap = Bitmap.createBitmap(width, fontHeight, _conf);
+        _imageBitmap = Bitmap.createBitmap(width, height, _conf);
        
         Canvas canvas = new Canvas(_imageBitmap);
 
         canvas.drawColor(Color.TRANSPARENT);
-        canvas.drawText(word, 0, fontHeight, textPaint);
+        canvas.drawText(word, 0, height, textPaint);
 
         _collisionRaster = new CollisionRaster(_imageBitmap);
     }
@@ -146,4 +150,32 @@ public class Word implements Collidable
     {
         collisionRaster.mask(collisionRaster, _textPosition.getX(), _textPosition.getY());
     }
+
+	public void setTextPixelSize(int fontWidthPixel) 
+	{
+        textPaint.setColor(_color);
+        
+        if(_typeface != null)
+        	textPaint.setTypeface(_typeface);
+
+        setTextSizeForWidth(textPaint, fontWidthPixel, _word);
+        textPaint.setTextAlign(Align.LEFT);
+        
+        Rect bounds = new Rect();
+        textPaint.getTextBounds(_word, 0, _word.length(), bounds);
+        int width = bounds.width() + 2;
+        int height = bounds.height() + 2;
+        
+        if(_imageBitmap != null)
+        	_imageBitmap.recycle();
+        _imageBitmap = Bitmap.createBitmap(width, height, _conf);
+       
+        Canvas canvas = new Canvas(_imageBitmap);
+
+        canvas.drawColor(Color.TRANSPARENT);
+        canvas.drawText(_word, 0, height, textPaint);
+
+        _collisionRaster = new CollisionRaster(_imageBitmap);
+		
+	}
 }

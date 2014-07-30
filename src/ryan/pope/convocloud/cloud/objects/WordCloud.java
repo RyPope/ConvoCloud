@@ -84,14 +84,42 @@ public class WordCloud
         Collections.sort(wordFrequencies);
         drawForegroundToBackground();
         insertWatermark();
+        
+        /* Starter width */
+        int fontWidthPixel = _imageBitmap.getWidth();
+        int fontStepsPixel = fontWidthPixel / 20;
         int i = 1;
-        for(Word word : buildwords(wordFrequencies, _colorPalette)) 
+        //for(Word word : buildwords(wordFrequencies, _colorPalette)) 
+        for (WordFrequency wordFreq : wordFrequencies)
         {
+            Word word = new Word(wordFreq.getWord(), _colorPalette.next(), fontWidthPixel, _mainTypeface, _collisionChecker);
+
+            double theta = _angleGenerator.randomNext();
+            if(theta != 0) 
+            {
+                word.setBufferedImage(ImageRotation.rotate(word.getBufferedImage(), theta));
+            }
+        	
         	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
-            int startX = RANDOM.nextInt(Math.max(_width - word.getWidth(), _width));
-            int startY = RANDOM.nextInt(Math.max(_height - word.getHeight(), _height));
-            place(word, startX, startY);
-            i++;
+        	while(true)
+        	{
+	            int startX = RANDOM.nextInt(Math.max(_width - word.getWidth(), _width));
+	            int startY = RANDOM.nextInt(Math.max(_height - word.getHeight(), _height));
+	            if(testPlace(word))
+	            {
+	            	i++;
+	            	break;
+	            }
+	            else
+	            {
+	            	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Lowering text size to: " + fontWidthPixel);
+	            	fontWidthPixel -= fontStepsPixel;
+	        		word.setTextPixelSize(fontWidthPixel);
+	            }
+	            
+	            if(fontWidthPixel <= 50)
+	            	break;
+        	}
         }
     }
 
@@ -140,8 +168,31 @@ public class WordCloud
         Canvas graphics2 = new Canvas(_imageBitmap);
         graphics2.drawBitmap(backgroundBufferedImage, 0, 0, null);
     }
+    
+    protected boolean testPlace(final Word word) 
+    {
 
-    protected void place(final Word word, final int startX, final int startY) 
+        for(int x = 0; x < _width - word.getWidth(); x += 2) 
+        {
+            for(int y = 0; y <= _height - word.getHeight(); y += 2) 
+            {
+                word.setX(x);
+                word.setY(y);
+                if(tryToPlace(word)) 
+                {
+                    Canvas graphics = new Canvas(_imageBitmap);
+                    _collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
+                    graphics.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
+                	return true;
+                }
+
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean place(final Word word, final int startX, final int startY) 
     {
         Canvas graphics = new Canvas(_imageBitmap);
 
@@ -180,13 +231,13 @@ public class WordCloud
                 {
                     _collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
                     graphics.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
-                	return;
+                	return true;
                 }
 
             }
         }
 
-        _skippedWords.add(word);
+        return false;
     }
 
     private boolean tryToPlace(Word word) 
