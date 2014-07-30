@@ -15,8 +15,8 @@ public class AngleGenerator
 
     public AngleGenerator() 
     {
-        _steps = 3;
-        _thetas = calculateThetas(-90, 90);
+        _steps = 2;
+        _thetas = calculateThetas(0, 90);
     }
 
     public AngleGenerator(int degrees) 
