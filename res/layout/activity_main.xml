@@ -10,7 +10,10 @@
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="10dp" >
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="3dp" >
 
         <Button
             android:id="@+id/contact_selection_button"
@@ -35,28 +38,73 @@
             android:text="@string/create_convocloud" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/settingsButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="5dp"
-        android:adjustViewBounds="true"
-        android:alpha=".35"
-        android:maxHeight="40dp"
-        android:maxWidth="40dp"
-        android:src="@drawable/settingsicon" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/status_text"
+        <ImageView
+            android:id="@+id/settings_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:adjustViewBounds="true"
+            android:alpha=".35"
+            android:contentDescription="@string/settings_description"
+            android:maxHeight="30dp"
+            android:maxWidth="30dp"
+            android:src="@drawable/settingsicon" />
+
+        <ImageView
+            android:id="@+id/visible_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:adjustViewBounds="true"
+            android:alpha=".35"
+            android:contentDescription="@string/settings_description"
+            android:maxHeight="30dp"
+            android:maxWidth="30dp"
+            android:src="@drawable/visible_icon" />
+
+        <ImageView
+            android:id="@+id/share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:adjustViewBounds="true"
+            android:alpha=".35"
+            android:contentDescription="@string/settings_description"
+            android:maxHeight="30dp"
+            android:maxWidth="30dp"
+            android:src="@drawable/share_icon" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button_layout"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
+        android:alpha=".75"
         android:background="@android:color/black"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/white" />
+        android:padding="2dp" >
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/status_text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/Default"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </RelativeLayout>
