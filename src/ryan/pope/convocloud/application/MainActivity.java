@@ -43,6 +43,13 @@ public class MainActivity extends Activity
 		doStartUp();
 
 	}
+	
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		_progressHelper.end();
+	}
 
 	private void doStartUp() 
 	{
@@ -107,13 +114,31 @@ public class MainActivity extends Activity
 			_photoFile = file;
 			Resources res = getResources();
 			Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-			BitmapDrawable bd = new BitmapDrawable(res, bitmap);
-			View view = findViewById(R.id.main_layout);
+			final BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+			final View view = findViewById(R.id.main_layout);
 			
 	        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-	            view.setBackground(bd);
+	        {
+				runOnUiThread(new Runnable() 
+				{
+					@Override
+					public void run() 
+					{
+						view.setBackground(bd);
+					}
+				});
+	        }
 	        else
-	            view.setBackgroundDrawable(bd);
+	        {
+				runOnUiThread(new Runnable() 
+				{
+					@Override
+					public void run() 
+					{
+					view.setBackgroundDrawable(bd);
+					}
+				});
+	        }
 		}
 
 	}

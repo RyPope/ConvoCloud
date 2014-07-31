@@ -32,6 +32,7 @@ import ryan.pope.convocloud.cloud.padding.WordPixelPadder;
 import ryan.pope.convocloud.cloud.palette.ColorPalette;
 import ryan.pope.convocloud.cloud.font.CloudFont;
 import ryan.pope.convocloud.cloud.font.FontWeight;
+import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 
 public class WordCloud 
 {
@@ -54,12 +55,13 @@ public class WordCloud
     protected Set<Word> _skippedWords = new HashSet<Word>();
     protected Typeface _mainTypeface;
     protected ColorPalette _colorPalette = new ColorPalette(Color.RED, Color.BLACK, Color.YELLOW, Color.GRAY, Color.GREEN);
-    
-    public WordCloud(int width, int height, CollisionMode collisionMode) 
+    private ProgressDialogHelper _progressHelper;
+    public WordCloud(ProgressDialogHelper progressHelper, int width, int height, CollisionMode collisionMode) 
     {
         _width = width;
         _height = height;
         _collisionMode = collisionMode;
+        _progressHelper = progressHelper;
         switch(collisionMode) 
         {
             case PIXEL_PERFECT:
@@ -100,6 +102,7 @@ public class WordCloud
                 word.setBufferedImage(ImageRotation.rotate(word.getBufferedImage(), theta));
             }
         	
+            _progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size());
         	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
         	while(true)
         	{
