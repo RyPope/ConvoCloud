@@ -1,6 +1,7 @@
 package ryan.pope.convocloud.presentation;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
@@ -29,7 +30,7 @@ public class ProgressDialogHelper
 				_contactProgressDialog.setTitle(title);
 				_contactProgressDialog.setMessage(message);
 				_contactProgressDialog.setIcon(R.drawable.smallicon);
-				_contactProgressDialog.setCancelable(true);
+				_contactProgressDialog.setCanceledOnTouchOutside(false);
 				_contactProgressDialog.show();
 			}
 		});
@@ -67,6 +68,7 @@ public class ProgressDialogHelper
 	{
 		_mainActivity.runOnUiThread(new Runnable() 
 		{
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run()
 			{
@@ -75,7 +77,15 @@ public class ProgressDialogHelper
 				_cloudProgressDialog.setTitle(title);
 				_cloudProgressDialog.setMessage(message);
 				_cloudProgressDialog.setIcon(R.drawable.smallicon);
-				_cloudProgressDialog.setCancelable(true);
+				_cloudProgressDialog.setCanceledOnTouchOutside(false);
+				_cloudProgressDialog.setCancelable(false);
+				_cloudProgressDialog.setButton("End", new DialogInterface.OnClickListener() 
+			    {
+			        public void onClick(DialogInterface dialog, int which) 
+			        {
+			        	
+			        }
+			    });
 				_cloudProgressDialog.show();
 			}
 		});

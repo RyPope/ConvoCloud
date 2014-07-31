@@ -11,62 +11,36 @@ import ryan.pope.convocloud.cloud.background.RectangleBackground;
 import ryan.pope.convocloud.cloud.objects.CollisionMode;
 import ryan.pope.convocloud.cloud.objects.WordCloud;
 import ryan.pope.convocloud.cloud.objects.WordFrequency;
+import ryan.pope.convocloud.persistance.ContactFetchThread;
 
 public class WordCloudManager
 {
 	private MainActivity _mainActivity;
+	private WordCloudThread _wordCloudThread;
 	private Thread _cloudThread;
 
 	public WordCloudManager(MainActivity mainActivity)
 	{
 		_mainActivity = mainActivity;
-		_cloudThread = new Thread()
-		{
-			@SuppressWarnings("deprecation")
-			@Override
-			public void run() 
-			{
-				_mainActivity.runOnUiThread(new Runnable() 
-				{
-				      @Override
-				      public void run()
-				      {
-				    	  _mainActivity.getProgressHelper().showCloudProgressDialog("Creating ConvoCloud", "Creating Canvas.");
-				      }
-				});
-				Display display = _mainActivity.getWindowManager().getDefaultDisplay(); 
-				int width = display.getWidth();
-				int height = display.getHeight();
-				
-				ArrayList<WordFrequency> wordFrequencies = _mainActivity.getWordFrequencies();
-
-				WordCloud wordCloud = new WordCloud(_mainActivity.getProgressHelper(), width, height, CollisionMode.PIXEL_PERFECT);
-				wordCloud.setPadding(0);
-				wordCloud.setBackground(new RectangleBackground(width, height));
-				wordCloud.setTypeface(Typeface.createFromAsset(_mainActivity.getAssets(), "neue.otf"));
-				wordCloud.build(wordFrequencies);
-				
-				File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-				File file = new File(path, "/" + "wordcloud.png");
-				wordCloud.writeToFile(file.getAbsolutePath());
-				
-				_mainActivity.setBackground(file);
-				
-				_mainActivity.runOnUiThread(new Runnable() 
-				{
-				      @Override
-				      public void run()
-				      {
-				  		_mainActivity.getProgressHelper().dismissCloudProgressDialog();
-				      }
-				});
-
-			}
-		};
+		_wordCloudThread = new WordCloudThread(_mainActivity);
 	}
 
 	public void createCloud() 
 	{
+		try 
+		{
+			if(_cloudThread != null)
+			{
+				_wordCloudThread.kill();
+				_cloudThread.join();
+			}
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		
+		_cloudThread = new Thread(_wordCloudThread);
 		_cloudThread.start();
 	}
 

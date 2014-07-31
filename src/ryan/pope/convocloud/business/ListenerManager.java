@@ -60,15 +60,15 @@ public class ListenerManager
 					
 					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "My Convo Cloud with " + _mainActivity.getContact().getName() + ". Made with http://goo.gl/zEgP5B for Android #ConvoCloud");
 					shareIntent.setType("image/png");
-					_mainActivity.startActivity(Intent.createChooser(shareIntent, _mainActivity.getResources().getText(R.string.send_to)));
+					_mainActivity.startActivity(Intent.createChooser(shareIntent, "Share ConvoCloud with..."));
 				}
 				else
 				{
 					Intent shareIntent = new Intent();
 					shareIntent.setAction(Intent.ACTION_SEND);
-					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out Convo Cloud for Android, http://goo.gl/zEgP5B #ConvoCloud");
+					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out ConvoCloud for Android, TODO: LINK #ConvoCloud");
 					shareIntent.setType("text/plain");
-					_mainActivity.startActivity(Intent.createChooser(shareIntent, _mainActivity.getResources().getText(R.string.send_to)));
+					_mainActivity.startActivity(Intent.createChooser(shareIntent, "Share ConvoCloud with..."));
 				}
 			}
 
@@ -104,7 +104,6 @@ public class ListenerManager
 			{
 				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Visibility Button clicked"); 
 				_UIHelper.toggleUI();
-				
 			}
 
 		});

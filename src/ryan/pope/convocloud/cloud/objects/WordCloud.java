@@ -56,6 +56,7 @@ public class WordCloud
     protected Typeface _mainTypeface;
     protected ColorPalette _colorPalette = new ColorPalette(Color.RED, Color.BLACK, Color.YELLOW, Color.GRAY, Color.GREEN);
     private ProgressDialogHelper _progressHelper;
+	private boolean _running = true;
     public WordCloud(ProgressDialogHelper progressHelper, int width, int height, CollisionMode collisionMode) 
     {
         _width = width;
@@ -94,6 +95,9 @@ public class WordCloud
 
         for (WordFrequency wordFreq : wordFrequencies)
         {
+        	if(!_running)
+        		break;
+        	
             Word word = new Word(wordFreq.getWord(), _colorPalette.next(), fontWidthPixel, _mainTypeface, _collisionChecker);
 
             double theta = _angleGenerator.randomNext();
@@ -104,7 +108,7 @@ public class WordCloud
         	
             _progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size());
         	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
-        	while(true)
+        	while(true && _running)
         	{
 	            if(testPlace(word))
 	            {
@@ -275,56 +279,6 @@ public class WordCloud
         return false;
     }
 
-    protected ArrayList<Word> buildwords(ArrayList<WordFrequency> wordFrequencies, ColorPalette colorPalette) 
-    {
-        int maxFrequency = maxFrequency(wordFrequencies);
-
-        ArrayList<Word> words = new ArrayList<Word>();
-        for(WordFrequency wordFrequency : wordFrequencies) 
-        {
-            words.add(buildWord(wordFrequency, maxFrequency, colorPalette));
-        }
-        return words;
-    }
-
-    private Word buildWord(WordFrequency wordFrequency, int maxFrequency, ColorPalette colorPalette) 
-    {
-
-        int frequency = wordFrequency.getFrequency();
-        float fontHeight = _fontScalar.scale(frequency, 0, maxFrequency);
-        Word word = new Word(wordFrequency.getWord(), colorPalette.next(), (int) fontHeight, _mainTypeface, _collisionChecker);
-
-        double theta = _angleGenerator.randomNext();
-        if(theta != 0) 
-        {
-            word.setBufferedImage(ImageRotation.rotate(word.getBufferedImage(), theta));
-        }
-        if(_padding > 0) 
-        {
-            _padder.pad(word, _padding);
-        }
-        return word;
-    }
-
-    private int maxFrequency(Collection<WordFrequency> wordFrequencies) 
-    {
-        if(wordFrequencies.isEmpty()) 
-        { 
-        	return 1; 
-        }
-        
-        int max = 1;
-        for(WordFrequency f : wordFrequencies)
-        {
-        	if (f.getFrequency() > max)
-        	{
-        		max = f.getFrequency();
-        	}
-        }
-        
-        return max;
-    }
-
     public void setBackgroundColor(int backgroundColor) 
     {
         _backgroundColor = backgroundColor;
@@ -374,4 +328,10 @@ public class WordCloud
     {
         return _skippedWords;
     }
+
+	public void kill() 
+	{
+		_progressHelper.changeCloudDialogMessage("Ending ConvoCloud early...");
+		_running  = false;
+	}
 }
