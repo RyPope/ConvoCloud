@@ -5,8 +5,10 @@ import ryan.pope.convocloud.application.MainActivity;
 
 public class ContactDataAccess 
 {
+	private Thread _dataAccessThread;
 	public void fetchContact(MainActivity mainActivity, int requestCode, int resultCode, Intent data)
 	{
-		new Thread(new ContactFetchThread(mainActivity, requestCode, resultCode, data)).start();
+		_dataAccessThread = new Thread(new ContactFetchThread(mainActivity, requestCode, resultCode, data));
+		_dataAccessThread.start();
 	}
 }
