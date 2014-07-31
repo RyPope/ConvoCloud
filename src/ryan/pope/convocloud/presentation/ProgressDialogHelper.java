@@ -22,6 +22,7 @@ public class ProgressDialogHelper
 	{
 		_mainActivity.runOnUiThread(new Runnable() 
 		{
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run()
 			{
@@ -31,6 +32,16 @@ public class ProgressDialogHelper
 				_contactProgressDialog.setMessage(message);
 				_contactProgressDialog.setIcon(R.drawable.smallicon);
 				_contactProgressDialog.setCanceledOnTouchOutside(false);
+				_contactProgressDialog.setCancelable(false);
+				_contactProgressDialog.setButton("Continue", new DialogInterface.OnClickListener() 
+			    {
+			        public void onClick(DialogInterface dialog, int which) 
+			        {
+			    		changeContactDialogMessage("Ending Search early...");
+			        	_mainActivity.getContactManager().kill();
+			        	return;
+			        }
+			    });
 				_contactProgressDialog.show();
 			}
 		});
@@ -79,7 +90,7 @@ public class ProgressDialogHelper
 				_cloudProgressDialog.setIcon(R.drawable.smallicon);
 				_cloudProgressDialog.setCanceledOnTouchOutside(false);
 				_cloudProgressDialog.setCancelable(false);
-				_cloudProgressDialog.setButton("End", new DialogInterface.OnClickListener() 
+				_cloudProgressDialog.setButton("Continue", new DialogInterface.OnClickListener() 
 			    {
 			        public void onClick(DialogInterface dialog, int which) 
 			        {

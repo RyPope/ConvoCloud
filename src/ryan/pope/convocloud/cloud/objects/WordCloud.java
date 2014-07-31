@@ -2,7 +2,6 @@ package ryan.pope.convocloud.cloud.objects;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
@@ -36,298 +35,287 @@ import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 
 public class WordCloud 
 {
-    protected static final Random RANDOM = new Random();
-    protected int _width;
-    protected int _height;
-    protected CollisionMode _collisionMode;
-    protected CollisionChecker _collisionChecker;
-    protected Padder _padder;
-    protected int _padding = 0;
-    protected Background _background;
-    protected RectanglePixelCollidable _backgroundCollidable;
-    protected int _backgroundColor = Color.WHITE;
-    protected FontScalar _fontScalar = new LinearFontScalar(10, 40);
-    protected CloudFont _cloudFont = new CloudFont("Comic Sans MS", FontWeight.BOLD);
-    protected AngleGenerator _angleGenerator = new AngleGenerator();
-    protected CollisionRaster _collisionRaster;
-    protected Bitmap _imageBitmap;
-    protected Set<Word> _placedWords = new HashSet<Word>();
-    protected Set<Word> _skippedWords = new HashSet<Word>();
-    protected Typeface _mainTypeface;
-    protected ColorPalette _colorPalette = new ColorPalette(Color.RED, Color.BLACK, Color.YELLOW, Color.GRAY, Color.GREEN);
-    private ProgressDialogHelper _progressHelper;
+	protected static final Random RANDOM = new Random();
+	protected int _width;
+	protected int _height;
+	protected CollisionMode _collisionMode;
+	protected CollisionChecker _collisionChecker;
+	protected Padder _padder;
+	protected int _padding = 0;
+	protected Background _background;
+	protected RectanglePixelCollidable _backgroundCollidable;
+	protected int _backgroundColor = Color.WHITE;
+	protected FontScalar _fontScalar = new LinearFontScalar(10, 40);
+	protected CloudFont _cloudFont = new CloudFont("Comic Sans MS", FontWeight.BOLD);
+	protected AngleGenerator _angleGenerator = new AngleGenerator();
+	protected CollisionRaster _collisionRaster;
+	protected Bitmap _imageBitmap;
+	protected Set<Word> _placedWords = new HashSet<Word>();
+	protected Typeface _mainTypeface;
+	protected ColorPalette _colorPalette = new ColorPalette(Color.RED, Color.BLACK, Color.YELLOW, Color.GRAY, Color.GREEN);
+	private ProgressDialogHelper _progressHelper;
 	private boolean _running = true;
-    public WordCloud(ProgressDialogHelper progressHelper, int width, int height, CollisionMode collisionMode) 
-    {
-        _width = width;
-        _height = height;
-        _collisionMode = collisionMode;
-        _progressHelper = progressHelper;
-        switch(collisionMode) 
-        {
-            case PIXEL_PERFECT:
-                _padder = new WordPixelPadder();
-                _collisionChecker = new RectanglePixelCollisionChecker();
-                break;
+	private Canvas _bitmapCanvas;
 
-            case RECTANGLE:
-            default:
-                _padder = new RectanglePadder();
-                _collisionChecker = new RectangleCollisionChecker();
-                break;
-        }
-        _collisionRaster = new CollisionRaster(width, height);
-        _imageBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        _backgroundCollidable = new RectanglePixelCollidable(_collisionRaster, 0, 0);
-        _background = new RectangleBackground(width, height);
-    }
+	public WordCloud(ProgressDialogHelper progressHelper, int width, int height, CollisionMode collisionMode) 
+	{
+		_width = width;
+		_height = height;
+		_collisionMode = collisionMode;
+		_progressHelper = progressHelper;
+		switch(collisionMode) 
+		{
+		case PIXEL_PERFECT:
+			_padder = new WordPixelPadder();
+			_collisionChecker = new RectanglePixelCollisionChecker();
+			break;
 
-    public void build(ArrayList<WordFrequency> wordFrequencies) 
-    {
-        Collections.sort(wordFrequencies);
-        drawForegroundToBackground();
-        insertWatermark();
-        
-        /* Starter width */
-        int fontWidthPixel = _imageBitmap.getWidth();
-        int fontSteps = fontWidthPixel / 15;
-        int i = 1;
+		case RECTANGLE:
+		default:
+			_padder = new RectanglePadder();
+			_collisionChecker = new RectangleCollisionChecker();
+			break;
+		}
+		_collisionRaster = new CollisionRaster(width, height);
+		_imageBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		_bitmapCanvas = new Canvas(_imageBitmap);
+		_backgroundCollidable = new RectanglePixelCollidable(_collisionRaster, 0, 0);
+		_background = new RectangleBackground(width, height);
+	}
 
-        for (WordFrequency wordFreq : wordFrequencies)
-        {
-        	if(!_running)
-        		break;
-        	
-            Word word = new Word(wordFreq.getWord(), _colorPalette.next(), fontWidthPixel, _mainTypeface, _collisionChecker);
+	public void build(ArrayList<WordFrequency> wordFrequencies) 
+	{
+		Collections.sort(wordFrequencies);
+		drawBackgroundColor();
+		insertWatermark();
 
-            double theta = _angleGenerator.randomNext();
-            if(theta != 0) 
-            {
-                word.setBufferedImage(ImageRotation.rotate(word.getBufferedImage(), theta));
-            }
-        	
-            _progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size());
-        	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
-        	while(true && _running)
-        	{
-	            if(testPlace(word))
-	            {
-	            	i++;
-	            	break;
-	            }
-	            else
-	            {
-	            	fontWidthPixel *= .5;
-	            	if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Lowering text size to: " + fontWidthPixel);
-	        		word.setTextPixelSize(fontWidthPixel);
-	            }
-	            
-	            if(fontWidthPixel <= fontSteps)
-	            {
-	            	break;
-	            }
-        	}
-        }
-    }
+		/* Starter width */
+		int fontWidthPixel = _imageBitmap.getWidth() - 10;
+		int fontSteps = fontWidthPixel / 15;
+		int i = 1;
+
+		for (WordFrequency wordFreq : wordFrequencies)
+		{
+
+			if(!_running)
+				break;
+
+			Word word = new Word(wordFreq.getWord(), _colorPalette.next(), fontWidthPixel, _mainTypeface, _collisionChecker);
+
+			double theta = _angleGenerator.randomNext();
+			if(theta != 0) 
+			{
+				word.setBufferedImage(ImageRotation.rotate(word.getBufferedImage(), theta));
+			}
+
+			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size());
+			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
+			while(_running)
+			{
+				if(testPlace(word))
+				//if(place(word, _width / 2, _height / 2))
+				{
+					i++;
+					break;
+				}
+				else
+				{
+					fontWidthPixel *= .5;
+					if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Lowering text size to: " + fontWidthPixel);
+					word.setTextPixelSize(fontWidthPixel);
+				}
+
+				if(fontWidthPixel <= fontSteps)
+				{
+					break;
+				}
+			}
+		}
+	}
 
 	private void insertWatermark() 
-    {
-		Word watermark = new Word("#TextCloud", Color.BLACK,_width / 2, _mainTypeface, _collisionChecker);
+	{
+		Word watermark = new Word("#ConvoCloud", Color.BLACK,_width / 2, _mainTypeface, _collisionChecker);
 		place(watermark, _width - watermark.getWidth(), _height - watermark.getHeight() - 2);
-		
+
 	}
 
 	public void writeToFile(final String outputFileName) 
-    {
-        
-        FileOutputStream out = null;
-        try 
-        {
-               out = new FileOutputStream(outputFileName);
-               _imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-        } 
-        catch (Exception e) 
-        {
-            e.printStackTrace();
-        } 
-        finally 
-        {
-               try
-               {
-                   out.close();
-               } 
-               catch(Exception e) 
-               {
-            	   
-               }
-        }
-    }
+	{
 
-    protected void drawForegroundToBackground() 
-    {
-        Bitmap backgroundBufferedImage = Bitmap.createBitmap(_width, _height, Bitmap.Config.ARGB_8888);
-        Canvas graphics = new Canvas(backgroundBufferedImage);
+		FileOutputStream out = null;
+		try 
+		{
+			out = new FileOutputStream(outputFileName);
+			_imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		} 
+		finally 
+		{
+			try
+			{
+				out.close();
+			} 
+			catch(Exception e) 
+			{
 
-        Paint fillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        fillPaint.setColor(_backgroundColor);
-        graphics.drawRect(0, 0, _width, _height, fillPaint);
+			}
+		}
+	}
 
-        Canvas graphics2 = new Canvas(_imageBitmap);
-        graphics2.drawBitmap(backgroundBufferedImage, 0, 0, null);
-    }
-    
-    protected boolean testPlace(final Word word) 
-    {
+	protected void drawBackgroundColor() 
+	{
+		Paint fillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		fillPaint.setColor(_backgroundColor);
+		_bitmapCanvas.drawRect(0, 0, _width, _height, fillPaint);
+	}
 
-        for(int x = 0; x < _width - word.getWidth(); x += 2) 
-        {
-            for(int y = 0; y <= _height - word.getHeight(); y += 2) 
-            {
-                word.setX(x);
-                word.setY(y);
-                if(tryToPlace(word)) 
-                {
-                    Canvas graphics = new Canvas(_imageBitmap);
-                    _collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
-                    graphics.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
-                	return true;
-                }
+	protected boolean testPlace(final Word word) 
+	{
+		for(int x = 0; x < _width - word.getWidth() && _running; x += 2) 
+		{
+			for(int y = 0; y < _height - word.getHeight() && _running; y += 4) 
+			{
+				word.setX(x);
+				word.setY(y);
+				//if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "x:" + x + ",y:" + y);
+				if(tryToPlace(word)) 
+				{
+					_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
+					_bitmapCanvas.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
+					return true;
+				}
 
-            }
-        }
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
+	
+	private void query_integral_image()
+	{
+		
+	}
 
-    protected boolean place(final Word word, final int startX, final int startY) 
-    {
-        Canvas graphics = new Canvas(_imageBitmap);
+	protected boolean place(final Word word, final int startX, final int startY) 
+	{
 
-        int maxRadius = _width;
+		int maxRadius = _height / 2;
 
         for(int r = 0; r < maxRadius; r += 2) 
         {
-            for(int x = -r; x <= r; x++) 
-            {
-                if(startX + x < 0) 
-                { 
-                	continue; 
-                }
-                if(startX + x >= _width) 
-                { 
-                	continue; 
-                }
+            for(int x = -r; x <= r; x++) {
+                if(startX + x < 0) { continue; }
+                if(startX + x >= _width) { continue; }
 
-                boolean placed = false;
-                word.setX(startX + x);
+				boolean placed = false;
+				word.setX(startX + x);
 
-                int y1 = (int) Math.sqrt(r * r - x * x);
-                if(startY + y1 >= 0 && startY + y1 < _height)
-                {
-                    word.setY(startY + y1);
-                    placed = tryToPlace(word);
-                }
+				int y1 = (int) Math.sqrt(r * r - x * x);
+				if(startY + y1 >= 0 && startY + y1 < _height)
+				{
+					word.setY(startY + y1);
+					placed = tryToPlace(word);
+				}
 
-                int y2 = -y1;
-                if(!placed && startY + y2 >= 0 && startY + y2 < _height) 
-                {
-                    word.setY(startY + y2);
-                    placed = tryToPlace(word);
-                }
-                if(placed) 
-                {
-                    _collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
-                    graphics.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
-                	return true;
-                }
+				int y2 = -y1;
+				if(!placed && startY + y2 >= 0 && startY + y2 < _height) 
+				{
+					word.setY(startY + y2);
+					placed = tryToPlace(word);
+				}
+				if(placed) 
+				{
+					_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
+					_bitmapCanvas.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
+					return true;
+				}
 
-            }
-        }
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    private boolean tryToPlace(Word word) 
-    {
-        if(!_background.inBounds(word)) 
-        { 
-        	return false; 
-        }
+	private boolean tryToPlace(Word word) 
+	{
+		if(!_background.inBounds(word)) 
+		{ 
+			return false; 
+		}
 
-        switch(this._collisionMode) 
-        {
-            case RECTANGLE:
-                for(Word placeWord : this._placedWords) 
-                {
-                    if(placeWord.collide(word)) 
-                    {
-                        return false;
-                    }
-                }
-                _placedWords.add(word);
-                return true;
+		switch(this._collisionMode) 
+		{
+		case RECTANGLE:
+			for(Word placeWord : _placedWords) 
+			{
+				if(placeWord.collide(word)) 
+				{
+					return false;
+				}
+			}
+			_placedWords.add(word);
+			return true;
 
-            case PIXEL_PERFECT:
-                if(_backgroundCollidable.collide(word)) 
-                { 
-                	return false; 
-                }
-                _placedWords.add(word);
-                return true;
+		case PIXEL_PERFECT:
+			if(_backgroundCollidable.collide(word)) 
+			{ 
+				return false; 
+			}
+			_placedWords.add(word);
+			return true;
 
-        }
-        return false;
-    }
+		}
+		return false;
+	}
 
-    public void setBackgroundColor(int backgroundColor) 
-    {
-        _backgroundColor = backgroundColor;
-    }
-    
-    public void setTypeface(Typeface typeface)
-    {
-    	_mainTypeface = typeface;
-    }
+	public void setBackgroundColor(int backgroundColor) 
+	{
+		_backgroundColor = backgroundColor;
+	}
 
-    public void setPadding(int padding) 
-    {
-        _padding = padding;
-    }
+	public void setTypeface(Typeface typeface)
+	{
+		_mainTypeface = typeface;
+	}
 
-    public void setColorPalette(ColorPalette colorPalette) 
-    {
-        _colorPalette = colorPalette;
-    }
+	public void setPadding(int padding) 
+	{
+		_padding = padding;
+	}
 
-    public void setBackground(Background background) 
-    {
-        _background = background;
-    }
+	public void setColorPalette(ColorPalette colorPalette) 
+	{
+		_colorPalette = colorPalette;
+	}
 
-    public void setFontScalar(FontScalar fontScalar) 
-    {
-        _fontScalar = fontScalar;
-    }
+	public void setBackground(Background background) 
+	{
+		_background = background;
+	}
 
-    public void setCloudFont(CloudFont cloudFont) 
-    {
-        _cloudFont = cloudFont;
-    }
+	public void setFontScalar(FontScalar fontScalar) 
+	{
+		_fontScalar = fontScalar;
+	}
 
-    public void setAngleGenerator(AngleGenerator angleGenerator)
-    {
-        _angleGenerator = angleGenerator;
-    }
+	public void setCloudFont(CloudFont cloudFont) 
+	{
+		_cloudFont = cloudFont;
+	}
 
-    public Bitmap getBufferedImage() 
-    {
-        return _imageBitmap;
-    }
+	public void setAngleGenerator(AngleGenerator angleGenerator)
+	{
+		_angleGenerator = angleGenerator;
+	}
 
-    public Set<Word> getSkipped() 
-    {
-        return _skippedWords;
-    }
+	public Bitmap getBufferedImage() 
+	{
+		return _imageBitmap;
+	}
 
 	public void kill() 
 	{

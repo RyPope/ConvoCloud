@@ -13,6 +13,7 @@ public class ContactFetchThread implements Runnable
 {
 	private MainActivity _mainActivity;
 	private Intent _data;
+	private boolean _running = true;
 
 	public ContactFetchThread(MainActivity mainActivity, int requestCode, int resultCode, Intent data) 
 	{
@@ -33,7 +34,6 @@ public class ContactFetchThread implements Runnable
 		}
 
 		_mainActivity.setContact(contactToFetch);
-
 
 		_mainActivity.getProgressHelper().dismissContactProgressDialog();
 
@@ -88,7 +88,7 @@ public class ContactFetchThread implements Runnable
 				final Cursor findThreadCursor = _mainActivity.getContentResolver().query(Uri.parse("content://sms/"), projection, selection, null, null);
 				if(findThreadCursor != null && findThreadCursor.moveToFirst())
 				{
-					for(int i = 0; i < findThreadCursor.getCount(); i++)
+					for(int i = 0; i < findThreadCursor.getCount() && _running; i++)
 					{
 						String number = findThreadCursor.getString(findThreadCursor.getColumnIndexOrThrow("address"));
 						String sms = findThreadCursor.getString(findThreadCursor.getColumnIndexOrThrow("body")).toString();
@@ -172,6 +172,11 @@ public class ContactFetchThread implements Runnable
 
 		return contactToFetch;
 
+	}
+	
+	public void kill()
+	{
+		_running = false;
 	}
 
 }

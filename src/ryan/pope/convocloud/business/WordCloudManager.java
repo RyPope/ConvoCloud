@@ -11,11 +11,11 @@ public class WordCloudManager
 	public WordCloudManager(MainActivity mainActivity)
 	{
 		_mainActivity = mainActivity;
-		_wordCloudThread = new WordCloudThread(_mainActivity);
 	}
 
 	public void createCloud() 
 	{
+		_wordCloudThread = new WordCloudThread(_mainActivity);
 		try 
 		{
 			if(_cloudThread != null)

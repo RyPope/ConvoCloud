@@ -66,7 +66,7 @@ public class MainActivity extends Activity
 		_listenerManager = new ListenerManager();
 		_listenerManager.setup(this, _wordCloudManager);
 
-		_contactDataAccess = new ContactDataAccess();
+		_contactDataAccess = new ContactDataAccess(this);
 
 		_progressHelper = new ProgressDialogHelper(this);
 
@@ -85,7 +85,7 @@ public class MainActivity extends Activity
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
-		_contactDataAccess.fetchContact(this, requestCode, resultCode, data);
+		_contactDataAccess.fetchContact(requestCode, resultCode, data);
 	}
 
 	public void setContact(Contact contactToFetch)
@@ -169,5 +169,10 @@ public class MainActivity extends Activity
 	public Contact getContact() 
 	{
 		return _selectedContact;
+	}
+
+	public ContactDataAccess getContactManager() 
+	{
+		return _contactDataAccess;
 	}
 }
