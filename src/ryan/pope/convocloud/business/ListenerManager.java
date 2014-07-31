@@ -26,10 +26,10 @@ public class ListenerManager
 	private UIHelper _UIHelper;
 	private WordCloudManager _wordCloudManager;
 	
-	public void setup(MainActivity mainActivity) 
+	public void setup(MainActivity mainActivity, WordCloudManager wordCloudManager) 
 	{
 		_mainActivity = mainActivity;
-		_wordCloudManager = new WordCloudManager(_mainActivity);
+		_wordCloudManager = wordCloudManager;
 		_UIHelper = new UIHelper(_mainActivity);
 		
 		if(_mainActivity != null)

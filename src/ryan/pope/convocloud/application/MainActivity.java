@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.business.ListenerManager;
+import ryan.pope.convocloud.business.WordCloudManager;
 import ryan.pope.convocloud.cloud.objects.WordFrequency;
 import ryan.pope.convocloud.objects.Contact;
 import ryan.pope.convocloud.persistance.ContactDataAccess;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity
 	private File _photoFile;
 
 	private Contact _selectedContact;
+	private WordCloudManager _wordCloudManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -60,8 +62,9 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 
 		/* Create all click listeners */
+		_wordCloudManager = new WordCloudManager(this);
 		_listenerManager = new ListenerManager();
-		_listenerManager.setup(this);
+		_listenerManager.setup(this, _wordCloudManager);
 
 		_contactDataAccess = new ContactDataAccess();
 
@@ -72,6 +75,11 @@ public class MainActivity extends Activity
 
 		/* Initialize views */
 		_statusTextView = (TextView) findViewById(R.id.status_text);
+	}
+	
+	public WordCloudManager getWordCloudManager()
+	{
+		return _wordCloudManager;
 	}
 
 	@Override
@@ -162,7 +170,4 @@ public class MainActivity extends Activity
 	{
 		return _selectedContact;
 	}
-	
-	
-
 }

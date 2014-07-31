@@ -133,7 +133,7 @@ public class WordCloud
 	private void insertWatermark() 
     {
 		Word watermark = new Word("#TextCloud", Color.BLACK,_width / 2, _mainTypeface, _collisionChecker);
-		place(watermark, _width - watermark.getWidth(), _height - watermark.getHeight());
+		place(watermark, _width - watermark.getWidth(), _height - watermark.getHeight() - 2);
 		
 	}
 
@@ -331,7 +331,6 @@ public class WordCloud
 
 	public void kill() 
 	{
-		_progressHelper.changeCloudDialogMessage("Ending ConvoCloud early...");
 		_running  = false;
 	}
 }

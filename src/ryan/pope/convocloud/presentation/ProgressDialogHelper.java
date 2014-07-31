@@ -83,7 +83,9 @@ public class ProgressDialogHelper
 			    {
 			        public void onClick(DialogInterface dialog, int which) 
 			        {
-			        	
+			    		changeCloudDialogMessage("Ending ConvoCloud early...");
+			        	_mainActivity.getWordCloudManager().kill();
+			        	return;
 			        }
 			    });
 				_cloudProgressDialog.show();
