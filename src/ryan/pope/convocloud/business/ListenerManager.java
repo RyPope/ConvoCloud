@@ -10,10 +10,8 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
 import android.util.Log;
 import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,6 +29,7 @@ public class ListenerManager
 	private Button contactSelectionButton;
 	private Button createTextCloudButton;
 	private ImageView visibilityButton;
+	private ImageView shareButton;
 	private RelativeLayout backgroundLayout;
 	
 	private MainActivity _mainActivity;
@@ -47,7 +46,41 @@ public class ListenerManager
 			setupCreateTextCloudListener();
 			setupVisiblityButtonListener();
 			setupBackgroundListener();
+			setupShareButtonListener();
 		}
+	}
+
+	private void setupShareButtonListener() 
+	{
+		shareButton = (ImageView) _mainActivity.findViewById(R.id.share_button);
+		shareButton.setOnClickListener( new OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Share Button clicked"); 
+				if(_mainActivity.hasPhotoLoaded() && _mainActivity.hasContactLoaded())
+				{
+					Intent shareIntent = new Intent();
+					shareIntent.setAction(Intent.ACTION_SEND);
+					shareIntent.putExtra(Intent.EXTRA_STREAM, _mainActivity.getPhotoURI());
+					
+					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "My Convo Cloud with " + _mainActivity.getContact().getName() + ". Made with http://goo.gl/zEgP5B for Android #ConvoCloud");
+					shareIntent.setType("image/png");
+					_mainActivity.startActivity(Intent.createChooser(shareIntent, _mainActivity.getResources().getText(R.string.send_to)));
+				}
+				else
+				{
+					Intent shareIntent = new Intent();
+					shareIntent.setAction(Intent.ACTION_SEND);
+					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out Convo Cloud for Android, http://goo.gl/zEgP5B #ConvoCloud");
+					shareIntent.setType("text/plain");
+					_mainActivity.startActivity(Intent.createChooser(shareIntent, _mainActivity.getResources().getText(R.string.send_to)));
+				}
+			}
+
+		});
 	}
 
 	private void setupBackgroundListener() 

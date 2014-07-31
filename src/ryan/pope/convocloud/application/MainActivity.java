@@ -16,6 +16,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -30,8 +31,9 @@ public class MainActivity extends Activity
 	private ContactDataAccess _contactDataAccess;
 	private ProgressDialogHelper _progressHelper;
 	private TextView _statusTextView;
+	private File _photoFile;
 
-	private Contact selectedContact;
+	private Contact _selectedContact;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -58,7 +60,8 @@ public class MainActivity extends Activity
 
 		_progressHelper = new ProgressDialogHelper(this);
 
-		selectedContact = null;
+		_selectedContact = null;
+		_photoFile = null;
 
 		/* Initialize views */
 		_statusTextView = (TextView) findViewById(R.id.status_text);
@@ -72,15 +75,15 @@ public class MainActivity extends Activity
 
 	public void setContact(Contact contactToFetch)
 	{
-		selectedContact = contactToFetch;
-		if(selectedContact != null)
+		_selectedContact = contactToFetch;
+		if(_selectedContact != null)
 		{
 			runOnUiThread(new Runnable() 
 			{
 				@Override
 				public void run() 
 				{
-					_statusTextView.setText("Selected Contact: " + selectedContact.getName());
+					_statusTextView.setText("Selected Contact: " + _selectedContact.getName());
 				}
 			});
 		}
@@ -93,22 +96,48 @@ public class MainActivity extends Activity
 
 	public ArrayList<WordFrequency> getWordFrequencies() 
 	{
-		return selectedContact.getWordFrequencies();
+		return _selectedContact.getWordFrequencies();
 	}
 
 	@SuppressWarnings("deprecation")
 	public void setBackground(File file) 
 	{
-		Resources res = getResources();
-		Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-		BitmapDrawable bd = new BitmapDrawable(res, bitmap);
-		View view = findViewById(R.id.main_layout);
-		
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-            view.setBackground(bd);
-        else
-            view.setBackgroundDrawable(bd);
+		if(file != null)
+		{
+			_photoFile = file;
+			Resources res = getResources();
+			Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+			BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+			View view = findViewById(R.id.main_layout);
+			
+	        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+	            view.setBackground(bd);
+	        else
+	            view.setBackgroundDrawable(bd);
+		}
 
 	}
+
+	public boolean hasPhotoLoaded() 
+	{
+		return _photoFile != null ? true : false;
+	}
+
+	public Uri getPhotoURI() 
+	{
+		return Uri.fromFile(_photoFile);
+	}
+
+	public boolean hasContactLoaded() 
+	{
+		return _selectedContact != null ? true: false;
+	}
+
+	public Contact getContact() 
+	{
+		return _selectedContact;
+	}
+	
+	
 
 }

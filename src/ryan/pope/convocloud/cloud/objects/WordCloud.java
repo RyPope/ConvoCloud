@@ -137,7 +137,7 @@ public class WordCloud
         try 
         {
                out = new FileOutputStream(outputFileName);
-               _imageBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
+               _imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
         } 
         catch (Exception e) 
         {
