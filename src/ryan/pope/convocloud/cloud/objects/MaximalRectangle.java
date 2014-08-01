@@ -2,19 +2,23 @@ package ryan.pope.convocloud.cloud.objects;
 
 import java.util.Stack;
 
+import ryan.pope.convocloud.application.Globals;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.util.Log;
 
 public class MaximalRectangle 
 {
-    public int maximalRectangle(Bitmap _imageBitmap) 
+	private int totalWidth;
+	private int totalHeight;
+    public Rect maximalRectangle(Bitmap _imageBitmap) 
     {
     	int _imageBitmapWidth = _imageBitmap.getWidth();
     	int _imageBitmapHeight = _imageBitmap.getHeight();
         if (_imageBitmap == null || _imageBitmapWidth == 0)
         {
-            return 0;
+            return new Rect();
         }
         
         int[][] heights = new int[_imageBitmapWidth][_imageBitmapHeight];
@@ -34,21 +38,28 @@ public class MaximalRectangle
             }
         }
         
-        int max = 0;
+        int maxRow = 0;
+        Rect maxRect = new Rect();
         
         for (int row = 0; row < heights.length; row++)
         {
-            max = Math.max(max, maxArea(heights[row]));
+        	Rect checkRect = maxArea(heights[row]);
+        	if(maxRect.width() * maxRect.height() < checkRect.width() * checkRect.height())
+        	{
+        		maxRow = row;
+        		maxRect.set(heights[maxRow][0] - checkRect.right, checkRect.top, (heights[maxRow][0] - checkRect.right) + checkRect.right, checkRect.bottom);
+        	}
         }
         
-        return max;
+        if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Max row: " + heights[maxRow][0]);
+        return maxRect;
     }
 
-    private int maxArea(int[] heights)
+    private Rect maxArea(int[] heights)
     {
         if (heights == null || heights.length == 0)
         {
-            return 0;
+            return new Rect();
         }
         
         Stack<Integer> stack = new Stack<Integer>();
@@ -69,7 +80,11 @@ public class MaximalRectangle
                 
                 int width = stack.isEmpty() ? i : i - stack.peek() - 1;
                 
-                max = Math.max(max, height * width);
+                if(max < height * width)
+                {
+                	max = height * width;
+                	maxRect.set(0, 0, height, width);
+                }
             }
             
         }
@@ -77,11 +92,15 @@ public class MaximalRectangle
         {
             int height = heights[stack.pop()];
             
-            int width=stack.isEmpty() ? i : i - stack.peek() - 1;
-            max = Math.max(max, height*width);
+            int width = stack.isEmpty() ? i : i - stack.peek() - 1;
+            if(max < height * width)
+            {
+            	max = height * width;
+            	maxRect.set(0, 0, height, width);
+            }
         }
         
-        return max;
+        return maxRect;
         
     }
 }

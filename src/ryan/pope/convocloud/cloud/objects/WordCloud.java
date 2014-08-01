@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
 import ryan.pope.convocloud.application.Globals;
@@ -87,7 +88,7 @@ public class WordCloud
 	{
 		Collections.sort(wordFrequencies);
 		drawBackgroundColor();
-		insertWatermark();
+		//insertWatermark();
 
 		/* Starter width */
 		int fontWidthPixel = _imageBitmap.getWidth() - 10;
@@ -122,8 +123,8 @@ public class WordCloud
 				if(testPlace(word))
 				//if(place(word, _width / 2, _height / 2))
 				{
-					int max = maxRect.maximalRectangle(_imageBitmap);
-					if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Max Rect: " + max); 
+					Rect rect = maxRect.maximalRectangle(_imageBitmap);
+					if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
 					i++;
 					break;
 				}
