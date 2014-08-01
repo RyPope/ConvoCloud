@@ -69,7 +69,7 @@ public class Word implements Collidable
         paint.setTextSize(desiredTextSize);
     }
 
-    public Bitmap getBufferedImage() 
+    public Bitmap getImageBitmap() 
     {
         return _imageBitmap;
     }

@@ -91,8 +91,10 @@ public class WordCloud
 
 		/* Starter width */
 		int fontWidthPixel = _imageBitmap.getWidth() - 10;
-		int fontSteps = fontWidthPixel / 15;
+		int minimumFontPixelSize = fontWidthPixel / 15;
 		int i = 1;
+		
+		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Minimum font size: " + minimumFontPixelSize);
 
 		for (WordFrequency wordFreq : wordFrequencies)
 		{
@@ -105,15 +107,20 @@ public class WordCloud
 			double theta = _angleGenerator.randomNext();
 			if(theta != 0) 
 			{
-				word.setBufferedImage(ImageRotation.rotate(word.getBufferedImage(), theta));
+				word.setBufferedImage(ImageRotation.rotate(word.getImageBitmap(), theta));
 			}
 
 			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size());
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
 			while(_running)
 			{
+				if(fontWidthPixel < minimumFontPixelSize)
+				{
+					break;
+				}
 				if(testPlace(word))
 				//if(place(word, _width / 2, _height / 2))
+				//if(query_integral_image(word))
 				{
 					i++;
 					break;
@@ -124,11 +131,11 @@ public class WordCloud
 					if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Lowering text size to: " + fontWidthPixel);
 					word.setTextPixelSize(fontWidthPixel);
 				}
-
-				if(fontWidthPixel <= fontSteps)
-				{
-					break;
-				}
+			}
+			
+			if(fontWidthPixel < minimumFontPixelSize)
+			{
+				break;
 			}
 		}
 	}
@@ -136,7 +143,8 @@ public class WordCloud
 	private void insertWatermark() 
 	{
 		Word watermark = new Word("#ConvoCloud", Color.BLACK,_width / 2, _mainTypeface, _collisionChecker);
-		place(watermark, _width - watermark.getWidth(), _height - watermark.getHeight() - 2);
+		_collisionRaster.mask(watermark.getCollisionRaster(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2);
+		_bitmapCanvas.drawBitmap(watermark.getImageBitmap(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2, null);
 
 	}
 
@@ -175,9 +183,9 @@ public class WordCloud
 
 	protected boolean testPlace(final Word word) 
 	{
-		for(int x = 0; x < _width - word.getWidth() && _running; x += 2) 
+		for(int y = 0; y < _height - word.getHeight() && _running; y += 4) 
 		{
-			for(int y = 0; y < _height - word.getHeight() && _running; y += 4) 
+			for(int x = 0; x < _width - word.getWidth() && _running; x += 2) 
 			{
 				word.setX(x);
 				word.setY(y);
@@ -185,7 +193,7 @@ public class WordCloud
 				if(tryToPlace(word)) 
 				{
 					_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
-					_bitmapCanvas.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
+					_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
 					return true;
 				}
 
@@ -195,15 +203,36 @@ public class WordCloud
 		return false;
 	}
 	
-	private void query_integral_image()
+	private boolean query_integral_image(final Word word)
 	{
+		IntegralImage integralImage = new IntegralImage(_imageBitmap);
 		
+		int w = word.getImageBitmap().getWidth();
+		int h = word.getImageBitmap().getHeight();
+
+		for (int i = _width - 1; i >= w/4; i -= w/2)
+		    for (int j = _height  - 1; j >= h/4; j -= h/2)
+		    {
+		        if (integralImage.total(i - w/2, j - h/2, i, j) == 0)
+		        {
+		        	word.setX(i - w/2);
+		        	word.setY(j - h/2);
+					if(tryToPlace(word)) 
+					{
+						_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
+						_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
+						return true;
+					}
+		        }
+		    }
+		
+		return false;
 	}
 
 	protected boolean place(final Word word, final int startX, final int startY) 
 	{
 
-		int maxRadius = _height / 2;
+		int maxRadius = _width;
 
         for(int r = 0; r < maxRadius; r += 2) 
         {
@@ -230,7 +259,7 @@ public class WordCloud
 				if(placed) 
 				{
 					_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
-					_bitmapCanvas.drawBitmap(word.getBufferedImage(), word.getX(), word.getY(), null);
+					_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
 					return true;
 				}
 

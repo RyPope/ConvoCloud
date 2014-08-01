@@ -15,7 +15,7 @@ public class RectanglePadder implements Padder
         	return; 
         }
 
-        Bitmap _imageBitmap = word.getBufferedImage();
+        Bitmap _imageBitmap = word.getImageBitmap();
         int width = _imageBitmap.getWidth() + padding * 2;
         int height = _imageBitmap.getHeight() + padding * 2;
 
