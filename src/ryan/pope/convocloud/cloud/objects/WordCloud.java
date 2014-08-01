@@ -120,7 +120,6 @@ public class WordCloud
 				}
 				if(testPlace(word))
 				//if(place(word, _width / 2, _height / 2))
-				//if(query_integral_image(word))
 				{
 					i++;
 					break;
@@ -200,32 +199,6 @@ public class WordCloud
 			}
 		}
 
-		return false;
-	}
-	
-	private boolean query_integral_image(final Word word)
-	{
-		IntegralImage integralImage = new IntegralImage(_imageBitmap);
-		
-		int w = word.getImageBitmap().getWidth();
-		int h = word.getImageBitmap().getHeight();
-
-		for (int i = _width - 1; i >= w/4; i -= w/2)
-		    for (int j = _height  - 1; j >= h/4; j -= h/2)
-		    {
-		        if (integralImage.total(i - w/2, j - h/2, i, j) == 0)
-		        {
-		        	word.setX(i - w/2);
-		        	word.setY(j - h/2);
-					if(tryToPlace(word)) 
-					{
-						_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
-						_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
-						return true;
-					}
-		        }
-		    }
-		
 		return false;
 	}
 
