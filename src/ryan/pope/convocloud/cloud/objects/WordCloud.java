@@ -96,6 +96,7 @@ public class WordCloud
 		
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Minimum font size: " + minimumFontPixelSize);
 
+		MaximalRectangle maxRect = new MaximalRectangle();
 		for (WordFrequency wordFreq : wordFrequencies)
 		{
 
@@ -121,6 +122,8 @@ public class WordCloud
 				if(testPlace(word))
 				//if(place(word, _width / 2, _height / 2))
 				{
+					int max = maxRect.maximalRectangle(_imageBitmap);
+					if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Max Rect: " + max); 
 					i++;
 					break;
 				}
