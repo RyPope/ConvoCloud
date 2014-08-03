@@ -88,25 +88,31 @@ public class WordCloud
 	{
 		Collections.sort(wordFrequencies);
 		drawBackgroundColor();
-		//insertWatermark();
+		insertWatermark();
 
 		/* Starter width */
-		int fontWidthPixel = _imageBitmap.getWidth() - 10;
-		int minimumFontPixelSize = fontWidthPixel / 15;
+		int minimumFontPixelSize = _width / 15;
 		int i = 1;
 		
-		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Minimum font size: " + minimumFontPixelSize);
-
 		MaximalRectangle maxRect = new MaximalRectangle();
 		for (WordFrequency wordFreq : wordFrequencies)
 		{
-
 			if(!_running)
 				break;
-
-			Word word = new Word(wordFreq.getWord(), _colorPalette.next(), fontWidthPixel, _mainTypeface, _collisionChecker);
-
+			
 			double theta = _angleGenerator.randomNext();
+			Rect rect = maxRect.maximalRect(_imageBitmap);
+			
+			if(Math.min(rect.width(), rect.height()) <= minimumFontPixelSize)
+			{
+				break;
+			}
+
+			Word word = new Word(wordFreq.getWord(), _colorPalette.next(), rect, _mainTypeface, _collisionChecker);
+			
+			word.setX(rect.left);
+			word.setY(rect.top);
+			
 			if(theta != 0) 
 			{
 				word.setBufferedImage(ImageRotation.rotate(word.getImageBitmap(), theta));
@@ -114,38 +120,23 @@ public class WordCloud
 
 			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size());
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
-			while(_running)
-			{
-				if(fontWidthPixel < minimumFontPixelSize)
-				{
-					break;
-				}
-				if(testPlace(word))
-				//if(place(word, _width / 2, _height / 2))
-				{
-					Rect rect = maxRect.maximalRect(_imageBitmap);
-					if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
-					i++;
-					break;
-				}
-				else
-				{
-					fontWidthPixel *= .5;
-					if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Lowering text size to: " + fontWidthPixel);
-					word.setTextPixelSize(fontWidthPixel);
-				}
-			}
 			
-			if(fontWidthPixel < minimumFontPixelSize)
-			{
-				break;
-			}
+			draw(word);
+			
+			if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
+			i++;
 		}
+	}
+
+	private void draw(Word word) 
+	{
+		_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
+		_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
 	}
 
 	private void insertWatermark() 
 	{
-		Word watermark = new Word("#ConvoCloud", Color.BLACK,_width / 2, _mainTypeface, _collisionChecker);
+		Word watermark = new Word("#ConvoCloud", Color.BLACK, _height / 15, _mainTypeface, _collisionChecker);
 		_collisionRaster.mask(watermark.getCollisionRaster(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2);
 		_bitmapCanvas.drawBitmap(watermark.getImageBitmap(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2, null);
 

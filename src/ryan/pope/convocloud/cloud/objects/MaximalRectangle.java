@@ -23,21 +23,16 @@ final class Cell
 
 final class Cache 
 {
-
-	private final LinkedList<Integer> aggregateHeights;
+	private int[] aggregateHeights;
 
 	Cache(final int size) 
 	{
-		aggregateHeights = new LinkedList<Integer>();
-		for(int i = 0; i <= size; i++) 
-		{
-			aggregateHeights.add(0);
-		}
+		aggregateHeights = new int[size + 1];
 	}
 
 	public int get(final int col) 
 	{
-		return aggregateHeights.get(col);
+		return aggregateHeights[col];
 	}
 
 	public void aggregate(final int[] row) 
@@ -48,11 +43,11 @@ final class Cache
 
 			if(element != Color.WHITE) 
 			{
-				aggregateHeights.set(col, 0);
+				aggregateHeights[col] = 0;
 			} 
 			else 
 			{
-				aggregateHeights.set(col, aggregateHeights.get(col) + 1);
+				aggregateHeights[col] = aggregateHeights[col] + 1;
 			}
 		}
 	}

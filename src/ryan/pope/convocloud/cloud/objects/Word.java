@@ -25,7 +25,7 @@ public class Word implements Collidable
 	private int _color;
 	private Typeface _typeface;
 
-    public Word(String word, int color, int fontWidth, Typeface typeface, CollisionChecker collisionChecker) 
+    public Word(String word, int color, Rect rect, Typeface typeface, CollisionChecker collisionChecker) 
     {
         _word = word;
         _collisionChecker = collisionChecker;
@@ -37,7 +37,39 @@ public class Word implements Collidable
         if(typeface != null)
         	textPaint.setTypeface(typeface);
 
-        setTextSizeForWidth(textPaint, fontWidth, word);
+        setTextSize(textPaint, rect, word);
+        //setTextSizeForHeight(textPaint, rect.width(), word);
+        textPaint.setTextAlign(Align.LEFT);
+        
+        Rect bounds = new Rect();
+        textPaint.getTextBounds(word, 0, word.length(), bounds);
+        int width = bounds.width() + 2;
+        int height = bounds.height() + 2;
+        
+        _imageBitmap = Bitmap.createBitmap(width, height, _conf);
+       
+        Canvas canvas = new Canvas(_imageBitmap);
+
+        canvas.drawColor(Color.TRANSPARENT); //Is this necessary?
+        canvas.drawText(word, 0, height, textPaint);
+
+        _collisionRaster = new CollisionRaster(_imageBitmap);
+    }
+    
+    public Word(String word, int color, int fontHeight, Typeface typeface, CollisionChecker collisionChecker) 
+    {
+    	/* Remove this constructor when convenient */
+        _word = word;
+        _collisionChecker = collisionChecker;
+        _color = color;
+        _typeface = typeface;
+
+        textPaint.setColor(color);
+        
+        if(typeface != null)
+        	textPaint.setTypeface(typeface);
+
+        setTextSizeForHeight(textPaint, fontHeight, word);
         textPaint.setTextAlign(Align.LEFT);
         
         Rect bounds = new Rect();
@@ -54,8 +86,22 @@ public class Word implements Collidable
 
         _collisionRaster = new CollisionRaster(_imageBitmap);
     }
-    
-    private static void setTextSizeForWidth(Paint paint, float desiredWidth, String text) 
+
+	private void setTextSize(Paint paint, Rect rect, String text) 
+    {
+        final float testTextSize = 48f;
+
+        paint.setTextSize(testTextSize);
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        float desiredTextSize = testTextSize * rect.width() / bounds.width();
+        desiredTextSize = desiredTextSize * rect.height() / bounds.height();
+
+        paint.setTextSize(desiredTextSize);
+	}
+
+	private static void setTextSizeForWidth(Paint paint, float desiredWidth, String text) 
     {
 
         final float testTextSize = 48f;
@@ -65,6 +111,20 @@ public class Word implements Collidable
         paint.getTextBounds(text, 0, text.length(), bounds);
 
         float desiredTextSize = testTextSize * desiredWidth / bounds.width();
+
+        paint.setTextSize(desiredTextSize);
+    }
+    
+    private static void setTextSizeForHeight(Paint paint, float desiredWidth, String text) 
+    {
+
+        final float testTextSize = 48f;
+
+        paint.setTextSize(testTextSize);
+        Rect bounds = new Rect();
+        paint.getTextBounds(text, 0, text.length(), bounds);
+
+        float desiredTextSize = testTextSize * desiredWidth / bounds.height();
 
         paint.setTextSize(desiredTextSize);
     }
