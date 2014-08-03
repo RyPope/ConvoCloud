@@ -123,7 +123,7 @@ public class WordCloud
 				if(testPlace(word))
 				//if(place(word, _width / 2, _height / 2))
 				{
-					Rect rect = maxRect.maximalRectangle(_imageBitmap);
+					Rect rect = maxRect.maximalRect(_imageBitmap);
 					if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
 					i++;
 					break;
