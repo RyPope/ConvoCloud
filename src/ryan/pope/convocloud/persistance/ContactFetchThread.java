@@ -1,11 +1,16 @@
 package ryan.pope.convocloud.persistance;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.objects.Contact;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -30,7 +35,14 @@ public class ContactFetchThread implements Runnable
 
 		if(contactToFetch != null)
 		{
-			fetchContactMessages(contactToFetch);
+			if(_mainActivity.isTablet())
+			{
+				fetchStubData(contactToFetch);
+			}
+			else
+			{
+				fetchContactMessages(contactToFetch);
+			}
 		}
 
 		_mainActivity.setContact(contactToFetch);
@@ -38,6 +50,34 @@ public class ContactFetchThread implements Runnable
 		_mainActivity.getProgressHelper().dismissContactProgressDialog();
 
 
+	}
+
+	private void fetchStubData(Contact contactToFetch) 
+	{
+		try 
+		{
+			File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+			File file = new File(path, File.separator + "stub.txt");
+			BufferedReader br = new BufferedReader(new FileReader(file));  
+			String line;   
+			int i = 0;
+			while ((line = br.readLine()) != null) 
+			{
+				i++;
+				contactToFetch.addMessage(line);
+
+				if(i % 10 == 0)
+				{
+					_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching message " + i);
+				}
+			} 
+			
+			br.close();
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private void fetchContactMessages(Contact contactToFetch) 

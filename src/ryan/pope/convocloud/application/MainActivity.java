@@ -12,6 +12,7 @@ import ryan.pope.convocloud.persistance.ContactDataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -20,6 +21,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -36,6 +39,7 @@ public class MainActivity extends Activity
 
 	private Contact _selectedContact;
 	private WordCloudManager _wordCloudManager;
+	private boolean _tablet;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -75,11 +79,21 @@ public class MainActivity extends Activity
 
 		/* Initialize views */
 		_statusTextView = (TextView) findViewById(R.id.status_text);
+		
+		TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        _tablet = manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE ? true : false;
+
+        if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _tablet ? "Tablet" : "Not Tablet");
 	}
 	
 	public WordCloudManager getWordCloudManager()
 	{
 		return _wordCloudManager;
+	}
+	
+	public boolean isTablet()
+	{
+		return _tablet;
 	}
 
 	@Override

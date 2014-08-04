@@ -10,6 +10,7 @@ import ryan.pope.convocloud.cloud.collide.Collidable;
 import ryan.pope.convocloud.cloud.collide.Vector2d;
 import ryan.pope.convocloud.cloud.collide.checkers.CollisionChecker;
 import ryan.pope.convocloud.cloud.collide.image.CollisionRaster;
+import ryan.pope.convocloud.cloud.collide.image.ImageRotation;
 
 public class Word implements Collidable
 {
@@ -22,7 +23,7 @@ public class Word implements Collidable
     private CollisionRaster _collisionRaster;
     private Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
 
-    public Word(String word, int color, Rect rect, Typeface typeface, CollisionChecker collisionChecker) 
+    public Word(String word, int color, Rect rect, Typeface typeface, CollisionChecker collisionChecker, double theta) 
     {
         _word = word;
         _collisionChecker = collisionChecker;
@@ -36,13 +37,12 @@ public class Word implements Collidable
 
         textPaint.setTextAlign(Align.LEFT);
         
-        adjustTextSize(word, textPaint, rect);
+        adjustTextSize(word, textPaint, rect, theta);
 
         Rect bounds = new Rect();
         textPaint.getTextBounds(word, 0, word.length(), bounds);
         int width = bounds.width();
         int height = bounds.height();
-        
         
         _imageBitmap = Bitmap.createBitmap(width, height, _conf);
        
@@ -50,31 +50,57 @@ public class Word implements Collidable
 
         canvas.drawText(word, 0, height, textPaint);
 
-        _textPosition.setX(rect.left + (rect.width() - width));
-        _textPosition.setY(rect.top + (rect.height() - height));
+        if(theta == 0)
+        {
+	        _textPosition.setX(rect.left + (rect.width() - width));
+	        _textPosition.setY(rect.top + (rect.height() - height));
+        }
+        else
+        {
+        	_imageBitmap = ImageRotation.rotate(_imageBitmap, theta);
+        }
         _collisionRaster = new CollisionRaster(_imageBitmap);
     }
 	
-	private void adjustTextSize(String word, Paint textPaint, Rect rect) 
+	private void adjustTextSize(String word, Paint textPaint, Rect rect, double theta) 
 	{
 		textPaint.setTextSize(100);
 		textPaint.setTextScaleX(1.0f);
 	    Rect bounds = new Rect();
 	    textPaint.getTextBounds(word, 0, word.length(), bounds);
 
-	    int h = bounds.height();
-
-	    float targetHeight = (float)rect.height()*1f;
-	 
-	    float heightSize  = ((targetHeight/h)*100f);
-	    
-	    int w = bounds.width();
-
-	    float targetWidth = (float)rect.width()*1f;
-	 
-	    float widthSize  = ((targetWidth/w)*100f);
-
-	    textPaint.setTextSize(Math.min(heightSize, widthSize));
+	    if(theta == 0)
+	    {
+		    int h = bounds.height();
+	
+		    float targetHeight = (float)rect.height()*1f;
+		 
+		    float heightSize  = ((targetHeight/h)*100f);
+		    
+		    int w = bounds.width();
+	
+		    float targetWidth = (float)rect.width()*1f;
+		 
+		    float widthSize  = ((targetWidth/w)*100f);
+	
+		    textPaint.setTextSize(Math.min(heightSize, widthSize));
+	    }
+	    else
+	    {
+		    int h = bounds.height();
+			
+		    float targetHeight = (float)rect.width()*1f;
+		 
+		    float heightSize  = ((targetHeight/h)*100f);
+		    
+		    int w = bounds.width();
+	
+		    float targetWidth = (float)rect.height()*1f;
+		 
+		    float widthSize  = ((targetWidth/w)*100f);
+	
+		    textPaint.setTextSize(Math.min(heightSize, widthSize));
+	    }
 	}
 
     public Bitmap getImageBitmap() 

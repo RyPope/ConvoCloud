@@ -23,7 +23,6 @@ import ryan.pope.convocloud.cloud.collide.checkers.RectangleCollisionChecker;
 import ryan.pope.convocloud.cloud.collide.checkers.RectanglePixelCollisionChecker;
 import ryan.pope.convocloud.cloud.collide.image.AngleGenerator;
 import ryan.pope.convocloud.cloud.collide.image.CollisionRaster;
-import ryan.pope.convocloud.cloud.collide.image.ImageRotation;
 import ryan.pope.convocloud.cloud.font.scale.FontScalar;
 import ryan.pope.convocloud.cloud.font.scale.LinearFontScalar;
 import ryan.pope.convocloud.cloud.padding.Padder;
@@ -102,15 +101,14 @@ public class WordCloud
 			if(!_running)
 				break;
 			
+			
 			double theta = _angleGenerator.randomNext();
 			Rect rect = maxRect.maximalRect(_imageBitmap);
-
-			Word word = new Word(wordFreq.getWord(), _colorPalette.next(), rect, _mainTypeface, _collisionChecker);
 			
-			if(theta != 0) 
-			{
-				//word.setBufferedImage(ImageRotation.rotate(word.getImageBitmap(), theta));
-			}
+			if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
+				break;
+
+			Word word = new Word(wordFreq.getWord(), _colorPalette.next(), rect, _mainTypeface, _collisionChecker, theta);
 
 			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size() + "\nNote: Not all words will be placed.");
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
@@ -139,7 +137,7 @@ public class WordCloud
 	private void insertWatermark() 
 	{
 		Rect rect = new Rect(_width - (_width / 2), _height - (_height / 15), _width, _height);
-		Word watermark = new Word("#ConvoCloud", Color.BLACK, rect, _mainTypeface, _collisionChecker);
+		Word watermark = new Word("#ConvoCloud", Color.BLACK, rect, _mainTypeface, _collisionChecker, 0);
 		draw(watermark);
 	}
 
