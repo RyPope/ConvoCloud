@@ -23,7 +23,6 @@ import ryan.pope.convocloud.cloud.collide.checkers.RectangleCollisionChecker;
 import ryan.pope.convocloud.cloud.collide.checkers.RectanglePixelCollisionChecker;
 import ryan.pope.convocloud.cloud.collide.image.AngleGenerator;
 import ryan.pope.convocloud.cloud.collide.image.CollisionRaster;
-import ryan.pope.convocloud.cloud.collide.image.ImageRotation;
 import ryan.pope.convocloud.cloud.font.scale.FontScalar;
 import ryan.pope.convocloud.cloud.font.scale.LinearFontScalar;
 import ryan.pope.convocloud.cloud.padding.Padder;
@@ -62,6 +61,8 @@ public class WordCloud
 	{
 		_width = width;
 		_height = height;
+		
+		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Width: " + width + " Height: " + height);
 		_collisionMode = collisionMode;
 		_progressHelper = progressHelper;
 		switch(collisionMode) 
@@ -103,23 +104,25 @@ public class WordCloud
 			double theta = _angleGenerator.randomNext();
 			Rect rect = maxRect.maximalRect(_imageBitmap);
 
+			if(rect.height() > _width / 2);
+			{
+				rect.bottom = rect.bottom - (rect.height() / 2);
+			}
 			Word word = new Word(wordFreq.getWord(), _colorPalette.next(), rect, _mainTypeface, _collisionChecker);
-			
-			word.setX(rect.left);
-			word.setY(rect.top);
 			
 			if(theta != 0) 
 			{
 				//word.setBufferedImage(ImageRotation.rotate(word.getImageBitmap(), theta));
 			}
 
-			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size());
+			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size() + "\nNote: Not all words will be placed.");
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
 			
 			draw(word);
 			
 			if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
 			i++;
+			
 		}
 	}
 
@@ -131,10 +134,9 @@ public class WordCloud
 
 	private void insertWatermark() 
 	{
-		//Word watermark = new Word("#ConvoCloud", Color.BLACK, _height / 15, _mainTypeface, _collisionChecker);
-		//_collisionRaster.mask(watermark.getCollisionRaster(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2);
-		//_bitmapCanvas.drawBitmap(watermark.getImageBitmap(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2, null);
-
+		Rect rect = new Rect(_width - (_width / 2), _height - (_height / 15), _width, _height);
+		Word watermark = new Word("#ConvoCloud", Color.BLACK, rect, _mainTypeface, _collisionChecker);
+		draw(watermark);
 	}
 
 	public void writeToFile(final String outputFileName) 
