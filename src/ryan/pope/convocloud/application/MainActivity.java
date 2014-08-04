@@ -1,5 +1,6 @@
 package ryan.pope.convocloud.application;
 
+import com.crashlytics.android.Crashlytics;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -45,6 +46,7 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
+		Crashlytics.start(this);
 
 		doStartUp();
 
