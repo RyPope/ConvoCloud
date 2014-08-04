@@ -23,6 +23,7 @@ import ryan.pope.convocloud.cloud.collide.checkers.RectangleCollisionChecker;
 import ryan.pope.convocloud.cloud.collide.checkers.RectanglePixelCollisionChecker;
 import ryan.pope.convocloud.cloud.collide.image.AngleGenerator;
 import ryan.pope.convocloud.cloud.collide.image.CollisionRaster;
+import ryan.pope.convocloud.cloud.collide.image.ImageRotation;
 import ryan.pope.convocloud.cloud.font.scale.FontScalar;
 import ryan.pope.convocloud.cloud.font.scale.LinearFontScalar;
 import ryan.pope.convocloud.cloud.padding.Padder;
@@ -104,10 +105,6 @@ public class WordCloud
 			double theta = _angleGenerator.randomNext();
 			Rect rect = maxRect.maximalRect(_imageBitmap);
 
-			if(rect.height() > _width / 2);
-			{
-				rect.bottom = rect.bottom - (rect.height() / 2);
-			}
 			Word word = new Word(wordFreq.getWord(), _colorPalette.next(), rect, _mainTypeface, _collisionChecker);
 			
 			if(theta != 0) 
@@ -128,8 +125,15 @@ public class WordCloud
 
 	private void draw(Word word) 
 	{
-		_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
-		_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
+		try
+		{
+			_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
+			_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private void insertWatermark() 
@@ -170,100 +174,6 @@ public class WordCloud
 		Paint fillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		fillPaint.setColor(_backgroundColor);
 		_bitmapCanvas.drawRect(0, 0, _width, _height, fillPaint);
-	}
-
-	protected boolean testPlace(final Word word) 
-	{
-		for(int y = 0; y < _height - word.getHeight() && _running; y += 4) 
-		{
-			for(int x = 0; x < _width - word.getWidth() && _running; x += 2) 
-			{
-				word.setX(x);
-				word.setY(y);
-				//if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "x:" + x + ",y:" + y);
-				if(tryToPlace(word)) 
-				{
-					_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
-					_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
-					return true;
-				}
-
-			}
-		}
-
-		return false;
-	}
-
-	protected boolean place(final Word word, final int startX, final int startY) 
-	{
-
-		int maxRadius = _width;
-
-        for(int r = 0; r < maxRadius; r += 2) 
-        {
-            for(int x = -r; x <= r; x++) {
-                if(startX + x < 0) { continue; }
-                if(startX + x >= _width) { continue; }
-
-				boolean placed = false;
-				word.setX(startX + x);
-
-				int y1 = (int) Math.sqrt(r * r - x * x);
-				if(startY + y1 >= 0 && startY + y1 < _height)
-				{
-					word.setY(startY + y1);
-					placed = tryToPlace(word);
-				}
-
-				int y2 = -y1;
-				if(!placed && startY + y2 >= 0 && startY + y2 < _height) 
-				{
-					word.setY(startY + y2);
-					placed = tryToPlace(word);
-				}
-				if(placed) 
-				{
-					_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
-					_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
-					return true;
-				}
-
-			}
-		}
-
-		return false;
-	}
-
-	private boolean tryToPlace(Word word) 
-	{
-		if(!_background.inBounds(word)) 
-		{ 
-			return false; 
-		}
-
-		switch(this._collisionMode) 
-		{
-		case RECTANGLE:
-			for(Word placeWord : _placedWords) 
-			{
-				if(placeWord.collide(word)) 
-				{
-					return false;
-				}
-			}
-			_placedWords.add(word);
-			return true;
-
-		case PIXEL_PERFECT:
-			if(_backgroundCollidable.collide(word)) 
-			{ 
-				return false; 
-			}
-			_placedWords.add(word);
-			return true;
-
-		}
-		return false;
 	}
 
 	public void setBackgroundColor(int backgroundColor) 

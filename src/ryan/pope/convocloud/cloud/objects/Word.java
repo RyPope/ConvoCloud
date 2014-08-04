@@ -2,7 +2,6 @@ package ryan.pope.convocloud.cloud.objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
@@ -27,46 +26,34 @@ public class Word implements Collidable
     {
         _word = word;
         _collisionChecker = collisionChecker;
+        _textPosition.setX(rect.left);
+        _textPosition.setY(rect.top);
 
         textPaint.setColor(color);
         
         if(typeface != null)
         	textPaint.setTypeface(typeface);
 
-        //setTextSize(textPaint, rect, word);
-        //setTextSizeForHeight(textPaint, rect.width(), word);
         textPaint.setTextAlign(Align.LEFT);
         
         adjustTextSize(word, textPaint, rect);
-        adjustTextScale(word, textPaint, rect);
+
         Rect bounds = new Rect();
         textPaint.getTextBounds(word, 0, word.length(), bounds);
         int width = bounds.width();
         int height = bounds.height();
         
+        
         _imageBitmap = Bitmap.createBitmap(width, height, _conf);
        
         Canvas canvas = new Canvas(_imageBitmap);
 
-        canvas.drawColor(Color.TRANSPARENT); //Is this necessary?
         canvas.drawText(word, 0, height, textPaint);
 
+        _textPosition.setX(rect.left + (rect.width() - width));
+        _textPosition.setY(rect.top + (rect.height() - height));
         _collisionRaster = new CollisionRaster(_imageBitmap);
     }
-
-	private void adjustTextScale(String word, Paint textPaint, Rect rect) 
-	{
-		textPaint.setTextScaleX(1.0f);
-	    Rect bounds = new Rect();
-
-	    textPaint.getTextBounds(word, 0, word.length(), bounds);
-
-	    int w = bounds.right - bounds.left;
-
-	    float xscale = ((float) (rect.width())) / w;
-
-	    textPaint.setTextScaleX(xscale);
-	}
 	
 	private void adjustTextSize(String word, Paint textPaint, Rect rect) 
 	{
@@ -75,13 +62,19 @@ public class Word implements Collidable
 	    Rect bounds = new Rect();
 	    textPaint.getTextBounds(word, 0, word.length(), bounds);
 
-	    int h = bounds.bottom - bounds.top;
+	    int h = bounds.height();
 
-	    float target = (float)rect.height()*.7f;
+	    float targetHeight = (float)rect.height()*1f;
 	 
-	    float size  = ((target/h)*100f);
+	    float heightSize  = ((targetHeight/h)*100f);
+	    
+	    int w = bounds.width();
 
-	    textPaint.setTextSize(size);
+	    float targetWidth = (float)rect.width()*1f;
+	 
+	    float widthSize  = ((targetWidth/w)*100f);
+
+	    textPaint.setTextSize(Math.min(heightSize, widthSize));
 	}
 
     public Bitmap getImageBitmap() 
