@@ -118,6 +118,16 @@ public class ContactFetchThread implements Runnable
 				{
 					//No messages found
 				}
+				
+				if(findThreadCursor != null)
+				{
+					findThreadCursor.close();
+				}
+			}
+			
+			if(findContactCursor != null)
+			{
+				findContactCursor.close();
 			}
 		}
 	}

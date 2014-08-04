@@ -102,11 +102,6 @@ public class WordCloud
 			
 			double theta = _angleGenerator.randomNext();
 			Rect rect = maxRect.maximalRect(_imageBitmap);
-			
-			if(Math.min(rect.width(), rect.height()) <= minimumFontPixelSize)
-			{
-				break;
-			}
 
 			Word word = new Word(wordFreq.getWord(), _colorPalette.next(), rect, _mainTypeface, _collisionChecker);
 			
@@ -115,7 +110,7 @@ public class WordCloud
 			
 			if(theta != 0) 
 			{
-				word.setBufferedImage(ImageRotation.rotate(word.getImageBitmap(), theta));
+				//word.setBufferedImage(ImageRotation.rotate(word.getImageBitmap(), theta));
 			}
 
 			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size());
@@ -136,9 +131,9 @@ public class WordCloud
 
 	private void insertWatermark() 
 	{
-		Word watermark = new Word("#ConvoCloud", Color.BLACK, _height / 15, _mainTypeface, _collisionChecker);
-		_collisionRaster.mask(watermark.getCollisionRaster(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2);
-		_bitmapCanvas.drawBitmap(watermark.getImageBitmap(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2, null);
+		//Word watermark = new Word("#ConvoCloud", Color.BLACK, _height / 15, _mainTypeface, _collisionChecker);
+		//_collisionRaster.mask(watermark.getCollisionRaster(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2);
+		//_bitmapCanvas.drawBitmap(watermark.getImageBitmap(), _width - watermark.getWidth(), _height - watermark.getHeight() - 2, null);
 
 	}
 
