@@ -46,8 +46,8 @@
         android:layout_alignParentLeft="false"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical" >
 
         <ImageView
@@ -59,8 +59,8 @@
             android:alpha=".35"
             android:clickable="true"
             android:contentDescription="@string/settings_description"
-            android:maxHeight="30dp"
-            android:maxWidth="30dp"
+            android:maxHeight="45dp"
+            android:maxWidth="45dp"
             android:src="@drawable/settingsicon" />
 
         <ImageView
@@ -71,8 +71,8 @@
             android:alpha=".35"
             android:clickable="true"
             android:contentDescription="@string/settings_description"
-            android:maxHeight="30dp"
-            android:maxWidth="30dp"
+            android:maxHeight="45dp"
+            android:maxWidth="45dp"
             android:src="@drawable/visible_icon" />
 
         <ImageView
@@ -83,8 +83,8 @@
             android:alpha=".35"
             android:clickable="true"
             android:contentDescription="@string/settings_description"
-            android:maxHeight="30dp"
-            android:maxWidth="30dp"
+            android:maxHeight="45dp"
+            android:maxWidth="45dp"
             android:src="@drawable/share_icon" />
 
     </LinearLayout>

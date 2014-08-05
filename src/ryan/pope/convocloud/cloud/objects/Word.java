@@ -23,9 +23,10 @@ public class Word implements Collidable
     private CollisionRaster _collisionRaster;
     private Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
 
-    public Word(String word, int color, Rect rect, Typeface typeface, double theta) 
+    public Word(String word, int color, Rect rect, Typeface typeface, CollisionChecker collisionChecker, double theta) 
     {
         _word = word;
+        _collisionChecker = collisionChecker;
         _textPosition.setX(rect.left);
         _textPosition.setY(rect.top);
 
