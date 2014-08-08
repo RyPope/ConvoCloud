@@ -1,5 +1,7 @@
 package ryan.pope.convocloud.cloud.objects;
 
+import java.util.Random;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -14,12 +16,11 @@ public class Word
     private Bitmap.Config _conf = Bitmap.Config.ARGB_8888;
     private Bitmap _imageBitmap;
     private Paint _textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
-
-    public Word(String word, int color, Rect rect, Typeface typeface, double theta) 
+    private static final Random RANDOM = new Random();
+    
+    public Word(String word, int color, Rect rect, Typeface typeface, double theta, boolean hold) 
     {
-        _pos.setX(rect.left);
-        _pos.setY(rect.top);
-
+    	
         _textPaint.setColor(color);
         
         if(typeface != null)
@@ -43,13 +44,33 @@ public class Word
         if(theta == 0)
         {
 	        _pos.setX(rect.left + (rect.width() - width));
-	        _pos.setY(rect.top + (rect.height() - height));
+        	if(!hold)
+		        _pos.setY(randInt(rect.top, (rect.top + (rect.height() - height))));
+        	else
+        		_pos.setY(rect.top + (rect.height() - height));
         }
         else
         {
         	_imageBitmap = ImageRotation.rotate(_imageBitmap, theta);
+            _pos.setY(rect.top);
+            _pos.setX(rect.left);
         }
 
+    }
+    
+    public static int randInt(int min, int max) 
+    {
+    	int randomNum = 0;
+    	try
+    	{
+    		randomNum = RANDOM.nextInt((max - min) + 1) + min;
+    	}
+    	catch (IllegalArgumentException e)
+    	{
+    		return max;
+    	}
+
+        return randomNum;
     }
 	
 	private void adjustTextSize(String word, Paint textPaint, Rect rect, double theta) 

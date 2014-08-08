@@ -60,16 +60,12 @@ public class WordCloud
 			/* If the biggest rectangle available is smaller than the minimum size, finish */
 			if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
 				break;
+
+			Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext(), false);
 			
-			if(rect.width() * rect.height() != 0)
-			{
-				Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext());
+			draw(word);
 			
-				draw(word);
-			
-				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
-			
-			}
+			if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
 			
 			_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + Globals.CLOUD_NOTE);
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size());
@@ -93,7 +89,7 @@ public class WordCloud
 	private void insertWatermark() 
 	{
 		Rect rect = new Rect(_width - (_width / 2), _height - (_height / 15), _width, _height);
-		Word watermark = new Word("#ConvoCloud", _colorPalette.random(), rect, _mainTypeface, 0);
+		Word watermark = new Word("#ConvoCloud", _colorPalette.random(), rect, _mainTypeface, 0, true);
 		draw(watermark);
 	}
 

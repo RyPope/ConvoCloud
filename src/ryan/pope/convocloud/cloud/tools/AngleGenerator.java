@@ -41,7 +41,8 @@ public class AngleGenerator
     {
         final double stepSize = (to - from) / (_steps - 1);
         final double[] thetas = new double[_steps];
-        for(int i = 0; i < _steps; i++) {
+        for(int i = 0; i < _steps; i++) 
+        {
             thetas[i] = degreesToRadians(from + (i * stepSize));
         }
         return thetas;

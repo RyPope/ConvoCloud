@@ -74,7 +74,8 @@ public class WordCloudThread implements Runnable
 	                e.printStackTrace();
 	            }
 	        }
-	    } catch (NoSuchMethodException e3) 
+	    } 
+	    catch (NoSuchMethodException e3) 
 	    {  
 	        e3.printStackTrace();
             display.getRealMetrics(metrics);
