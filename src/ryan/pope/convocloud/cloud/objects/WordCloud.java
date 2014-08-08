@@ -15,16 +15,8 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
 import ryan.pope.convocloud.application.Globals;
-import ryan.pope.convocloud.cloud.background.Background;
-import ryan.pope.convocloud.cloud.background.RectangleBackground;
 import ryan.pope.convocloud.cloud.collide.image.AngleGenerator;
-import ryan.pope.convocloud.cloud.collide.image.CollisionRaster;
-import ryan.pope.convocloud.cloud.font.scale.FontScalar;
-import ryan.pope.convocloud.cloud.font.scale.LinearFontScalar;
-import ryan.pope.convocloud.cloud.padding.Padder;
-import ryan.pope.convocloud.cloud.palette.ColorPalette;
-import ryan.pope.convocloud.cloud.font.CloudFont;
-import ryan.pope.convocloud.cloud.font.FontWeight;
+import ryan.pope.convocloud.cloud.colour.ColourPalette;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 
 public class WordCloud 
@@ -33,18 +25,13 @@ public class WordCloud
 	protected int _width;
 	protected int _height;
 	protected CollisionMode _collisionMode;
-	protected Padder _padder;
 	protected int _padding = 0;
-	protected Background _background;
 	protected int _backgroundColor = Color.WHITE;
-	protected FontScalar _fontScalar = new LinearFontScalar(10, 40);
-	protected CloudFont _cloudFont = new CloudFont("Comic Sans MS", FontWeight.BOLD);
 	protected AngleGenerator _angleGenerator = new AngleGenerator();
-	protected CollisionRaster _collisionRaster;
 	protected Bitmap _imageBitmap;
 	protected Set<Word> _placedWords = new HashSet<Word>();
 	protected Typeface _mainTypeface;
-	protected ColorPalette _colorPalette = new ColorPalette(Color.RED, Color.BLACK, Color.YELLOW, Color.GRAY, Color.GREEN);
+	protected ColourPalette _colorPalette = new ColourPalette();
 	private ProgressDialogHelper _progressHelper;
 	private boolean _running = true;
 	private Canvas _bitmapCanvas;
@@ -56,10 +43,8 @@ public class WordCloud
 		
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Width: " + width + " Height: " + height);
 		_progressHelper = progressHelper;
-		_collisionRaster = new CollisionRaster(width, height);
 		_imageBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		_bitmapCanvas = new Canvas(_imageBitmap);
-		_background = new RectangleBackground(width, height);
 	}
 
 	public void build(ArrayList<WordFrequency> wordFrequencies) 
@@ -86,7 +71,6 @@ public class WordCloud
 				break;
 
 			Word word = new Word(wordFreq.getWord(), _colorPalette.random(), rect, _mainTypeface, theta);
-
 
 			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size() + "\nNote: Not all words will be placed.");
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
@@ -160,32 +144,7 @@ public class WordCloud
 	{
 		_mainTypeface = typeface;
 	}
-
-	public void setPadding(int padding) 
-	{
-		_padding = padding;
-	}
-
-	public void setColorPalette(ColorPalette colorPalette) 
-	{
-		_colorPalette = colorPalette;
-	}
-
-	public void setBackground(Background background) 
-	{
-		_background = background;
-	}
-
-	public void setFontScalar(FontScalar fontScalar) 
-	{
-		_fontScalar = fontScalar;
-	}
-
-	public void setCloudFont(CloudFont cloudFont) 
-	{
-		_cloudFont = cloudFont;
-	}
-
+	
 	public void setAngleGenerator(AngleGenerator angleGenerator)
 	{
 		_angleGenerator = angleGenerator;

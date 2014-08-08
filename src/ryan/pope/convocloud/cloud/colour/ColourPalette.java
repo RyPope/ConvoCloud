@@ -1,10 +1,10 @@
-package ryan.pope.convocloud.cloud.palette;
+package ryan.pope.convocloud.cloud.colour;
 
 import java.util.Random;
 
 import android.graphics.Color;
 
-public class ColorPalette 
+public class ColourPalette 
 {
 
     private static final Random RANDOM = new Random();
@@ -14,7 +14,7 @@ public class ColorPalette
 
     private int next = 0;
 
-    public ColorPalette(int... colors) 
+    public ColourPalette(int... colors) 
     {
         _colors = colors;
     }

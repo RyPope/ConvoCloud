@@ -4,13 +4,9 @@ import java.util.Random;
 
 public class AngleGenerator 
 {
-
     private static final Random RANDOM = new Random();
-
     private int _steps;
-
     private double[] _thetas;
-
     private int next = 0;
 
     public AngleGenerator() 
