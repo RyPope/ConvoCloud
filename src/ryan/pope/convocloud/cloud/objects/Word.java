@@ -6,27 +6,20 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import ryan.pope.convocloud.cloud.collide.Collidable;
 import ryan.pope.convocloud.cloud.collide.Vector2d;
-import ryan.pope.convocloud.cloud.collide.checkers.CollisionChecker;
-import ryan.pope.convocloud.cloud.collide.image.CollisionRaster;
 import ryan.pope.convocloud.cloud.collide.image.ImageRotation;
 
-public class Word implements Collidable
+public class Word
 {
-
-    private CollisionChecker _collisionChecker;
     private String _word;
     private Vector2d _textPosition = new Vector2d(0, 0);
     private Bitmap.Config _conf = Bitmap.Config.ARGB_8888;
     private Bitmap _imageBitmap;
-    private CollisionRaster _collisionRaster;
     private Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
 
-    public Word(String word, int color, Rect rect, Typeface typeface, CollisionChecker collisionChecker, double theta) 
+    public Word(String word, int color, Rect rect, Typeface typeface, double theta) 
     {
         _word = word;
-        _collisionChecker = collisionChecker;
         _textPosition.setX(rect.left);
         _textPosition.setY(rect.top);
 
@@ -59,7 +52,7 @@ public class Word implements Collidable
         {
         	_imageBitmap = ImageRotation.rotate(_imageBitmap, theta);
         }
-        _collisionRaster = new CollisionRaster(_imageBitmap);
+
     }
 	
 	private void adjustTextSize(String word, Paint textPaint, Rect rect, double theta) 
@@ -111,7 +104,6 @@ public class Word implements Collidable
     public void setBufferedImage(Bitmap imageBitmap) 
     {
         _imageBitmap = imageBitmap;
-        _collisionRaster = new CollisionRaster(imageBitmap);
     }
 
     public String getWord() 
@@ -152,22 +144,5 @@ public class Word implements Collidable
     public int getHeight() 
     {
         return _imageBitmap.getHeight();
-    }
-
-    @Override
-    public CollisionRaster getCollisionRaster() 
-    {
-        return _collisionRaster;
-    }
-
-    @Override
-    public boolean collide(Collidable collidable) 
-    {
-        return _collisionChecker.collide(this, collidable);
-    }
-
-    public void draw(CollisionRaster collisionRaster) 
-    {
-        collisionRaster.mask(collisionRaster, _textPosition.getX(), _textPosition.getY());
     }
 }

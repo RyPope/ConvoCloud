@@ -17,17 +17,11 @@ import android.util.Log;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.cloud.background.Background;
 import ryan.pope.convocloud.cloud.background.RectangleBackground;
-import ryan.pope.convocloud.cloud.collide.RectanglePixelCollidable;
-import ryan.pope.convocloud.cloud.collide.checkers.CollisionChecker;
-import ryan.pope.convocloud.cloud.collide.checkers.RectangleCollisionChecker;
-import ryan.pope.convocloud.cloud.collide.checkers.RectanglePixelCollisionChecker;
 import ryan.pope.convocloud.cloud.collide.image.AngleGenerator;
 import ryan.pope.convocloud.cloud.collide.image.CollisionRaster;
 import ryan.pope.convocloud.cloud.font.scale.FontScalar;
 import ryan.pope.convocloud.cloud.font.scale.LinearFontScalar;
 import ryan.pope.convocloud.cloud.padding.Padder;
-import ryan.pope.convocloud.cloud.padding.RectanglePadder;
-import ryan.pope.convocloud.cloud.padding.WordPixelPadder;
 import ryan.pope.convocloud.cloud.palette.ColorPalette;
 import ryan.pope.convocloud.cloud.font.CloudFont;
 import ryan.pope.convocloud.cloud.font.FontWeight;
@@ -39,11 +33,9 @@ public class WordCloud
 	protected int _width;
 	protected int _height;
 	protected CollisionMode _collisionMode;
-	protected CollisionChecker _collisionChecker;
 	protected Padder _padder;
 	protected int _padding = 0;
 	protected Background _background;
-	protected RectanglePixelCollidable _backgroundCollidable;
 	protected int _backgroundColor = Color.WHITE;
 	protected FontScalar _fontScalar = new LinearFontScalar(10, 40);
 	protected CloudFont _cloudFont = new CloudFont("Comic Sans MS", FontWeight.BOLD);
@@ -57,31 +49,16 @@ public class WordCloud
 	private boolean _running = true;
 	private Canvas _bitmapCanvas;
 
-	public WordCloud(ProgressDialogHelper progressHelper, int width, int height, CollisionMode collisionMode) 
+	public WordCloud(ProgressDialogHelper progressHelper, int width, int height) 
 	{
 		_width = width;
 		_height = height;
 		
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Width: " + width + " Height: " + height);
-		_collisionMode = collisionMode;
 		_progressHelper = progressHelper;
-		switch(collisionMode) 
-		{
-		case PIXEL_PERFECT:
-			_padder = new WordPixelPadder();
-			_collisionChecker = new RectanglePixelCollisionChecker();
-			break;
-
-		case RECTANGLE:
-		default:
-			_padder = new RectanglePadder();
-			_collisionChecker = new RectangleCollisionChecker();
-			break;
-		}
 		_collisionRaster = new CollisionRaster(width, height);
 		_imageBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		_bitmapCanvas = new Canvas(_imageBitmap);
-		_backgroundCollidable = new RectanglePixelCollidable(_collisionRaster, 0, 0);
 		_background = new RectangleBackground(width, height);
 	}
 
@@ -108,7 +85,7 @@ public class WordCloud
 			if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
 				break;
 
-			Word word = new Word(wordFreq.getWord(), _colorPalette.random(), rect, _mainTypeface, _collisionChecker, theta);
+			Word word = new Word(wordFreq.getWord(), _colorPalette.random(), rect, _mainTypeface, theta);
 
 
 			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size() + "\nNote: Not all words will be placed.");
@@ -126,7 +103,6 @@ public class WordCloud
 	{
 		try
 		{
-			_collisionRaster.mask(word.getCollisionRaster(), word.getX(), word.getY());
 			_bitmapCanvas.drawBitmap(word.getImageBitmap(), word.getX(), word.getY(), null);
 		}
 		catch(Exception e)
@@ -138,7 +114,7 @@ public class WordCloud
 	private void insertWatermark() 
 	{
 		Rect rect = new Rect(_width - (_width / 2), _height - (_height / 15), _width, _height);
-		Word watermark = new Word("#ConvoCloud", _colorPalette.random(), rect, _mainTypeface, _collisionChecker, 0);
+		Word watermark = new Word("#ConvoCloud", _colorPalette.random(), rect, _mainTypeface, 0);
 		draw(watermark);
 	}
 

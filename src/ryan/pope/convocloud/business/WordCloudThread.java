@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.cloud.background.RectangleBackground;
-import ryan.pope.convocloud.cloud.objects.CollisionMode;
 import ryan.pope.convocloud.cloud.objects.WordCloud;
 import ryan.pope.convocloud.cloud.objects.WordFrequency;
 import android.annotation.SuppressLint;
@@ -87,7 +86,7 @@ public class WordCloudThread implements Runnable
 		
 		ArrayList<WordFrequency> wordFrequencies = _mainActivity.getWordFrequencies();
 
-		_wordCloud = new WordCloud(_mainActivity.getProgressHelper(), width, height, CollisionMode.PIXEL_PERFECT);
+		_wordCloud = new WordCloud(_mainActivity.getProgressHelper(), width, height);
 		_wordCloud.setPadding(0);
 		_wordCloud.setBackground(new RectangleBackground(width, height));
 		_wordCloud.setTypeface(Typeface.createFromAsset(_mainActivity.getAssets(), "neue.otf"));
