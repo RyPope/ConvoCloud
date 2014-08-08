@@ -3,6 +3,7 @@ package ryan.pope.convocloud.presentation;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.view.WindowManager;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.R;
@@ -43,8 +44,22 @@ public class ProgressDialogHelper
 			        }
 			    });
 				_contactProgressDialog.show();
+				
+				setScreenFlag(true);
 			}
 		});
+	}
+	
+	protected void setScreenFlag(boolean flag)
+	{
+		if(flag)
+		{
+			_mainActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+		else
+		{
+			_mainActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 	}
 
 	public void dismissContactProgressDialog()
@@ -55,7 +70,10 @@ public class ProgressDialogHelper
 			public void run()
 			{
 				if(_contactProgressDialog != null && _contactProgressDialog.isShowing())
+				{
 					_contactProgressDialog.dismiss();
+					setScreenFlag(false);
+				}
 			}
 		});
 	}
@@ -100,6 +118,8 @@ public class ProgressDialogHelper
 			        }
 			    });
 				_cloudProgressDialog.show();
+				
+				setScreenFlag(true);
 			}
 		});
 	}
@@ -112,7 +132,10 @@ public class ProgressDialogHelper
 			public void run()
 			{
 				if(_cloudProgressDialog != null && _cloudProgressDialog.isShowing())
+				{
 					_cloudProgressDialog.dismiss();
+					setScreenFlag(false);
+				}
 			}
 		});
 	}
