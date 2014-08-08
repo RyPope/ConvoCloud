@@ -1,6 +1,7 @@
 package ryan.pope.convocloud.application;
 
 import com.crashlytics.android.Crashlytics;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -13,6 +14,8 @@ import ryan.pope.convocloud.persistance.ContactDataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -22,6 +25,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
@@ -125,7 +129,7 @@ public class MainActivity extends Activity
 		return _progressHelper;
 	}
 
-	public ArrayList<WordInfo> getWordFrequencies() 
+	public ArrayList<WordInfo> getWords() 
 	{
 		return _selectedContact.getWordFrequencies();
 	}
@@ -159,12 +163,32 @@ public class MainActivity extends Activity
 					@Override
 					public void run() 
 					{
-					view.setBackgroundDrawable(bd);
+						view.setBackgroundDrawable(bd);
 					}
 				});
 	        }
 		}
 
+	}
+	
+	public void sendNotification()
+	{
+		if(_progressHelper.isShowing())
+		{
+	        NotificationCompat.Builder builder =
+	                new NotificationCompat.Builder(this)
+	                        .setSmallIcon(R.drawable.smallicon)
+	                        .setContentTitle("Convo Cloud")
+	                        .setContentText("Your Cloud has completed!");
+	
+	        Intent targetIntent = new Intent(this, MainActivity.class);
+	        targetIntent.setAction("android.intent.action.MAIN");
+	        targetIntent.addCategory("android.intent.category.LAUNCHER");
+	        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+	        builder.setContentIntent(contentIntent);
+	        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	        nManager.notify(1, builder.build());
+		}
 	}
 
 	public boolean hasPhotoLoaded() 

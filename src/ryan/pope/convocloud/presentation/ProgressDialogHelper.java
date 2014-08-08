@@ -166,4 +166,14 @@ public class ProgressDialogHelper
 		
 	}
 
+	public boolean isShowing()
+	{
+		if(_cloudProgressDialog != null)
+		{
+			return _cloudProgressDialog.isShowing();
+		}
+		
+		return false;
+	}
+
 }

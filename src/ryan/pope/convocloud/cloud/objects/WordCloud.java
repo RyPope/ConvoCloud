@@ -47,7 +47,7 @@ public class WordCloud
 		Collections.sort(wordList);
 		drawBackgroundColor();
 		insertWatermark();
-		int minimumFontPixelSize = _width / 50;
+		int minimumFontPixelSize = _width / 35;
 		int _numPlaced = 1;
 		
 		MaximalRectangle maxRect = new MaximalRectangle();
@@ -57,11 +57,13 @@ public class WordCloud
 				break;
 			
 			Rect rect = maxRect.maximalRect(_imageBitmap);
-			
 			/* If the biggest rectangle available is smaller than the minimum size, finish */
 			if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
 				break;
 
+			if(rect.width() * rect.height() == 0)
+				continue;
+			
 			Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext());
 
 			_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + "\nNote: Not all words will be placed.");

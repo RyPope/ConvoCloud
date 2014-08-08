@@ -83,7 +83,7 @@ public class WordCloudThread implements Runnable
             height = metrics.heightPixels;
 	    }
 		
-		ArrayList<WordInfo> wordFrequencies = _mainActivity.getWordFrequencies();
+		ArrayList<WordInfo> wordFrequencies = _mainActivity.getWords();
 
 		_wordCloud = new WordCloud(_mainActivity.getProgressHelper(), width, height);
 		_wordCloud.setTypeface(Typeface.createFromAsset(_mainActivity.getAssets(), "neue.otf"));
@@ -103,6 +103,8 @@ public class WordCloudThread implements Runnable
 		  		_mainActivity.getProgressHelper().dismissCloudProgressDialog();
 		      }
 		});
+		
+		_mainActivity.sendNotification();
 
 	}
 }
