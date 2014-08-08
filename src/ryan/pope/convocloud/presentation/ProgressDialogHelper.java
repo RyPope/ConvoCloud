@@ -87,6 +87,8 @@ public class ProgressDialogHelper
 			{
 				if(_contactProgressDialog != null)
 				{
+					if(!_contactProgressDialog.isShowing())
+						_contactProgressDialog.show();
 					_contactProgressDialog.setMessage(message);
 				}
 			}
@@ -149,6 +151,8 @@ public class ProgressDialogHelper
 			{
 				if(_cloudProgressDialog != null)
 				{
+					if(!_cloudProgressDialog.isShowing())
+						_cloudProgressDialog.show();
 					_cloudProgressDialog.setMessage(message);
 				}
 			}
