@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.business.ListenerManager;
 import ryan.pope.convocloud.business.WordCloudManager;
-import ryan.pope.convocloud.cloud.objects.WordFrequency;
+import ryan.pope.convocloud.cloud.objects.WordInfo;
 import ryan.pope.convocloud.objects.Contact;
 import ryan.pope.convocloud.persistance.ContactDataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
@@ -125,7 +125,7 @@ public class MainActivity extends Activity
 		return _progressHelper;
 	}
 
-	public ArrayList<WordFrequency> getWordFrequencies() 
+	public ArrayList<WordInfo> getWordFrequencies() 
 	{
 		return _selectedContact.getWordFrequencies();
 	}

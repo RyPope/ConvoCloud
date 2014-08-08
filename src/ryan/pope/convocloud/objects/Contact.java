@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ryan.pope.convocloud.application.Globals;
-import ryan.pope.convocloud.cloud.objects.WordFrequency;
+import ryan.pope.convocloud.cloud.objects.WordInfo;
 
 public class Contact 
 {
@@ -59,12 +59,12 @@ public class Contact
 		return allMessages;
 	}
 
-	public ArrayList<WordFrequency> getWordFrequencies() 
+	public ArrayList<WordInfo> getWordFrequencies() 
 	{
-		ArrayList<WordFrequency> _wordFreqList = new ArrayList<WordFrequency>();
+		ArrayList<WordInfo> _wordFreqList = new ArrayList<WordInfo>();
 		for (Map.Entry<String, Integer> entry : _allMessages.entrySet())
 		{
-			_wordFreqList.add(new WordFrequency(entry.getKey(), entry.getValue()));
+			_wordFreqList.add(new WordInfo(entry.getKey(), entry.getValue()));
 		}
 		
 		return _wordFreqList;

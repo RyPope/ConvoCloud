@@ -6,12 +6,11 @@ import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import ryan.pope.convocloud.cloud.collide.Vector2d;
-import ryan.pope.convocloud.cloud.collide.image.ImageRotation;
+import ryan.pope.convocloud.cloud.tools.ImageRotation;
 
 public class Word
 {
-    private Vector2d _pos = new Vector2d(0, 0);
+    private WordPos _pos = new WordPos(0, 0);
     private Bitmap.Config _conf = Bitmap.Config.ARGB_8888;
     private Bitmap _imageBitmap;
     private Paint _textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
@@ -62,34 +61,29 @@ public class Word
 
 	    if(theta == 0)
 	    {
+	    	/* If the word is vertical, get the text size that would fit the
+	    	 * bounds for the width and the height and use the one that is smaller
+	    	 * to ensure the word does not go outside of it's bounds.
+	    	 */
 		    int h = bounds.height();
-	
 		    float targetHeight = (float)rect.height()*1f;
-		 
 		    float heightSize  = ((targetHeight/h)*100f);
-		    
 		    int w = bounds.width();
-	
 		    float targetWidth = (float)rect.width()*1f;
-		 
 		    float widthSize  = ((targetWidth/w)*100f);
-	
 		    textPaint.setTextSize(Math.min(heightSize, widthSize));
 	    }
 	    else
 	    {
+	    	/* If the word is vertical, get the bounds and set the 
+	    	 * size planned for the rotation.
+	    	 */
 		    int h = bounds.height();
-			
 		    float targetHeight = (float)rect.width()*1f;
-		 
 		    float heightSize  = ((targetHeight/h)*100f);
-		    
 		    int w = bounds.width();
-	
 		    float targetWidth = (float)rect.height()*1f;
-		 
 		    float widthSize  = ((targetWidth/w)*100f);
-	
 		    textPaint.setTextSize(Math.min(heightSize, widthSize));
 	    }
 	}

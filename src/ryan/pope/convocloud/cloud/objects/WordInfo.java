@@ -1,13 +1,13 @@
 package ryan.pope.convocloud.cloud.objects;
 
-public class WordFrequency implements Comparable<WordFrequency> 
+public class WordInfo implements Comparable<WordInfo> 
 {
 
     private String _word;
 
     private int _frequency;
 
-    public WordFrequency(String word, int frequency) 
+    public WordInfo(String word, int frequency) 
     {
         _word = word;
         _frequency = frequency;
@@ -24,7 +24,7 @@ public class WordFrequency implements Comparable<WordFrequency>
     }
 
     @Override
-    public int compareTo(WordFrequency wordFrequency) 
+    public int compareTo(WordInfo wordFrequency) 
     {
         return wordFrequency._frequency - _frequency;
     }

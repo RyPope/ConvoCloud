@@ -1,13 +1,13 @@
-package ryan.pope.convocloud.cloud.collide;
+package ryan.pope.convocloud.cloud.objects;
 
-public class Vector2d 
+public class WordPos 
 {
 
     private int _x;
 
     private int _y;
 
-    public Vector2d(int x, int y) 
+    public WordPos(int x, int y) 
     {
         _x = x;
         _y = y;
@@ -37,9 +37,9 @@ public class Vector2d
     public boolean equals(Object o) 
     {
         if (this == o) return true;
-        if (!(o instanceof Vector2d)) return false;
+        if (!(o instanceof WordPos)) return false;
 
-        Vector2d vector2d = (Vector2d) o;
+        WordPos vector2d = (WordPos) o;
 
         if (_x != vector2d._x) return false;
         if (_y != vector2d._y) return false;

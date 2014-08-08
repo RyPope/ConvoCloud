@@ -3,9 +3,7 @@ package ryan.pope.convocloud.cloud.objects;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,8 +13,8 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
 import ryan.pope.convocloud.application.Globals;
-import ryan.pope.convocloud.cloud.collide.image.AngleGenerator;
 import ryan.pope.convocloud.cloud.colour.ColourPalette;
+import ryan.pope.convocloud.cloud.tools.AngleGenerator;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 
 public class WordCloud 
@@ -24,12 +22,9 @@ public class WordCloud
 	protected static final Random RANDOM = new Random();
 	protected int _width;
 	protected int _height;
-	protected CollisionMode _collisionMode;
-	protected int _padding = 0;
 	protected int _backgroundColor = Color.WHITE;
 	protected AngleGenerator _angleGenerator = new AngleGenerator();
 	protected Bitmap _imageBitmap;
-	protected Set<Word> _placedWords = new HashSet<Word>();
 	protected Typeface _mainTypeface;
 	protected ColourPalette _colorPalette = new ColourPalette();
 	private ProgressDialogHelper _progressHelper;
@@ -47,18 +42,16 @@ public class WordCloud
 		_bitmapCanvas = new Canvas(_imageBitmap);
 	}
 
-	public void build(ArrayList<WordFrequency> wordFrequencies) 
+	public void build(ArrayList<WordInfo> wordList) 
 	{
-		Collections.sort(wordFrequencies);
+		Collections.sort(wordList);
 		drawBackgroundColor();
 		insertWatermark();
-
-		/* Starter width */
 		int minimumFontPixelSize = _width / 50;
-		int i = 1;
+		int _numPlaced = 1;
 		
 		MaximalRectangle maxRect = new MaximalRectangle();
-		for (WordFrequency wordFreq : wordFrequencies)
+		for (WordInfo wordToPlace : wordList)
 		{
 			if(!_running)
 				break;
@@ -70,15 +63,15 @@ public class WordCloud
 			if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
 				break;
 
-			Word word = new Word(wordFreq.getWord(), _colorPalette.random(), rect, _mainTypeface, theta);
+			Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, theta);
 
-			_progressHelper.changeCloudDialogMessage("Placing " + i + " of " + wordFrequencies.size() + "\nNote: Not all words will be placed.");
-			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + i + " of " + wordFrequencies.size());
+			_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + "\nNote: Not all words will be placed.");
+			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size());
 			
 			draw(word);
 			
 			if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
-			i++;
+			_numPlaced++;
 			
 		}
 	}
