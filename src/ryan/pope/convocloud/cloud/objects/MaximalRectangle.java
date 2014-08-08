@@ -93,7 +93,7 @@ final class Cache
 						rectStartCell = stack.pop();
 						final int rectWidth = col - rectStartCell.col;
 						final int area = currentRectHeight * rectWidth;
-						if(area > bestArea) 
+						if(area > bestArea && currentRectHeight > 1 && rectWidth > 1) 
 						{
 							bestArea = area;
 							bestLowerLeftCorner = new Cell(rectStartCell.col, row);

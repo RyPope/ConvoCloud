@@ -60,18 +60,19 @@ public class WordCloud
 			/* If the biggest rectangle available is smaller than the minimum size, finish */
 			if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
 				break;
-
-			if(rect.width() * rect.height() == 0)
-				continue;
 			
-			Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext());
-
-			_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + "\nNote: Not all words will be placed.");
+			if(rect.width() * rect.height() != 0)
+			{
+				Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext());
+			
+				draw(word);
+			
+				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
+			
+			}
+			
+			_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + Globals.CLOUD_NOTE);
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size());
-			
-			draw(word);
-			
-			if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
 			_numPlaced++;
 			
 		}
