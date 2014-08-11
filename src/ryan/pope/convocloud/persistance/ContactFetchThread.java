@@ -18,12 +18,13 @@ public class ContactFetchThread implements Runnable
 {
 	private MainActivity _mainActivity;
 	private Intent _data;
-	private boolean _running = true;
+	private boolean _running;
 
-	public ContactFetchThread(MainActivity mainActivity, int requestCode, int resultCode, Intent data) 
+	public ContactFetchThread(MainActivity mainActivity, Intent data) 
 	{
 		_mainActivity = mainActivity;
 		_data = data;
+		_running = true;
 	}
 
 	@Override
@@ -35,11 +36,7 @@ public class ContactFetchThread implements Runnable
 
 		if(contactToFetch != null)
 		{
-			if(_mainActivity.isTablet())
-			{
-				fetchStubData(contactToFetch);
-			}
-			else
+			if(_mainActivity.hasSMS())
 			{
 				fetchContactMessages(contactToFetch);
 			}

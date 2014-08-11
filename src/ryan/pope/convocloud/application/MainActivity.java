@@ -44,7 +44,7 @@ public class MainActivity extends Activity
 
 	private Contact _selectedContact;
 	private WordCloudManager _wordCloudManager;
-	private boolean _tablet;
+	private boolean _smsCapable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -87,9 +87,9 @@ public class MainActivity extends Activity
 		_statusTextView = (TextView) findViewById(R.id.status_text);
 		
 		TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        _tablet = manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE ? true : false;
-
-        if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _tablet ? "Tablet" : "Not Tablet");
+        _smsCapable = manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE ? false : true;
+        
+        if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _smsCapable ? "SMS" : "No SMS");
 	}
 	
 	public WordCloudManager getWordCloudManager()
@@ -97,15 +97,25 @@ public class MainActivity extends Activity
 		return _wordCloudManager;
 	}
 	
-	public boolean isTablet()
+	public boolean hasSMS()
 	{
-		return _tablet;
+		return _smsCapable;
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) 
 	{
-		_contactDataAccess.fetchContact(requestCode, resultCode, data);
+		if(resultCode == RESULT_OK)
+		{
+			if(requestCode == Globals.CONTACT_SELECT_CODE)
+			{
+				_contactDataAccess.fetchContact(requestCode, resultCode, data);
+			}
+			if(requestCode == Globals.FILE_SELECT_CODE)
+			{
+				
+			}
+		}
 	}
 
 	public void setContact(Contact contactToFetch)

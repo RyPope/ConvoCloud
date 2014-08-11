@@ -1,5 +1,6 @@
 package ryan.pope.convocloud.presentation;
 
+import android.app.Dialog;
 import android.view.View;
 import android.widget.LinearLayout;
 import ryan.pope.convocloud.R;
@@ -11,6 +12,7 @@ public class UIHelper
 	private LinearLayout _iconLayout;
 	private LinearLayout _buttonLayout;
 	private LinearLayout _statusLayout;
+	private Dialog _selectionDialog;
 	
 	private boolean _uiVisible = true;
 	
@@ -18,8 +20,19 @@ public class UIHelper
 	{
 		_mainActivity = mainActivity;
 		initViews();
+		initDialogs();
 	}
 	
+	private void initDialogs()
+	{
+		_selectionDialog = new Dialog(_mainActivity);
+		_selectionDialog.setContentView(R.layout.selection_dialog);
+		_selectionDialog.setTitle("Select source...");
+		_selectionDialog.setCanceledOnTouchOutside(false);
+		_selectionDialog.setCancelable(true);
+
+	}
+
 	private void initViews() 
 	{
 		_iconLayout = (LinearLayout) _mainActivity.findViewById(R.id.icon_layout);
@@ -49,6 +62,27 @@ public class UIHelper
 	public boolean layoutVisible() 
 	{
 		return _uiVisible;
+	}
+	
+	public void displaySelectionDialog()
+	{
+		if(_selectionDialog != null && !_selectionDialog.isShowing())
+		{
+			_selectionDialog.show();
+		}
+	}
+
+	public void dismissSelectionDialog()
+	{
+		if(_selectionDialog != null && _selectionDialog.isShowing())
+		{
+			_selectionDialog.dismiss();
+		}
+	}
+	
+	public Dialog getSelectionDialog()
+	{
+		return _selectionDialog;
 	}
 
 }

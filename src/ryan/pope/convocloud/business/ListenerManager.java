@@ -1,5 +1,6 @@
 package ryan.pope.convocloud.business;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
@@ -9,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
@@ -16,8 +18,11 @@ import ryan.pope.convocloud.presentation.UIHelper;
 
 public class ListenerManager 
 {
-	private Button contactSelectionButton;
+	private Button sourceSelectionButton;
 	private Button createTextCloudButton;
+	private Button fileButton;
+	private Button contactButton;
+	private Button cancelButton;
 	private ImageView visibilityButton;
 	private ImageView shareButton;
 	private RelativeLayout backgroundLayout;
@@ -39,7 +44,68 @@ public class ListenerManager
 			setupVisiblityButtonListener();
 			setupBackgroundListener();
 			setupShareButtonListener();
+			setupSelectionButtonListeners();
 		}
+	}
+
+	private void setupSelectionButtonListeners()
+	{
+		Dialog dialogView = _UIHelper.getSelectionDialog();
+		
+		fileButton = (Button) dialogView.findViewById(R.id.select_file_button);
+		contactButton = (Button) dialogView.findViewById(R.id.select_contact_button);
+		cancelButton = (Button) dialogView.findViewById(R.id.select_cancel_button);
+		
+		fileButton.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				_UIHelper.dismissSelectionDialog();
+				
+			    Intent intent = new Intent(Intent.ACTION_GET_CONTENT); 
+			    intent.setType("*/*"); 
+			    intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+			    try 
+			    {
+			    	_mainActivity.startActivityForResult(Intent.createChooser(intent, "Select a File"), Globals.FILE_SELECT_CODE);
+			    } catch (android.content.ActivityNotFoundException ex) 
+			    {
+			        // Potentially direct the user to the Market with a Dialog
+			        Toast.makeText(_mainActivity, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+			    }
+			}
+			
+		});
+		
+		contactButton.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				_UIHelper.dismissSelectionDialog();
+				
+				Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
+				intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+				_mainActivity.startActivityForResult(intent, Globals.CONTACT_SELECT_CODE);
+			}
+			
+		});
+		
+		cancelButton.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				_UIHelper.dismissSelectionDialog();
+			}
+			
+		});
+		
 	}
 
 	private void setupShareButtonListener() 
@@ -125,15 +191,13 @@ public class ListenerManager
 	private void setupContactListener() 
 	{
 
-		contactSelectionButton = (Button) _mainActivity.findViewById(R.id.contact_selection_button);
-		contactSelectionButton.setOnClickListener( new OnClickListener() 
+		sourceSelectionButton = (Button) _mainActivity.findViewById(R.id.source_selection_button);
+		sourceSelectionButton.setOnClickListener( new OnClickListener() 
 		{
 			@Override
 			public void onClick(View v) 
-			{
-				Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
-				intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-				_mainActivity.startActivityForResult(intent, 1);
+			{	
+				_UIHelper.displaySelectionDialog();
 			}
 		});
 		

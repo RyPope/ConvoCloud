@@ -16,7 +16,6 @@ public class ContactDataAccess
 	
 	public void fetchContact(int requestCode, int resultCode, Intent data)
 	{
-		_contactFetchThread = new ContactFetchThread(_mainActivity, requestCode, resultCode, data);
 		try 
 		{
 			if(_dataAccessThread != null)
@@ -30,6 +29,7 @@ public class ContactDataAccess
 			e.printStackTrace();
 		}
 		
+		_contactFetchThread = new ContactFetchThread(_mainActivity, data);
 		_dataAccessThread = new Thread(_contactFetchThread);
 		_dataAccessThread.start();
 	}

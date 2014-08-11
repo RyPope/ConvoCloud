@@ -17,7 +17,7 @@
         android:layout_marginTop="3dp" >
 
         <Button
-            android:id="@+id/contact_selection_button"
+            android:id="@+id/source_selection_button"
             style="@style/btnStyleBlackpearl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
             android:layout_weight=".25"
             android:alpha=".75"
             android:background="@drawable/button_left"
-            android:text="@string/select_contact" />
+            android:text="@string/select_source" />
 
         <Button
             android:id="@+id/create_text_cloud_button"
