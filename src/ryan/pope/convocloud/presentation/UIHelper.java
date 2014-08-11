@@ -85,4 +85,16 @@ public class UIHelper
 		return _selectionDialog;
 	}
 
+	public void notifyNoSMS()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void notifyNoMessages()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

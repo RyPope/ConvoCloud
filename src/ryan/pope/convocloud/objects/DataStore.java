@@ -10,28 +10,14 @@ import ryan.pope.convocloud.cloud.objects.WordInfo;
 
 public class DataStore 
 {
-	private String _phoneNumber;
-	private String _name;
 	private HashMap<String, Integer> _allWords;
 	
-	public DataStore(String id, String number, int type, String name)
+	public DataStore()
 	{
-		_phoneNumber = stripNumber(number);
 		_allWords = new HashMap<String, Integer>();
-		_name = name;
 	}
 
-	private String stripNumber(String number) 
-	{
-		return number.replaceAll("[^0-9]", "");
-	}
-
-	public String getPhoneNumber() 
-	{
-		return _phoneNumber;
-	}
-
-	public void addMessage(String sms) 
+	public void addWords(String sms) 
 	{
 		/* Parse each word and count them */
 		String parsedSMS = sms.replaceAll("[^A-Za-z0-9 ]+", "");
@@ -48,7 +34,7 @@ public class DataStore
 		}
 	}
 	
-	public String getMessages()
+	public String getWords()
 	{
 		String allMessages = "";
 		for (Map.Entry<String, Integer> entry : _allWords.entrySet())
@@ -68,15 +54,5 @@ public class DataStore
 		}
 		
 		return _wordFreqList;
-	}
-	
-	public void setName(String name)
-	{
-		_name = name;
-	}
-	
-	public String getName()
-	{
-		return _name;
 	}
 }

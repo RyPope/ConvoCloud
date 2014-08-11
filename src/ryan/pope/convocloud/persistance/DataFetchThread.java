@@ -6,11 +6,12 @@ import java.io.FileReader;
 
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
-import ryan.pope.convocloud.objects.DataStore;
+import ryan.pope.convocloud.objects.DataContact;
+import ryan.pope.convocloud.objects.DataFile;
+import ryan.pope.convocloud.presentation.UIHelper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -20,6 +21,7 @@ public class DataFetchThread implements Runnable
 	private Intent _data;
 	private boolean _running;
 	private Globals.Type _dataType;
+	private UIHelper _UIHelper;
 
 	public DataFetchThread(MainActivity mainActivity, Intent data, Globals.Type dataType) 
 	{
@@ -36,40 +38,44 @@ public class DataFetchThread implements Runnable
 		{
 			_mainActivity.getProgressHelper().showContactProgressDialog("Fetching Conversation", "Finding conversation...");
 	
-			DataStore data = fetchContact();
+			DataContact contact = fetchContact();
 	
-			if(data != null)
+			if(contact != null)
 			{
 				if(_mainActivity.hasSMS())
 				{
-					fetchContactMessages(data);
+					fetchContactMessages(contact);
+				}
+				else
+				{
+					_UIHelper.notifyNoSMS();
 				}
 			}
 	
-			_mainActivity.setDataStore(data);
+			_mainActivity.setDataStore(contact);
 		}
 		else if (_dataType == Globals.Type.FILE)
 		{
-			
+			DataFile dataFile = fetchFile();
+			_mainActivity.setDataStore(dataFile);
 		}
-		
-		
+
 		_mainActivity.getProgressHelper().dismissContactProgressDialog();
 	}
 
-	private void fetchStubData(DataStore contactToFetch) 
+	private DataFile fetchFile() 
 	{
+		DataFile fileToFetch = new DataFile(_data.getData());
 		try 
 		{
-			File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-			File file = new File(path, File.separator + "stub.txt");
+			File file = fileToFetch.getFile();
 			BufferedReader br = new BufferedReader(new FileReader(file));  
 			String line;   
 			int i = 0;
 			while ((line = br.readLine()) != null) 
 			{
 				i++;
-				contactToFetch.addMessage(line);
+				fileToFetch.addWords(line);
 
 				if(i % 10 == 0)
 				{
@@ -83,9 +89,11 @@ public class DataFetchThread implements Runnable
 		{
 			e.printStackTrace();
 		}
+		
+		return fileToFetch;
 	}
 
-	private void fetchContactMessages(DataStore contactToFetch) 
+	private void fetchContactMessages(DataContact contactToFetch) 
 	{
 		String contactNumber = contactToFetch.getPhoneNumber();
 
@@ -102,7 +110,7 @@ public class DataFetchThread implements Runnable
 				if(sms != null)
 				{
 					if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Message: " + sms);
-					contactToFetch.addMessage(sms);
+					contactToFetch.addWords(sms);
 				}
 
 				if(i % 10 == 0)
@@ -112,12 +120,12 @@ public class DataFetchThread implements Runnable
 				}
 			}
 
-			if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, contactToFetch.getMessages());
+			if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, contactToFetch.getWords());
 
 		}
 		else
 		{
-			//No messages found
+			_UIHelper.notifyNoMessages();
 		}
 
 		if(findThreadCursor != null)
@@ -126,10 +134,10 @@ public class DataFetchThread implements Runnable
 		}
 	}
 
-	private DataStore fetchContact() 
+	private DataContact fetchContact() 
 	{
 
-		DataStore contactToFetch = null;
+		DataContact contactToFetch = null;
 		Uri contactURI = null;
 
 		if(_data != null)
@@ -154,13 +162,11 @@ public class DataFetchThread implements Runnable
 				if (contactSelectionCursor != null && contactSelectionCursor.moveToFirst()) 
 				{
 					String number = contactSelectionCursor.getString(0);
-					int type = contactSelectionCursor.getInt(1);
-					String id = contactSelectionCursor.getString(2);
 					String name = contactSelectionCursor.getString(3);
 
 					if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Selected Contact: " + name); 
 
-					contactToFetch = new DataStore(id, number, type, name);
+					contactToFetch = new DataContact(name, number);
 				}
 			} 
 			finally 

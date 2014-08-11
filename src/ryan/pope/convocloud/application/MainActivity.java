@@ -9,6 +9,8 @@ import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.business.ListenerManager;
 import ryan.pope.convocloud.business.WordCloudManager;
 import ryan.pope.convocloud.cloud.objects.WordInfo;
+import ryan.pope.convocloud.objects.DataContact;
+import ryan.pope.convocloud.objects.DataFile;
 import ryan.pope.convocloud.objects.DataStore;
 import ryan.pope.convocloud.persistance.DataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
@@ -42,7 +44,7 @@ public class MainActivity extends Activity
 	private TextView _statusTextView;
 	private File _photoFile;
 
-	private DataStore _selectedContact;
+	private DataStore _selectData;
 	private WordCloudManager _wordCloudManager;
 	private boolean _smsCapable;
 
@@ -80,7 +82,7 @@ public class MainActivity extends Activity
 
 		_progressHelper = new ProgressDialogHelper(this);
 
-		_selectedContact = null;
+		_selectData = null;
 		_photoFile = null;
 
 		/* Initialize views */
@@ -118,17 +120,24 @@ public class MainActivity extends Activity
 		}
 	}
 
-	public void setDataStore(DataStore contactToFetch)
+	public void setDataStore(DataStore dataToFetch)
 	{
-		_selectedContact = contactToFetch;
-		if(_selectedContact != null)
+		_selectData = dataToFetch;
+		if(_selectData != null)
 		{
 			runOnUiThread(new Runnable() 
 			{
 				@Override
 				public void run() 
 				{
-					_statusTextView.setText("Selected Contact: " + _selectedContact.getName());
+					if(_selectData instanceof DataContact)
+					{
+						_statusTextView.setText("Selected Contact: " + ((DataContact)_selectData).getName());
+					}
+					else if(_selectData instanceof DataFile)
+					{
+						_statusTextView.setText("Selected File: " + ((DataFile)_selectData).getFileName());
+					}
 				}
 			});
 		}
@@ -141,7 +150,7 @@ public class MainActivity extends Activity
 
 	public ArrayList<WordInfo> getWords() 
 	{
-		return _selectedContact.getWordFrequencies();
+		return _selectData.getWordFrequencies();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -213,12 +222,12 @@ public class MainActivity extends Activity
 
 	public boolean hasContactLoaded() 
 	{
-		return _selectedContact != null ? true: false;
+		return _selectData != null ? true: false;
 	}
 
-	public DataStore getContact() 
+	public DataStore getDataStore() 
 	{
-		return _selectedContact;
+		return _selectData;
 	}
 
 	public DataAccess getContactManager() 

@@ -14,6 +14,8 @@ import android.widget.Toast;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
+import ryan.pope.convocloud.objects.DataContact;
+import ryan.pope.convocloud.objects.DataFile;
 import ryan.pope.convocloud.presentation.UIHelper;
 
 public class ListenerManager 
@@ -119,11 +121,20 @@ public class ListenerManager
 				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Share Button clicked"); 
 				if(_mainActivity.hasPhotoLoaded() && _mainActivity.hasContactLoaded())
 				{
+					String shareMessage = "";
 					Intent shareIntent = new Intent();
 					shareIntent.setAction(Intent.ACTION_SEND);
 					shareIntent.putExtra(Intent.EXTRA_STREAM, _mainActivity.getPhotoURI());
 					
-					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "My Convo Cloud with " + _mainActivity.getContact().getName() + ". Made with http://goo.gl/zEgP5B for Android #ConvoCloud");
+					if(_mainActivity.getDataStore() instanceof DataContact)
+					{
+						shareMessage = "My Convo Cloud with " + ((DataContact)_mainActivity.getDataStore()).getName() + ". Made with <TODO INSERT URL> for Android #ConvoCloud";	
+					}
+					else if(_mainActivity.getDataStore() instanceof DataFile)
+					{
+						
+					}
+					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
 					shareIntent.setType("image/png");
 					_mainActivity.startActivity(Intent.createChooser(shareIntent, "Share ConvoCloud with..."));
 				}
