@@ -2,9 +2,7 @@ package ryan.pope.convocloud.cloud.objects;
 
 public class WordPos 
 {
-
     private int _x;
-
     private int _y;
 
     public WordPos(int x, int y) 
@@ -39,19 +37,11 @@ public class WordPos
         if (this == o) return true;
         if (!(o instanceof WordPos)) return false;
 
-        WordPos vector2d = (WordPos) o;
+        WordPos pos = (WordPos) o;
 
-        if (_x != vector2d._x) return false;
-        if (_y != vector2d._y) return false;
+        if (_x != pos._x) return false;
+        if (_y != pos._y) return false;
 
         return true;
-    }
-
-    @Override
-    public int hashCode() 
-    {
-        int result = _x;
-        result = 31 * result + _y;
-        return result;
     }
 }

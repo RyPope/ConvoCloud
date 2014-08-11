@@ -46,10 +46,7 @@ public class ContactFetchThread implements Runnable
 		}
 
 		_mainActivity.setContact(contactToFetch);
-
 		_mainActivity.getProgressHelper().dismissContactProgressDialog();
-
-
 	}
 
 	private void fetchStubData(Contact contactToFetch) 
@@ -71,7 +68,7 @@ public class ContactFetchThread implements Runnable
 					_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching message " + i);
 				}
 			} 
-			
+
 			br.close();
 		}
 		catch (Exception e) 
@@ -82,93 +79,42 @@ public class ContactFetchThread implements Runnable
 
 	private void fetchContactMessages(Contact contactToFetch) 
 	{
-		boolean threadFound = false;
-		String threadID = "";
 		String contactNumber = contactToFetch.getPhoneNumber();
 
-		/* Find Thread ID with the contact,
-		 * there may be multiple thread IDs if the client has used
-		 * mass messaging.
-		 */
-
-		if(contactToFetch != null)
+		String[] projection = new String[]{"address", "body"};
+		String selection = "address=" + contactNumber;
+		final Cursor findThreadCursor = _mainActivity.getContentResolver().query(Uri.parse("content://sms/"), projection, selection, null, null);
+		if(findThreadCursor != null && findThreadCursor.moveToFirst())
 		{
-			String[] projection = new String[]{"thread_id", "address", "body"};
-			Cursor findContactCursor = _mainActivity.getContentResolver().query(Uri.parse("content://sms/"), projection, null, null, null);
-
-			if(findContactCursor != null && findContactCursor.moveToFirst())
+			for(int i = 0; i < findThreadCursor.getCount() && _running; i++)
 			{
+				String sms = findThreadCursor.getString(findThreadCursor.getColumnIndexOrThrow("body")).toString();
+				findThreadCursor.moveToNext();
 
-				for(int i=0; i < findContactCursor.getCount() && !threadFound; i++)
+				if(sms != null)
 				{
+					if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Message: " + sms);
+					contactToFetch.addMessage(sms);
+				}
 
-					String thread_id = findContactCursor.getString(findContactCursor.getColumnIndexOrThrow("thread_id"));
-					String number = findContactCursor.getString(findContactCursor.getColumnIndexOrThrow("address"));
-
-					findContactCursor.moveToNext();
-
-					if(number != null)
-					{
-
-						if(number.equalsIgnoreCase(contactNumber) && !threadFound)
-						{
-							if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Correct thread found with ID: " + thread_id);
-
-							threadFound = true;
-							threadID = thread_id;
-						}
-					}
+				if(i % 10 == 0)
+				{
+					int msgCount = i;
+					_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching message " + msgCount + " of " + findThreadCursor.getCount());
 				}
 			}
 
-			/* Get all messages from that thread */
-			if(!threadID.equals(""))
-			{
-				String selection = "thread_id=" + threadID;
-				final Cursor findThreadCursor = _mainActivity.getContentResolver().query(Uri.parse("content://sms/"), projection, selection, null, null);
-				if(findThreadCursor != null && findThreadCursor.moveToFirst())
-				{
-					for(int i = 0; i < findThreadCursor.getCount() && _running; i++)
-					{
-						String number = findThreadCursor.getString(findThreadCursor.getColumnIndexOrThrow("address"));
-						String sms = findThreadCursor.getString(findThreadCursor.getColumnIndexOrThrow("body")).toString();
+			if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, contactToFetch.getMessages());
 
-						findThreadCursor.moveToNext();
+		}
+		else
+		{
+			//No messages found
+		}
 
-						if(number != null)
-						{
-							if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Message: " + sms);
-							contactToFetch.addMessage(sms);
-
-							if(i % 10 == 0)
-							{
-								int msgCount = i;
-
-								_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching message " + msgCount + " of " + findThreadCursor.getCount());
-
-							}
-
-						}
-					}
-
-					if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, contactToFetch.getMessages());
-
-				}
-				else
-				{
-					//No messages found
-				}
-				
-				if(findThreadCursor != null)
-				{
-					findThreadCursor.close();
-				}
-			}
-			
-			if(findContactCursor != null)
-			{
-				findContactCursor.close();
-			}
+		if(findThreadCursor != null)
+		{
+			findThreadCursor.close();
 		}
 	}
 
@@ -223,7 +169,7 @@ public class ContactFetchThread implements Runnable
 		return contactToFetch;
 
 	}
-	
+
 	public void kill()
 	{
 		_running = false;
