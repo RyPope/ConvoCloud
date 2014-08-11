@@ -8,16 +8,16 @@ import java.util.Map;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.cloud.objects.WordInfo;
 
-public class Contact 
+public class DataStore 
 {
 	private String _phoneNumber;
 	private String _name;
-	private HashMap<String, Integer> _allMessages;
+	private HashMap<String, Integer> _allWords;
 	
-	public Contact(String id, String number, int type, String name)
+	public DataStore(String id, String number, int type, String name)
 	{
 		_phoneNumber = stripNumber(number);
-		_allMessages = new HashMap<String, Integer>();
+		_allWords = new HashMap<String, Integer>();
 		_name = name;
 	}
 
@@ -40,10 +40,10 @@ public class Contact
 		{
 			if(s.length() >= Globals.MIN_MESSAGE_SIZE && !Globals.STOP_WORDS.contains(s))
 			{
-				if(_allMessages.get(s) == null)
-					_allMessages.put(s, 1);
+				if(_allWords.get(s) == null)
+					_allWords.put(s, 1);
 				else
-					_allMessages.put(s, _allMessages.get(s) + 1);
+					_allWords.put(s, _allWords.get(s) + 1);
 			}
 		}
 	}
@@ -51,7 +51,7 @@ public class Contact
 	public String getMessages()
 	{
 		String allMessages = "";
-		for (Map.Entry<String, Integer> entry : _allMessages.entrySet())
+		for (Map.Entry<String, Integer> entry : _allWords.entrySet())
 		{
 			allMessages = allMessages + entry.getKey() + ":" + entry.getValue() + " ";
 		}
@@ -62,7 +62,7 @@ public class Contact
 	public ArrayList<WordInfo> getWordFrequencies() 
 	{
 		ArrayList<WordInfo> _wordFreqList = new ArrayList<WordInfo>();
-		for (Map.Entry<String, Integer> entry : _allMessages.entrySet())
+		for (Map.Entry<String, Integer> entry : _allWords.entrySet())
 		{
 			_wordFreqList.add(new WordInfo(entry.getKey(), entry.getValue()));
 		}

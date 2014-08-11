@@ -6,7 +6,7 @@ import java.io.FileReader;
 
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
-import ryan.pope.convocloud.objects.Contact;
+import ryan.pope.convocloud.objects.DataStore;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -14,39 +14,50 @@ import android.os.Environment;
 import android.provider.ContactsContract;
 import android.util.Log;
 
-public class ContactFetchThread implements Runnable 
+public class DataFetchThread implements Runnable 
 {
 	private MainActivity _mainActivity;
 	private Intent _data;
 	private boolean _running;
+	private Globals.Type _dataType;
 
-	public ContactFetchThread(MainActivity mainActivity, Intent data) 
+	public DataFetchThread(MainActivity mainActivity, Intent data, Globals.Type dataType) 
 	{
 		_mainActivity = mainActivity;
 		_data = data;
+		_dataType = dataType;
 		_running = true;
 	}
 
 	@Override
 	public void run() 
 	{
-		_mainActivity.getProgressHelper().showContactProgressDialog("Fetching Conversation", "Finding conversation...");
-
-		Contact contactToFetch = fetchContact();
-
-		if(contactToFetch != null)
+		if(_dataType == Globals.Type.CONTACT)
 		{
-			if(_mainActivity.hasSMS())
+			_mainActivity.getProgressHelper().showContactProgressDialog("Fetching Conversation", "Finding conversation...");
+	
+			DataStore data = fetchContact();
+	
+			if(data != null)
 			{
-				fetchContactMessages(contactToFetch);
+				if(_mainActivity.hasSMS())
+				{
+					fetchContactMessages(data);
+				}
 			}
+	
+			_mainActivity.setDataStore(data);
 		}
-
-		_mainActivity.setContact(contactToFetch);
+		else if (_dataType == Globals.Type.FILE)
+		{
+			
+		}
+		
+		
 		_mainActivity.getProgressHelper().dismissContactProgressDialog();
 	}
 
-	private void fetchStubData(Contact contactToFetch) 
+	private void fetchStubData(DataStore contactToFetch) 
 	{
 		try 
 		{
@@ -74,7 +85,7 @@ public class ContactFetchThread implements Runnable
 		}
 	}
 
-	private void fetchContactMessages(Contact contactToFetch) 
+	private void fetchContactMessages(DataStore contactToFetch) 
 	{
 		String contactNumber = contactToFetch.getPhoneNumber();
 
@@ -115,10 +126,10 @@ public class ContactFetchThread implements Runnable
 		}
 	}
 
-	private Contact fetchContact() 
+	private DataStore fetchContact() 
 	{
 
-		Contact contactToFetch = null;
+		DataStore contactToFetch = null;
 		Uri contactURI = null;
 
 		if(_data != null)
@@ -149,7 +160,7 @@ public class ContactFetchThread implements Runnable
 
 					if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Selected Contact: " + name); 
 
-					contactToFetch = new Contact(id, number, type, name);
+					contactToFetch = new DataStore(id, number, type, name);
 				}
 			} 
 			finally 

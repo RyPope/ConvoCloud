@@ -1,20 +1,21 @@
 package ryan.pope.convocloud.persistance;
 
 import android.content.Intent;
+import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
 
-public class ContactDataAccess 
+public class DataAccess 
 {
 	private Thread _dataAccessThread;
 	private MainActivity _mainActivity;
-	private ContactFetchThread _contactFetchThread;
+	private DataFetchThread _contactFetchThread;
 	
-	public ContactDataAccess(MainActivity mainActivity)
+	public DataAccess(MainActivity mainActivity)
 	{
 		_mainActivity = mainActivity;
 	}
 	
-	public void fetchContact(int requestCode, int resultCode, Intent data)
+	public void fetchData(Intent data, Globals.Type dataType)
 	{
 		try 
 		{
@@ -29,7 +30,7 @@ public class ContactDataAccess
 			e.printStackTrace();
 		}
 		
-		_contactFetchThread = new ContactFetchThread(_mainActivity, data);
+		_contactFetchThread = new DataFetchThread(_mainActivity, data, dataType);
 		_dataAccessThread = new Thread(_contactFetchThread);
 		_dataAccessThread.start();
 	}

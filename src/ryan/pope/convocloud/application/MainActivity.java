@@ -9,8 +9,8 @@ import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.business.ListenerManager;
 import ryan.pope.convocloud.business.WordCloudManager;
 import ryan.pope.convocloud.cloud.objects.WordInfo;
-import ryan.pope.convocloud.objects.Contact;
-import ryan.pope.convocloud.persistance.ContactDataAccess;
+import ryan.pope.convocloud.objects.DataStore;
+import ryan.pope.convocloud.persistance.DataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -37,12 +37,12 @@ import android.widget.TextView;
 public class MainActivity extends Activity 
 {
 	private static ListenerManager _listenerManager;
-	private ContactDataAccess _contactDataAccess;
+	private DataAccess _dataAccess;
 	private ProgressDialogHelper _progressHelper;
 	private TextView _statusTextView;
 	private File _photoFile;
 
-	private Contact _selectedContact;
+	private DataStore _selectedContact;
 	private WordCloudManager _wordCloudManager;
 	private boolean _smsCapable;
 
@@ -76,7 +76,7 @@ public class MainActivity extends Activity
 		_listenerManager = new ListenerManager();
 		_listenerManager.setup(this, _wordCloudManager);
 
-		_contactDataAccess = new ContactDataAccess(this);
+		_dataAccess = new DataAccess(this);
 
 		_progressHelper = new ProgressDialogHelper(this);
 
@@ -109,16 +109,16 @@ public class MainActivity extends Activity
 		{
 			if(requestCode == Globals.CONTACT_SELECT_CODE)
 			{
-				_contactDataAccess.fetchContact(requestCode, resultCode, data);
+				_dataAccess.fetchData(data, Globals.Type.CONTACT);
 			}
 			if(requestCode == Globals.FILE_SELECT_CODE)
 			{
-				
+	            _dataAccess.fetchData(data, Globals.Type.FILE);
 			}
 		}
 	}
 
-	public void setContact(Contact contactToFetch)
+	public void setDataStore(DataStore contactToFetch)
 	{
 		_selectedContact = contactToFetch;
 		if(_selectedContact != null)
@@ -216,13 +216,13 @@ public class MainActivity extends Activity
 		return _selectedContact != null ? true: false;
 	}
 
-	public Contact getContact() 
+	public DataStore getContact() 
 	{
 		return _selectedContact;
 	}
 
-	public ContactDataAccess getContactManager() 
+	public DataAccess getContactManager() 
 	{
-		return _contactDataAccess;
+		return _dataAccess;
 	}
 }

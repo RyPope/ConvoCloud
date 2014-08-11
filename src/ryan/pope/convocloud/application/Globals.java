@@ -12,6 +12,11 @@ public final class Globals
 	public static final int MIN_MESSAGE_SIZE = 3;
 	public static final int CONTACT_SELECT_CODE = 0;
 	public static final int FILE_SELECT_CODE = 1;
+	public enum Type
+	{
+		CONTACT,
+		FILE
+	}
 	private static final String[] wordArray = {
 		"A",
 		"ABOUT",

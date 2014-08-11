@@ -73,7 +73,6 @@ public class ListenerManager
 			    	_mainActivity.startActivityForResult(Intent.createChooser(intent, "Select a File"), Globals.FILE_SELECT_CODE);
 			    } catch (android.content.ActivityNotFoundException ex) 
 			    {
-			        // Potentially direct the user to the Market with a Dialog
 			        Toast.makeText(_mainActivity, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
 			    }
 			}
