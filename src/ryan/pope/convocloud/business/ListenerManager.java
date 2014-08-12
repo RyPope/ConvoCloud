@@ -119,7 +119,7 @@ public class ListenerManager
 			public void onClick(View v) 
 			{
 				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Share Button clicked"); 
-				if(_mainActivity.hasPhotoLoaded() && _mainActivity.hasContactLoaded())
+				if(_mainActivity.hasPhotoLoaded() && _mainActivity.hasDataStoreLoaded())
 				{
 					String shareMessage = "";
 					Intent shareIntent = new Intent();
@@ -132,10 +132,10 @@ public class ListenerManager
 					}
 					else if(_mainActivity.getDataStore() instanceof DataFile)
 					{
-						
+						shareMessage = "My Convo Cloud. Made with <TODO INSERT URL> for Android #ConvoCloud";	
 					}
 					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
-					shareIntent.setType("image/png");
+					shareIntent.setType("*/*");
 					_mainActivity.startActivity(Intent.createChooser(shareIntent, "Share ConvoCloud with..."));
 				}
 				else

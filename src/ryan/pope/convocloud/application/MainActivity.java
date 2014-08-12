@@ -58,7 +58,6 @@ public class MainActivity extends Activity
 		Crashlytics.start(this);
 
 		doStartUp();
-
 	}
 	
 	@Override
@@ -135,11 +134,11 @@ public class MainActivity extends Activity
 				{
 					if(_selectData instanceof DataContact)
 					{
-						_statusTextView.setText("Selected Contact: " + ((DataContact)_selectData).getName());
+						_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nContact: " + ((DataContact)_selectData).getName());
 					}
 					else if(_selectData instanceof DataFile)
 					{
-						_statusTextView.setText("Selected File: " + ((DataFile)_selectData).getFileName());
+						_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nSelected File: " + ((DataFile)_selectData).getFileName());
 					}
 				}
 			});
@@ -237,7 +236,7 @@ public class MainActivity extends Activity
 			e.printStackTrace();
 		}
 
-	    return isActivityFound ? true : false;
+	    return isActivityFound;
 	}
 
 	public Uri getPhotoURI() 
@@ -245,7 +244,7 @@ public class MainActivity extends Activity
 		return Uri.fromFile(_photoFile);
 	}
 
-	public boolean hasContactLoaded() 
+	public boolean hasDataStoreLoaded() 
 	{
 		return _selectData != null ? true: false;
 	}
@@ -255,7 +254,7 @@ public class MainActivity extends Activity
 		return _selectData;
 	}
 
-	public DataAccess getContactManager() 
+	public DataAccess getDataManager() 
 	{
 		return _dataAccess;
 	}

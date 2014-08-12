@@ -3,6 +3,7 @@ package ryan.pope.convocloud.presentation;
 import android.app.Dialog;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.MainActivity;
 
@@ -87,14 +88,27 @@ public class UIHelper
 
 	public void notifyNoSMS()
 	{
-		// TODO Auto-generated method stub
-		
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+			@Override
+			public void run()
+			{
+				Toast.makeText(_mainActivity, "You do not have an SMS enabled device.", Toast.LENGTH_SHORT).show();
+	
+			}
+		});
 	}
 
-	public void notifyNoMessages()
+	public void notifyNoMessages(final String contactName)
 	{
-		// TODO Auto-generated method stub
-		
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+			@Override
+			public void run()
+			{
+				Toast.makeText(_mainActivity, "No messages found with " + contactName, Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 
 }

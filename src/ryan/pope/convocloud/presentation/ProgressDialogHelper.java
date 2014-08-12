@@ -39,7 +39,7 @@ public class ProgressDialogHelper
 			        public void onClick(DialogInterface dialog, int which) 
 			        {
 			    		changeContactDialogMessage("Ending Search early...");
-			        	_mainActivity.getContactManager().kill();
+			        	_mainActivity.getDataManager().kill();
 			        	return;
 			        }
 			    });

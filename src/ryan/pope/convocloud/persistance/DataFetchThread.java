@@ -131,7 +131,7 @@ public class DataFetchThread implements Runnable
 		}
 		else
 		{
-			_UIHelper.notifyNoMessages();
+			_UIHelper.notifyNoMessages(contactToFetch.getName());
 		}
 
 		if(findThreadCursor != null)

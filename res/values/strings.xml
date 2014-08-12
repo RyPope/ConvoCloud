@@ -9,5 +9,5 @@
     <string name="select_cancel">Cancel</string>
     <string name="select_file">Select File&#8230;</string>
     <string name="create_convocloud">Create ConvoCloud</string>
-    <string name="status_text">Begin by selecting contact</string>
+    <string name="status_text">Begin by selecting cloud source</string>
 </resources>

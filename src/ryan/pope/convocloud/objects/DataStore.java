@@ -55,4 +55,9 @@ public class DataStore
 		
 		return _wordFreqList;
 	}
+
+	public int getWordCount()
+	{
+		return _allWords.size();
+	}
 }
