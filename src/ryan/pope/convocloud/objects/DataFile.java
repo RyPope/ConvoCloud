@@ -20,7 +20,7 @@ public class DataFile extends DataStore
 	
 	private String parseFileForName()
 	{
-		String fileName = "File";
+		String fileName = _filePath.getLastPathSegment();
 		try
 		{
 		    Cursor returnCursor = _mainActivity.getContentResolver().query(_filePath, null, null, null, null);

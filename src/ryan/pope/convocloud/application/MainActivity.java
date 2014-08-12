@@ -4,6 +4,7 @@ import com.crashlytics.android.Crashlytics;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.business.ListenerManager;
@@ -16,6 +17,8 @@ import ryan.pope.convocloud.persistance.DataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -192,7 +195,7 @@ public class MainActivity extends Activity
 	
 	public void sendNotification()
 	{
-		if(_progressHelper.isShowing())
+		if(!isInForeground())
 		{
 	        NotificationCompat.Builder builder =
 	                new NotificationCompat.Builder(this)
@@ -213,6 +216,28 @@ public class MainActivity extends Activity
 	public boolean hasPhotoLoaded() 
 	{
 		return _photoFile != null ? true : false;
+	}
+	
+	public boolean isInForeground()
+	{	    
+		boolean isActivityFound = false;
+		try
+		{
+		    ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		    List<RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE);
+	
+	
+		    if (services.get(0).topActivity.getPackageName().toString().equalsIgnoreCase(getPackageName().toString())) 
+		    {
+		        isActivityFound = true;
+		    }
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	    return isActivityFound ? true : false;
 	}
 
 	public Uri getPhotoURI() 
