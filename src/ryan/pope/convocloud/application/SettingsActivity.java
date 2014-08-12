@@ -31,6 +31,11 @@ public class SettingsActivity extends Activity
 	@Override
 	public void onBackPressed() 
 	{
+		endTransition();
+	}
+
+	private void endTransition()
+	{
 	    finish();
 	    overridePendingTransition(R.anim.slide_right_left_out, R.anim.slide_right_left_in);
 	}

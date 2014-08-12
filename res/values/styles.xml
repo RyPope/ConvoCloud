@@ -12,5 +12,7 @@
        <item name="android:alpha">.5</item>
        <item name="android:background">@drawable/button_left</item>
    </style>
+   
+<color name="gray">#EBEBEB</color>
 
 </resources>

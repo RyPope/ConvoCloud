@@ -12,7 +12,12 @@
     <string name="status_text">Begin by selecting cloud source</string>
     
     <!-- Settings activity -->
-    <string name="select_background_lbl">Select Background Colour</string>
-    <string name="select">Select</string>
-    
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_background_lbl">Background Colour</string>
+    <string name="select_words_lbl">Excluded Words</string>
+    <string name="select_scheme_lbl">Color Scheme</string>
+    <string name="select_scheme_button">Select Scheme</string>
+	<string name="select_words_button">Select Excluded Words</string>
+	<string name="set">Set</string>
 </resources>
