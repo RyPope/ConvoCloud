@@ -14,6 +14,7 @@ import android.widget.Toast;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
+import ryan.pope.convocloud.application.SettingsActivity;
 import ryan.pope.convocloud.objects.DataContact;
 import ryan.pope.convocloud.objects.DataFile;
 import ryan.pope.convocloud.presentation.UIHelper;
@@ -27,6 +28,7 @@ public class ListenerManager
 	private Button cancelButton;
 	private ImageView visibilityButton;
 	private ImageView shareButton;
+	private ImageView settingsButton;
 	private RelativeLayout backgroundLayout;
 	
 	private MainActivity _mainActivity;
@@ -46,8 +48,25 @@ public class ListenerManager
 			setupVisiblityButtonListener();
 			setupBackgroundListener();
 			setupShareButtonListener();
+			setupSettingsButtonListener();
 			setupSelectionButtonListeners();
 		}
+	}
+
+	private void setupSettingsButtonListener()
+	{
+		settingsButton = (ImageView) _mainActivity.findViewById(R.id.settings_button);
+		settingsButton.setOnClickListener( new OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				Intent intent = new Intent(_mainActivity, SettingsActivity.class);
+				_mainActivity.startActivity(intent);
+			}
+		});
+		
 	}
 
 	private void setupSelectionButtonListeners()
