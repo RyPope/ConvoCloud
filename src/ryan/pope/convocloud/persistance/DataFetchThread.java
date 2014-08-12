@@ -1,8 +1,6 @@
 package ryan.pope.convocloud.persistance;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -28,6 +26,7 @@ public class DataFetchThread implements Runnable
 	public DataFetchThread(MainActivity mainActivity, Intent data, Globals.Type dataType) 
 	{
 		_mainActivity = mainActivity;
+		_UIHelper = new UIHelper(_mainActivity);
 		_data = data;
 		_dataType = dataType;
 		_running = true;
@@ -69,7 +68,7 @@ public class DataFetchThread implements Runnable
 
 	private DataFile fetchFile() 
 	{
-		DataFile fileToFetch = new DataFile(_data.getData());	
+		DataFile fileToFetch = new DataFile(_mainActivity, _data.getData());	
 		InputStream is = null;
 		try 
 		{
@@ -85,7 +84,7 @@ public class DataFetchThread implements Runnable
 
 				if(i % 10 == 0)
 				{
-					_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching message " + i);
+					_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching line " + i);
 				}
 			}
 
