@@ -111,4 +111,17 @@ public class UIHelper
 		});
 	}
 
+	public void notifyNoData()
+	{
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+			@Override
+			public void run()
+			{
+				Toast.makeText(_mainActivity, "No source selected", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+	}
+
 }

@@ -19,10 +19,10 @@
         <Button
             android:id="@+id/source_selection_button"
             style="@style/btnStyleBlackpearl"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="1dp"
-            android:layout_weight=".25"
+            android:layout_weight=".5"
             android:alpha=".75"
             android:background="@drawable/button_left"
             android:text="@string/select_source" />
@@ -30,10 +30,10 @@
         <Button
             android:id="@+id/create_text_cloud_button"
             style="@style/btnStyleBlackpearl"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="1dp"
-            android:layout_weight=".25"
+            android:layout_weight=".5"
             android:alpha=".75"
             android:background="@drawable/button_right"
             android:text="@string/create_convocloud" />

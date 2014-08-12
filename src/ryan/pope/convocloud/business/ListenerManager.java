@@ -212,7 +212,10 @@ public class ListenerManager
 			@Override
 			public void onClick(View v) 
 			{
-				_wordCloudManager.createCloud();
+				if(_mainActivity.hasDataStoreLoaded())
+					_wordCloudManager.createCloud();
+				else
+					_UIHelper.notifyNoData();
 			}
 		});
 	}
