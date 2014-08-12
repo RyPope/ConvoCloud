@@ -1,8 +1,5 @@
 package ryan.pope.convocloud.business;
 
-import com.chiralcode.colorpicker.ColorPickerDialog;
-import com.chiralcode.colorpicker.ColorPickerDialog.OnColorSelectedListener;
-
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +8,8 @@ import android.widget.Button;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.SettingsActivity;
+import ryan.pope.convocloud.presentation.ColorPickerDialog;
+import ryan.pope.convocloud.presentation.ColorPickerDialog.OnColorSelectedListener;
 
 public class SettingsListenerManager
 {
