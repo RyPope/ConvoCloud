@@ -19,7 +19,7 @@ import ryan.pope.convocloud.objects.DataContact;
 import ryan.pope.convocloud.objects.DataFile;
 import ryan.pope.convocloud.presentation.UIHelper;
 
-public class ListenerManager 
+public class MainListenerManager 
 {
 	private Button sourceSelectionButton;
 	private Button createTextCloudButton;

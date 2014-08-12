@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ryan.pope.convocloud.R;
-import ryan.pope.convocloud.business.ListenerManager;
+import ryan.pope.convocloud.business.MainListenerManager;
 import ryan.pope.convocloud.business.WordCloudManager;
 import ryan.pope.convocloud.cloud.objects.WordInfo;
 import ryan.pope.convocloud.objects.DataContact;
@@ -41,7 +41,7 @@ import android.widget.TextView;
 @SuppressLint("NewApi")
 public class MainActivity extends Activity 
 {
-	private static ListenerManager _listenerManager;
+	private static MainListenerManager _listenerManager;
 	private DataAccess _dataAccess;
 	private ProgressDialogHelper _progressHelper;
 	private TextView _statusTextView;
@@ -77,7 +77,7 @@ public class MainActivity extends Activity
 
 		/* Create all click listeners */
 		_wordCloudManager = new WordCloudManager(this);
-		_listenerManager = new ListenerManager();
+		_listenerManager = new MainListenerManager();
 		_listenerManager.setup(this, _wordCloudManager);
 
 		_dataAccess = new DataAccess(this);

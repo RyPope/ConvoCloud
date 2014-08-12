@@ -3,7 +3,7 @@
     android:id="@+id/settings_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray" >
+    android:background="@drawable/main_image" >
 
     <LinearLayout
         android:id="@+id/setting_layout"
@@ -13,8 +13,9 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="false"
         android:layout_margin="10dp"
-        android:orientation="vertical"
-        android:background="@android:color/darker_gray" >
+        android:alpha=".75"
+        android:background="@android:color/darker_gray"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +30,7 @@
                 android:layout_weight=".5"
                 android:text="@string/select_background_lbl"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
 
         	<View
             android:id="@+id/vert_rule2"
@@ -68,7 +69,7 @@
                 android:layout_weight=".5"
                 android:text="@string/select_words_lbl"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
 
         <View
             android:id="@+id/vert_rule3"
@@ -105,7 +106,7 @@
                 android:layout_weight=".5"
                 android:text="@string/select_scheme_button"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/white" />
 
         <View
             android:id="@+id/vert_rule4"
@@ -122,7 +123,41 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:text="@string/set" />
         </LinearLayout>
+        <View
+            android:id="@+id/hor_rule3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
 
+            <TextView
+                android:id="@+id/select_rotation_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_margin="5dp"
+                android:layout_weight=".5"
+                android:text="@string/select_rotation_lbl"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white" />
+
+        <View
+            android:id="@+id/vert_rule6"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
+            <Button
+                android:id="@+id/select_rotation_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:background="?android:attr/selectableItemBackground"
+                android:text="@string/set" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -132,6 +167,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
+        android:alpha=".75"
         android:background="@android:color/darker_gray" >
 
         <Button

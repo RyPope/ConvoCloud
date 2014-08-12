@@ -17,7 +17,8 @@
     <string name="select_background_lbl">Background Colour</string>
     <string name="select_words_lbl">Excluded Words</string>
     <string name="select_scheme_lbl">Color Scheme</string>
+    <string name="select_rotation_lbl">Word Rotation</string>
     <string name="select_scheme_button">Select Scheme</string>
 	<string name="select_words_button">Select Excluded Words</string>
-	<string name="set">Set</string>
+	<string name="set">View/Set</string>
 </resources>

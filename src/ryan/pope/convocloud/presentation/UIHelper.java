@@ -23,7 +23,7 @@ public class UIHelper
 		initViews();
 		initDialogs();
 	}
-	
+
 	private void initDialogs()
 	{
 		_selectionDialog = new Dialog(_mainActivity);

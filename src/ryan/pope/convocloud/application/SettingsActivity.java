@@ -1,6 +1,7 @@
 package ryan.pope.convocloud.application;
 
 import ryan.pope.convocloud.R;
+import ryan.pope.convocloud.business.SettingsListenerManager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.WindowManager;
 
 public class SettingsActivity extends Activity
 {
+	private SettingsListenerManager _settingsListener;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -26,6 +28,8 @@ public class SettingsActivity extends Activity
 
 		setContentView(R.layout.activity_settings);
 		
+		_settingsListener = new SettingsListenerManager();
+		_settingsListener.setUp(this);
 	}
 	
 	@Override
