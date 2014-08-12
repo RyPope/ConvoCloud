@@ -3,6 +3,8 @@ package ryan.pope.convocloud.persistance;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
@@ -37,9 +39,9 @@ public class DataFetchThread implements Runnable
 		if(_dataType == Globals.Type.CONTACT)
 		{
 			_mainActivity.getProgressHelper().showContactProgressDialog("Fetching Conversation", "Finding conversation...");
-	
+
 			DataContact contact = fetchContact();
-	
+
 			if(contact != null)
 			{
 				if(_mainActivity.hasSMS())
@@ -51,11 +53,13 @@ public class DataFetchThread implements Runnable
 					_UIHelper.notifyNoSMS();
 				}
 			}
-	
+
 			_mainActivity.setDataStore(contact);
 		}
 		else if (_dataType == Globals.Type.FILE)
 		{
+			_mainActivity.getProgressHelper().showContactProgressDialog("Fetching File", "Finding conversation...");
+
 			DataFile dataFile = fetchFile();
 			_mainActivity.setDataStore(dataFile);
 		}
@@ -65,14 +69,16 @@ public class DataFetchThread implements Runnable
 
 	private DataFile fetchFile() 
 	{
-		DataFile fileToFetch = new DataFile(_data.getData());
+		DataFile fileToFetch = new DataFile(_data.getData());	
+		InputStream is = null;
 		try 
 		{
-			File file = fileToFetch.getFile();
-			BufferedReader br = new BufferedReader(new FileReader(file));  
-			String line;   
+			is = _mainActivity.getContentResolver().openInputStream(fileToFetch.getFile());
+
+			BufferedReader r = new BufferedReader(new InputStreamReader(is));
+			String line;
 			int i = 0;
-			while ((line = br.readLine()) != null) 
+			while ((line = r.readLine()) != null) 
 			{
 				i++;
 				fileToFetch.addWords(line);
@@ -81,15 +87,16 @@ public class DataFetchThread implements Runnable
 				{
 					_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching message " + i);
 				}
-			} 
+			}
 
-			br.close();
+			is.close();
+
 		}
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
-		
+
 		return fileToFetch;
 	}
 

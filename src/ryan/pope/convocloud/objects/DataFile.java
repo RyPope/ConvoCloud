@@ -6,12 +6,12 @@ import android.net.Uri;
 
 public class DataFile extends DataStore
 {
-	private File _filePath;
+	private Uri _filePath;
 	private String _fileName;
 	public DataFile(Uri filePath)
 	{
 		super();
-		_filePath = new File(filePath.getPath());
+		_filePath = filePath;
 		_fileName = filePath.getLastPathSegment();
 	}
 	
@@ -20,7 +20,7 @@ public class DataFile extends DataStore
 		return _fileName;
 	}
 	
-	public File getFile()
+	public Uri getFile()
 	{
 		return _filePath;
 	}
