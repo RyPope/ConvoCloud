@@ -62,8 +62,9 @@ public class ListenerManager
 			@Override
 			public void onClick(View v) 
 			{
-				Intent intent = new Intent(_mainActivity, SettingsActivity.class);
+				Intent intent = new Intent(_mainActivity, SettingsActivity.class);	
 				_mainActivity.startActivity(intent);
+				_mainActivity.overridePendingTransition(R.anim.slide_left_right_in, R.anim.slide_left_right_out);
 			}
 		});
 		

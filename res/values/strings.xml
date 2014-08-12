@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- Main activity -->
     <string name="app_name">Convo Cloud</string>
     <string name="main_textcloud_description">Convo Cloud</string>
     <string name="settings_description">Settings Button</string>
@@ -10,4 +10,9 @@
     <string name="select_file">Select File&#8230;</string>
     <string name="create_convocloud">Create ConvoCloud</string>
     <string name="status_text">Begin by selecting cloud source</string>
+    
+    <!-- Settings activity -->
+    <string name="select_background_lbl">Select Background Colour</string>
+    <string name="select">Select</string>
+    
 </resources>
