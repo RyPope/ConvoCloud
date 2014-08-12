@@ -8,11 +8,11 @@ import java.util.Map;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.cloud.objects.WordInfo;
 
-public class DataStore 
+public class DataBase 
 {
 	private HashMap<String, Integer> _allWords;
 	
-	public DataStore()
+	public DataBase()
 	{
 		_allWords = new HashMap<String, Integer>();
 	}

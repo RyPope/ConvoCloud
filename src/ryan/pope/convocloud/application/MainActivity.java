@@ -12,7 +12,7 @@ import ryan.pope.convocloud.business.WordCloudManager;
 import ryan.pope.convocloud.cloud.objects.WordInfo;
 import ryan.pope.convocloud.objects.DataContact;
 import ryan.pope.convocloud.objects.DataFile;
-import ryan.pope.convocloud.objects.DataStore;
+import ryan.pope.convocloud.objects.DataBase;
 import ryan.pope.convocloud.persistance.DataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 import android.annotation.SuppressLint;
@@ -47,7 +47,7 @@ public class MainActivity extends Activity
 	private TextView _statusTextView;
 	private File _photoFile;
 
-	private DataStore _selectData;
+	private DataBase _selectData;
 	private WordCloudManager _wordCloudManager;
 	private boolean _smsCapable;
 
@@ -122,7 +122,7 @@ public class MainActivity extends Activity
 		}
 	}
 
-	public void setDataStore(DataStore dataToFetch)
+	public void setDataStore(DataBase dataToFetch)
 	{
 		_selectData = dataToFetch;
 		if(_selectData != null)
@@ -249,7 +249,7 @@ public class MainActivity extends Activity
 		return _selectData != null ? true: false;
 	}
 
-	public DataStore getDataStore() 
+	public DataBase getDataStore() 
 	{
 		return _selectData;
 	}

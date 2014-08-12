@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 
-public class DataFile extends DataStore
+public class DataFile extends DataBase
 {
 	private Uri _filePath;
 	private String _fileName;

@@ -53,7 +53,8 @@ public class WordCloudThread implements Runnable
 	    try 
 	    {
 	        // For JellyBean 4.2 (API 17) and onward
-	        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+	        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) 
+	        {
 	            display.getRealMetrics(metrics);
 
 	            width = metrics.widthPixels;

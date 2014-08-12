@@ -41,7 +41,7 @@ public class ListenerManager
 		
 		if(_mainActivity != null)
 		{
-			setupContactListener();
+			setupSourceListener();
 			setupCreateTextCloudListener();
 			setupVisiblityButtonListener();
 			setupBackgroundListener();
@@ -198,7 +198,7 @@ public class ListenerManager
 		});
 	}
 
-	private void setupContactListener() 
+	private void setupSourceListener() 
 	{
 
 		sourceSelectionButton = (Button) _mainActivity.findViewById(R.id.source_selection_button);

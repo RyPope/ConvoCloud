@@ -1,6 +1,6 @@
 package ryan.pope.convocloud.objects;
 
-public class DataContact extends DataStore
+public class DataContact extends DataBase
 {
 
 	private String _phoneNumber;
