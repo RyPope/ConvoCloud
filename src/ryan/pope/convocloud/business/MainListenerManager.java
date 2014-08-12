@@ -53,21 +53,38 @@ public class MainListenerManager
 		}
 	}
 
-	private void setupSettingsButtonListener()
+	private void setupBackgroundListener() 
 	{
-		settingsButton = (ImageView) _mainActivity.findViewById(R.id.settings_button);
-		settingsButton.setOnClickListener( new OnClickListener() 
+		backgroundLayout = (RelativeLayout) _mainActivity.findViewById(R.id.main_layout);
+		backgroundLayout.setOnClickListener( new OnClickListener() 
 		{
 
 			@Override
 			public void onClick(View v) 
 			{
-				Intent intent = new Intent(_mainActivity, SettingsActivity.class);	
-				_mainActivity.startActivity(intent);
-				_mainActivity.overridePendingTransition(R.anim.slide_left_right_in, R.anim.slide_left_right_out);
+				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Background Image clicked"); 
+				if(!_UIHelper.layoutVisible())
+					_UIHelper.toggleUI();
 			}
+
 		});
 		
+	}
+
+	private void setupCreateTextCloudListener() 
+	{
+		createTextCloudButton = (Button) _mainActivity.findViewById(R.id.create_text_cloud_button);
+		createTextCloudButton.setOnClickListener( new OnClickListener() 
+		{
+			@Override
+			public void onClick(View v) 
+			{
+				if(_mainActivity.hasDataStoreLoaded())
+					_wordCloudManager.createCloud();
+				else
+					_UIHelper.notifyNoData();
+			}
+		});
 	}
 
 	private void setupSelectionButtonListeners()
@@ -129,6 +146,23 @@ public class MainListenerManager
 		
 	}
 
+	private void setupSettingsButtonListener()
+	{
+		settingsButton = (ImageView) _mainActivity.findViewById(R.id.settings_button);
+		settingsButton.setOnClickListener( new OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				Intent intent = new Intent(_mainActivity, SettingsActivity.class);	
+				_mainActivity.startActivity(intent);
+				_mainActivity.overridePendingTransition(R.anim.slide_left_right_in, R.anim.slide_left_right_out);
+			}
+		});
+		
+	}
+
 	private void setupShareButtonListener() 
 	{
 		shareButton = (ImageView) _mainActivity.findViewById(R.id.share_button);
@@ -171,21 +205,20 @@ public class MainListenerManager
 		});
 	}
 
-	private void setupBackgroundListener() 
+	private void setupSourceListener() 
 	{
-		backgroundLayout = (RelativeLayout) _mainActivity.findViewById(R.id.main_layout);
-		backgroundLayout.setOnClickListener( new OnClickListener() 
-		{
 
+		sourceSelectionButton = (Button) _mainActivity.findViewById(R.id.source_selection_button);
+		sourceSelectionButton.setOnClickListener( new OnClickListener() 
+		{
 			@Override
 			public void onClick(View v) 
-			{
-				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Background Image clicked"); 
-				if(!_UIHelper.layoutVisible())
-					_UIHelper.toggleUI();
+			{	
+				_UIHelper.displaySelectionDialog();
 			}
-
 		});
+		
+		
 		
 	}
 
@@ -203,38 +236,5 @@ public class MainListenerManager
 			}
 
 		});
-	}
-
-	private void setupCreateTextCloudListener() 
-	{
-		createTextCloudButton = (Button) _mainActivity.findViewById(R.id.create_text_cloud_button);
-		createTextCloudButton.setOnClickListener( new OnClickListener() 
-		{
-			@Override
-			public void onClick(View v) 
-			{
-				if(_mainActivity.hasDataStoreLoaded())
-					_wordCloudManager.createCloud();
-				else
-					_UIHelper.notifyNoData();
-			}
-		});
-	}
-
-	private void setupSourceListener() 
-	{
-
-		sourceSelectionButton = (Button) _mainActivity.findViewById(R.id.source_selection_button);
-		sourceSelectionButton.setOnClickListener( new OnClickListener() 
-		{
-			@Override
-			public void onClick(View v) 
-			{	
-				_UIHelper.displaySelectionDialog();
-			}
-		});
-		
-		
-		
 	}
 }

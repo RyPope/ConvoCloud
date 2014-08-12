@@ -48,6 +48,7 @@ public class SettingsListenerManager
 
 
 			    });
+			    
 			    colorPickerDialog.show();
 			}
 		});

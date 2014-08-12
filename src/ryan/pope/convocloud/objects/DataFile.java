@@ -18,6 +18,16 @@ public class DataFile extends DataBase
 		_fileName = parseFileForName();
 	}
 	
+	public Uri getFile()
+	{
+		return _filePath;
+	}
+
+	public String getFileName()
+	{
+		return _fileName;
+	}
+	
 	private String parseFileForName()
 	{
 		String fileName = _filePath.getLastPathSegment();
@@ -36,15 +46,5 @@ public class DataFile extends DataBase
 		}
 		
 	    return fileName;
-	}
-
-	public String getFileName()
-	{
-		return _fileName;
-	}
-	
-	public Uri getFile()
-	{
-		return _filePath;
 	}
 }

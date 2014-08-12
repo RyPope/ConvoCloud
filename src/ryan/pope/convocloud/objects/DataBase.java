@@ -34,15 +34,9 @@ public class DataBase
 		}
 	}
 	
-	public String getWords()
+	public int getWordCount()
 	{
-		String allMessages = "";
-		for (Map.Entry<String, Integer> entry : _allWords.entrySet())
-		{
-			allMessages = allMessages + entry.getKey() + ":" + entry.getValue() + " ";
-		}
-		
-		return allMessages;
+		return _allWords.size();
 	}
 
 	public ArrayList<WordInfo> getWordFrequencies() 
@@ -56,8 +50,14 @@ public class DataBase
 		return _wordFreqList;
 	}
 
-	public int getWordCount()
+	public String getWords()
 	{
-		return _allWords.size();
+		String allMessages = "";
+		for (Map.Entry<String, Integer> entry : _allWords.entrySet())
+		{
+			allMessages = allMessages + entry.getKey() + ":" + entry.getValue() + " ";
+		}
+		
+		return allMessages;
 	}
 }

@@ -13,9 +13,10 @@ public class WordInfo implements Comparable<WordInfo>
         _frequency = frequency;
     }
 
-    public String getWord() 
+    @Override
+    public int compareTo(WordInfo wordFrequency) 
     {
-        return _word;
+        return wordFrequency._frequency - _frequency;
     }
 
     public int getFrequency() 
@@ -23,10 +24,9 @@ public class WordInfo implements Comparable<WordInfo>
         return _frequency;
     }
 
-    @Override
-    public int compareTo(WordInfo wordFrequency) 
+    public String getWord() 
     {
-        return wordFrequency._frequency - _frequency;
+        return _word;
     }
 
 }

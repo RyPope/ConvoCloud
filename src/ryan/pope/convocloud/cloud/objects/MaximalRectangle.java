@@ -6,20 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 
-final class Cell 
-{
-
-	final int col;
-	final int row;
-
-	Cell(final int col, final int row) 
-	{
-		this.col = col;
-		this.row = row;
-	}
-
-}
-
 final class Cache 
 {
 	private int[] aggregateHeights;
@@ -27,11 +13,6 @@ final class Cache
 	Cache(final int size) 
 	{
 		aggregateHeights = new int[size + 1];
-	}
-
-	public int get(final int col) 
-	{
-		return aggregateHeights[col];
 	}
 
 	public void aggregate(final int[] row) 
@@ -50,6 +31,25 @@ final class Cache
 			}
 		}
 	}
+
+	public int get(final int col) 
+	{
+		return aggregateHeights[col];
+	}
+}
+
+final class Cell 
+{
+
+	final int col;
+	final int row;
+
+	Cell(final int col, final int row) 
+	{
+		this.col = col;
+		this.row = row;
+	}
+
 }
 
  public class MaximalRectangle

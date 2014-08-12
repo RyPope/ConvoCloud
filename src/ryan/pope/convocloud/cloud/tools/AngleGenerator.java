@@ -15,26 +15,16 @@ public class AngleGenerator
         _thetas = calculateThetas(0, 90);
     }
 
-    public AngleGenerator(int degrees) 
-    {
-        _steps = 1;
-        _thetas = new double[] { degreesToRadians(degrees) };
-    }
-
     public AngleGenerator(double fromDegrees, double toDegrees, int steps) 
     {
         _steps = steps;
         _thetas = calculateThetas(fromDegrees, toDegrees);
     }
 
-    public double next() 
+    public AngleGenerator(int degrees) 
     {
-        return _thetas[next++ % _steps];
-    }
-
-    public double randomNext() 
-    {
-        return _thetas[RANDOM.nextInt(_steps)];
+        _steps = 1;
+        _thetas = new double[] { degreesToRadians(degrees) };
     }
 
     private double[] calculateThetas(final double to, final double from) 
@@ -51,6 +41,16 @@ public class AngleGenerator
     private double degreesToRadians(final double degrees)
     {
         return Math.PI * degrees / 180.0;
+    }
+
+    public double next() 
+    {
+        return _thetas[next++ % _steps];
+    }
+
+    public double randomNext() 
+    {
+        return _thetas[RANDOM.nextInt(_steps)];
     }
 
 }

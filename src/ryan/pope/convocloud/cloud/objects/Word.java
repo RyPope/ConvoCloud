@@ -2,20 +2,35 @@ package ryan.pope.convocloud.cloud.objects;
 
 import java.util.Random;
 
+import ryan.pope.convocloud.cloud.tools.ImageRotation;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import ryan.pope.convocloud.cloud.tools.ImageRotation;
 
 public class Word
 {
+    public static int randInt(int min, int max) 
+    {
+    	int randomNum = 0;
+    	try
+    	{
+    		randomNum = RANDOM.nextInt((max - min) + 1) + min;
+    	}
+    	catch (IllegalArgumentException e)
+    	{
+    		return max;
+    	}
+
+        return randomNum;
+    }
     private WordPos _pos = new WordPos(0, 0);
     private Bitmap.Config _conf = Bitmap.Config.ARGB_8888;
     private Bitmap _imageBitmap;
     private Paint _textPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG);
+    
     private static final Random RANDOM = new Random();
     
     public Word(String word, int color, Rect rect, Typeface typeface, double theta, boolean hold) 
@@ -56,21 +71,6 @@ public class Word
             _pos.setX(rect.left);
         }
 
-    }
-    
-    public static int randInt(int min, int max) 
-    {
-    	int randomNum = 0;
-    	try
-    	{
-    		randomNum = RANDOM.nextInt((max - min) + 1) + min;
-    	}
-    	catch (IllegalArgumentException e)
-    	{
-    		return max;
-    	}
-
-        return randomNum;
     }
 	
 	private void adjustTextSize(String word, Paint textPaint, Rect rect, double theta) 
@@ -115,14 +115,14 @@ public class Word
         return _pos.getX();
     }
 
-    public void setX(int x) 
-    {
-        _pos.setX(x);
-    }
-
     public int getY() 
     {
         return _pos.getY();
+    }
+
+    public void setX(int x) 
+    {
+        _pos.setX(x);
     }
 
     public void setY(int y) 

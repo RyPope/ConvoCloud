@@ -86,11 +86,43 @@ public class WordCloud
 		}
 	}
 
+	protected void drawBackgroundColor() 
+	{
+		Paint fillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		fillPaint.setColor(_backgroundColor);
+		_bitmapCanvas.drawRect(0, 0, _width, _height, fillPaint);
+	}
+
+	public Bitmap getBufferedImage() 
+	{
+		return _imageBitmap;
+	}
+
 	private void insertWatermark() 
 	{
 		Rect rect = new Rect(_width - (_width / 2), _height - (_height / 15), _width, _height);
 		Word watermark = new Word("#ConvoCloud", _colorPalette.random(), rect, _mainTypeface, 0, true);
 		draw(watermark);
+	}
+
+	public void kill() 
+	{
+		_running  = false;
+	}
+
+	public void setAngleGenerator(AngleGenerator angleGenerator)
+	{
+		_angleGenerator = angleGenerator;
+	}
+	
+	public void setBackgroundColor(int backgroundColor) 
+	{
+		_backgroundColor = backgroundColor;
+	}
+
+	public void setTypeface(Typeface typeface)
+	{
+		_mainTypeface = typeface;
 	}
 
 	public void writeToFile(final String outputFileName) 
@@ -117,37 +149,5 @@ public class WordCloud
 
 			}
 		}
-	}
-
-	protected void drawBackgroundColor() 
-	{
-		Paint fillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		fillPaint.setColor(_backgroundColor);
-		_bitmapCanvas.drawRect(0, 0, _width, _height, fillPaint);
-	}
-
-	public void setBackgroundColor(int backgroundColor) 
-	{
-		_backgroundColor = backgroundColor;
-	}
-
-	public void setTypeface(Typeface typeface)
-	{
-		_mainTypeface = typeface;
-	}
-	
-	public void setAngleGenerator(AngleGenerator angleGenerator)
-	{
-		_angleGenerator = angleGenerator;
-	}
-
-	public Bitmap getBufferedImage() 
-	{
-		return _imageBitmap;
-	}
-
-	public void kill() 
-	{
-		_running  = false;
 	}
 }

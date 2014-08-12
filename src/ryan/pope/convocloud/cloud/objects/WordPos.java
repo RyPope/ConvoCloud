@@ -11,26 +11,6 @@ public class WordPos
         _y = y;
     }
 
-    public int getX() 
-    {
-        return _x;
-    }
-
-    public void setX(int x) 
-    {
-        _x = x;
-    }
-
-    public int getY() 
-    {
-        return _y;
-    }
-
-    public void setY(int y) 
-    {
-        this._y = y;
-    }
-
     @Override
     public boolean equals(Object o) 
     {
@@ -43,5 +23,25 @@ public class WordPos
         if (_y != pos._y) return false;
 
         return true;
+    }
+
+    public int getX() 
+    {
+        return _x;
+    }
+
+    public int getY() 
+    {
+        return _y;
+    }
+
+    public void setX(int x) 
+    {
+        _x = x;
+    }
+
+    public void setY(int y) 
+    {
+        this._y = y;
     }
 }

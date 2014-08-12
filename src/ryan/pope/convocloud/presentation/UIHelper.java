@@ -24,6 +24,27 @@ public class UIHelper
 		initDialogs();
 	}
 
+	public void dismissSelectionDialog()
+	{
+		if(_selectionDialog != null && _selectionDialog.isShowing())
+		{
+			_selectionDialog.dismiss();
+		}
+	}
+
+	public void displaySelectionDialog()
+	{
+		if(_selectionDialog != null && !_selectionDialog.isShowing())
+		{
+			_selectionDialog.show();
+		}
+	}
+
+	public Dialog getSelectionDialog()
+	{
+		return _selectionDialog;
+	}
+
 	private void initDialogs()
 	{
 		_selectionDialog = new Dialog(_mainActivity);
@@ -33,13 +54,56 @@ public class UIHelper
 		_selectionDialog.setCancelable(true);
 
 	}
-
+	
 	private void initViews() 
 	{
 		_iconLayout = (LinearLayout) _mainActivity.findViewById(R.id.icon_layout);
 		_buttonLayout = (LinearLayout) _mainActivity.findViewById(R.id.button_layout);
 		_statusLayout = (LinearLayout) _mainActivity.findViewById(R.id.status_layout);
 		
+	}
+
+	public boolean layoutVisible() 
+	{
+		return _uiVisible;
+	}
+	
+	public void notifyNoData()
+	{
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+			@Override
+			public void run()
+			{
+				Toast.makeText(_mainActivity, "No source selected", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+	}
+
+	public void notifyNoMessages(final String contactName)
+	{
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+			@Override
+			public void run()
+			{
+				Toast.makeText(_mainActivity, "No messages found with " + contactName, Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	public void notifyNoSMS()
+	{
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+			@Override
+			public void run()
+			{
+				Toast.makeText(_mainActivity, "You do not have an SMS enabled device.", Toast.LENGTH_SHORT).show();
+	
+			}
+		});
 	}
 
 	public void toggleUI()
@@ -58,70 +122,6 @@ public class UIHelper
 		}
 		
 		_uiVisible = !_uiVisible;
-	}
-
-	public boolean layoutVisible() 
-	{
-		return _uiVisible;
-	}
-	
-	public void displaySelectionDialog()
-	{
-		if(_selectionDialog != null && !_selectionDialog.isShowing())
-		{
-			_selectionDialog.show();
-		}
-	}
-
-	public void dismissSelectionDialog()
-	{
-		if(_selectionDialog != null && _selectionDialog.isShowing())
-		{
-			_selectionDialog.dismiss();
-		}
-	}
-	
-	public Dialog getSelectionDialog()
-	{
-		return _selectionDialog;
-	}
-
-	public void notifyNoSMS()
-	{
-		_mainActivity.runOnUiThread(new Runnable() 
-		{
-			@Override
-			public void run()
-			{
-				Toast.makeText(_mainActivity, "You do not have an SMS enabled device.", Toast.LENGTH_SHORT).show();
-	
-			}
-		});
-	}
-
-	public void notifyNoMessages(final String contactName)
-	{
-		_mainActivity.runOnUiThread(new Runnable() 
-		{
-			@Override
-			public void run()
-			{
-				Toast.makeText(_mainActivity, "No messages found with " + contactName, Toast.LENGTH_SHORT).show();
-			}
-		});
-	}
-
-	public void notifyNoData()
-	{
-		_mainActivity.runOnUiThread(new Runnable() 
-		{
-			@Override
-			public void run()
-			{
-				Toast.makeText(_mainActivity, "No source selected", Toast.LENGTH_SHORT).show();
-			}
-		});
-		
 	}
 
 }

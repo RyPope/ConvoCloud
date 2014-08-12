@@ -51,22 +51,6 @@ public class MainActivity extends Activity
 	private WordCloudManager _wordCloudManager;
 	private boolean _smsCapable;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
-		super.onCreate(savedInstanceState);
-		Crashlytics.start(this);
-
-		doStartUp();
-	}
-	
-	@Override
-	protected void onStop()
-	{
-		super.onStop();
-		_progressHelper.end();
-	}
-
 	private void doStartUp() 
 	{
 		/* Remove title and menu bar */
@@ -96,14 +80,71 @@ public class MainActivity extends Activity
         if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _smsCapable ? "SMS" : "No SMS");
 	}
 	
+	public DataAccess getDataManager() 
+	{
+		return _dataAccess;
+	}
+
+	public DataBase getDataStore() 
+	{
+		return _selectData;
+	}
+	
+	public Uri getPhotoURI() 
+	{
+		return Uri.fromFile(_photoFile);
+	}
+	
+	public ProgressDialogHelper getProgressHelper()
+	{
+		return _progressHelper;
+	}
+
 	public WordCloudManager getWordCloudManager()
 	{
 		return _wordCloudManager;
 	}
-	
+
+	public ArrayList<WordInfo> getWords() 
+	{
+		return _selectData.getWordFrequencies();
+	}
+
+	public boolean hasDataStoreLoaded() 
+	{
+		return _selectData != null ? true: false;
+	}
+
+	public boolean hasPhotoLoaded() 
+	{
+		return _photoFile != null ? true : false;
+	}
+
 	public boolean hasSMS()
 	{
 		return _smsCapable;
+	}
+	
+	public boolean isInForeground()
+	{	    
+		boolean isActivityFound = false;
+		try
+		{
+		    ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		    List<RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE);
+	
+	
+		    if (services.get(0).topActivity.getPackageName().toString().equalsIgnoreCase(getPackageName().toString())) 
+		    {
+		        isActivityFound = true;
+		    }
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+	    return isActivityFound;
 	}
 
 	@Override
@@ -121,38 +162,41 @@ public class MainActivity extends Activity
 			}
 		}
 	}
-
-	public void setDataStore(DataBase dataToFetch)
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
 	{
-		_selectData = dataToFetch;
-		if(_selectData != null)
+		super.onCreate(savedInstanceState);
+		Crashlytics.start(this);
+
+		doStartUp();
+	}
+
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		_progressHelper.end();
+	}
+
+	public void sendNotification()
+	{
+		if(!isInForeground())
 		{
-			runOnUiThread(new Runnable() 
-			{
-				@Override
-				public void run() 
-				{
-					if(_selectData instanceof DataContact)
-					{
-						_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nContact: " + ((DataContact)_selectData).getName());
-					}
-					else if(_selectData instanceof DataFile)
-					{
-						_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nSelected File: " + ((DataFile)_selectData).getFileName());
-					}
-				}
-			});
+	        NotificationCompat.Builder builder =
+	                new NotificationCompat.Builder(this)
+	                        .setSmallIcon(R.drawable.smallicon)
+	                        .setContentTitle("Convo Cloud")
+	                        .setContentText("Your Cloud has completed!");
+	
+	        Intent targetIntent = new Intent(this, MainActivity.class);
+	        targetIntent.setAction("android.intent.action.MAIN");
+	        targetIntent.addCategory("android.intent.category.LAUNCHER");
+	        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+	        builder.setContentIntent(contentIntent);
+	        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	        nManager.notify(1, builder.build());
 		}
-	}
-
-	public ProgressDialogHelper getProgressHelper()
-	{
-		return _progressHelper;
-	}
-
-	public ArrayList<WordInfo> getWords() 
-	{
-		return _selectData.getWordFrequencies();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -191,71 +235,27 @@ public class MainActivity extends Activity
 		}
 
 	}
-	
-	public void sendNotification()
+
+	public void setDataStore(DataBase dataToFetch)
 	{
-		if(!isInForeground())
+		_selectData = dataToFetch;
+		if(_selectData != null)
 		{
-	        NotificationCompat.Builder builder =
-	                new NotificationCompat.Builder(this)
-	                        .setSmallIcon(R.drawable.smallicon)
-	                        .setContentTitle("Convo Cloud")
-	                        .setContentText("Your Cloud has completed!");
-	
-	        Intent targetIntent = new Intent(this, MainActivity.class);
-	        targetIntent.setAction("android.intent.action.MAIN");
-	        targetIntent.addCategory("android.intent.category.LAUNCHER");
-	        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-	        builder.setContentIntent(contentIntent);
-	        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-	        nManager.notify(1, builder.build());
+			runOnUiThread(new Runnable() 
+			{
+				@Override
+				public void run() 
+				{
+					if(_selectData instanceof DataContact)
+					{
+						_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nContact: " + ((DataContact)_selectData).getName());
+					}
+					else if(_selectData instanceof DataFile)
+					{
+						_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nSelected File: " + ((DataFile)_selectData).getFileName());
+					}
+				}
+			});
 		}
-	}
-
-	public boolean hasPhotoLoaded() 
-	{
-		return _photoFile != null ? true : false;
-	}
-	
-	public boolean isInForeground()
-	{	    
-		boolean isActivityFound = false;
-		try
-		{
-		    ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		    List<RunningTaskInfo> services = activityManager.getRunningTasks(Integer.MAX_VALUE);
-	
-	
-		    if (services.get(0).topActivity.getPackageName().toString().equalsIgnoreCase(getPackageName().toString())) 
-		    {
-		        isActivityFound = true;
-		    }
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-	    return isActivityFound;
-	}
-
-	public Uri getPhotoURI() 
-	{
-		return Uri.fromFile(_photoFile);
-	}
-
-	public boolean hasDataStoreLoaded() 
-	{
-		return _selectData != null ? true: false;
-	}
-
-	public DataBase getDataStore() 
-	{
-		return _selectData;
-	}
-
-	public DataAccess getDataManager() 
-	{
-		return _dataAccess;
 	}
 }

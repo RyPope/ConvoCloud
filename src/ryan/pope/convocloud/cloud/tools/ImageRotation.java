@@ -6,16 +6,6 @@ import android.graphics.Matrix;
 public class ImageRotation 
 {
 
-    public static Bitmap rotate90(final Bitmap bufferedImage) 
-    {
-        return rotate(bufferedImage, Math.PI / 2);
-    }
-
-    public static Bitmap rotateMinus90(final Bitmap bufferedImage) 
-    {
-        return rotate(bufferedImage, -Math.PI / 2);
-    }
-
     public static Bitmap rotate(Bitmap bufferedImage, double theta) 
     {
         if(theta == 0) 
@@ -32,6 +22,16 @@ public class ImageRotation
 
         Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap.getWidth(), scaledBitmap .getHeight(), matrix, true);
         return rotatedBitmap;
+    }
+
+    public static Bitmap rotate90(final Bitmap bufferedImage) 
+    {
+        return rotate(bufferedImage, Math.PI / 2);
+    }
+
+    public static Bitmap rotateMinus90(final Bitmap bufferedImage) 
+    {
+        return rotate(bufferedImage, -Math.PI / 2);
     }
 
 }

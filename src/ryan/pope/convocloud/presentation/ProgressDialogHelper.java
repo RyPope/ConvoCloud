@@ -1,12 +1,12 @@
 package ryan.pope.convocloud.presentation;
 
+import ryan.pope.convocloud.R;
+import ryan.pope.convocloud.application.Globals;
+import ryan.pope.convocloud.application.MainActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.WindowManager;
-import ryan.pope.convocloud.application.Globals;
-import ryan.pope.convocloud.application.MainActivity;
-import ryan.pope.convocloud.R;
 
 public class ProgressDialogHelper 
 {
@@ -19,47 +19,54 @@ public class ProgressDialogHelper
 		_mainActivity = mainActivity;
 	}
 
-	public void showContactProgressDialog(final String title, final String message)
+	public void changeCloudDialogMessage(final String message) 
 	{
 		_mainActivity.runOnUiThread(new Runnable() 
 		{
-			@SuppressWarnings("deprecation")
 			@Override
 			public void run()
 			{
-				if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Showing progress dialog"); 
-				_contactProgressDialog = new ProgressDialog(_mainActivity);
-				_contactProgressDialog.setTitle(title);
-				_contactProgressDialog.setMessage(message);
-				_contactProgressDialog.setIcon(R.drawable.smallicon);
-				_contactProgressDialog.setCanceledOnTouchOutside(false);
-				_contactProgressDialog.setCancelable(false);
-				_contactProgressDialog.setButton("Continue", new DialogInterface.OnClickListener() 
-			    {
-			        public void onClick(DialogInterface dialog, int which) 
-			        {
-			    		changeContactDialogMessage("Ending Search early...");
-			        	_mainActivity.getDataManager().kill();
-			        	return;
-			        }
-			    });
-				_contactProgressDialog.show();
-				
-				setScreenFlag(true);
+				if(_cloudProgressDialog != null)
+				{
+					if(!_cloudProgressDialog.isShowing())
+						_cloudProgressDialog.show();
+					_cloudProgressDialog.setMessage(message);
+				}
 			}
 		});
 	}
 	
-	protected void setScreenFlag(boolean flag)
+	public void changeContactDialogMessage(final String message) 
 	{
-		if(flag)
+		_mainActivity.runOnUiThread(new Runnable() 
 		{
-			_mainActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		}
-		else
+			@Override
+			public void run()
+			{
+				if(_contactProgressDialog != null)
+				{
+					if(!_contactProgressDialog.isShowing())
+						_contactProgressDialog.show();
+					_contactProgressDialog.setMessage(message);
+				}
+			}
+		});
+	}
+
+	public void dismissCloudProgressDialog()
+	{
+		_mainActivity.runOnUiThread(new Runnable() 
 		{
-			_mainActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		}
+			@Override
+			public void run()
+			{
+				if(_cloudProgressDialog != null && _cloudProgressDialog.isShowing())
+				{
+					_cloudProgressDialog.dismiss();
+					setScreenFlag(false);
+				}
+			}
+		});
 	}
 
 	public void dismissContactProgressDialog()
@@ -78,21 +85,33 @@ public class ProgressDialogHelper
 		});
 	}
 
-	public void changeContactDialogMessage(final String message) 
+	public void end() 
 	{
-		_mainActivity.runOnUiThread(new Runnable() 
+		dismissCloudProgressDialog();
+		dismissContactProgressDialog();
+		
+	}
+
+	public boolean isShowing()
+	{
+		if(_cloudProgressDialog != null)
 		{
-			@Override
-			public void run()
-			{
-				if(_contactProgressDialog != null)
-				{
-					if(!_contactProgressDialog.isShowing())
-						_contactProgressDialog.show();
-					_contactProgressDialog.setMessage(message);
-				}
-			}
-		});
+			return _cloudProgressDialog.isShowing();
+		}
+		
+		return false;
+	}
+
+	protected void setScreenFlag(boolean flag)
+	{
+		if(flag)
+		{
+			_mainActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
+		else
+		{
+			_mainActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 	}
 
 	public void showCloudProgressDialog(final String title, final String message)
@@ -126,54 +145,35 @@ public class ProgressDialogHelper
 		});
 	}
 
-	public void dismissCloudProgressDialog()
+	public void showContactProgressDialog(final String title, final String message)
 	{
 		_mainActivity.runOnUiThread(new Runnable() 
 		{
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run()
 			{
-				if(_cloudProgressDialog != null && _cloudProgressDialog.isShowing())
-				{
-					_cloudProgressDialog.dismiss();
-					setScreenFlag(false);
-				}
+				if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Showing progress dialog"); 
+				_contactProgressDialog = new ProgressDialog(_mainActivity);
+				_contactProgressDialog.setTitle(title);
+				_contactProgressDialog.setMessage(message);
+				_contactProgressDialog.setIcon(R.drawable.smallicon);
+				_contactProgressDialog.setCanceledOnTouchOutside(false);
+				_contactProgressDialog.setCancelable(false);
+				_contactProgressDialog.setButton("Continue", new DialogInterface.OnClickListener() 
+			    {
+			        public void onClick(DialogInterface dialog, int which) 
+			        {
+			    		changeContactDialogMessage("Ending Search early...");
+			        	_mainActivity.getDataManager().kill();
+			        	return;
+			        }
+			    });
+				_contactProgressDialog.show();
+				
+				setScreenFlag(true);
 			}
 		});
-	}
-
-	public void changeCloudDialogMessage(final String message) 
-	{
-		_mainActivity.runOnUiThread(new Runnable() 
-		{
-			@Override
-			public void run()
-			{
-				if(_cloudProgressDialog != null)
-				{
-					if(!_cloudProgressDialog.isShowing())
-						_cloudProgressDialog.show();
-					_cloudProgressDialog.setMessage(message);
-				}
-			}
-		});
-	}
-
-	public void end() 
-	{
-		dismissCloudProgressDialog();
-		dismissContactProgressDialog();
-		
-	}
-
-	public boolean isShowing()
-	{
-		if(_cloudProgressDialog != null)
-		{
-			return _cloudProgressDialog.isShowing();
-		}
-		
-		return false;
 	}
 
 }

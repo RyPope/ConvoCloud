@@ -12,9 +12,9 @@ public class DataContact extends DataBase
 		_phoneNumber = stripNumber(number);
 	}
 	
-	private String stripNumber(String number) 
+	public String getName()
 	{
-		return number.replaceAll("[^0-9]", "");
+		return _contactName;
 	}
 	
 	public String getPhoneNumber() 
@@ -28,9 +28,9 @@ public class DataContact extends DataBase
 		_contactName = contactName;
 	}
 	
-	public String getName()
+	private String stripNumber(String number) 
 	{
-		return _contactName;
+		return number.replaceAll("[^0-9]", "");
 	}
 	
 }

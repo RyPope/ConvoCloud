@@ -11,15 +11,6 @@ import android.view.WindowManager;
 public class SettingsActivity extends Activity
 {
 	private SettingsListenerManager _settingsListener;
-	@Override
-	protected void onCreate(Bundle savedInstanceState) 
-	{
-		super.onCreate(savedInstanceState);
-		if (Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Settings activity loaded.");
-		
-		doStartUp();
-	}
-
 	private void doStartUp()
 	{
 		/* Remove title and menu bar */
@@ -31,6 +22,12 @@ public class SettingsActivity extends Activity
 		_settingsListener = new SettingsListenerManager();
 		_settingsListener.setUp(this);
 	}
+
+	private void endTransition()
+	{
+	    finish();
+	    overridePendingTransition(R.anim.slide_right_left_out, R.anim.slide_right_left_in);
+	}
 	
 	@Override
 	public void onBackPressed() 
@@ -38,9 +35,12 @@ public class SettingsActivity extends Activity
 		endTransition();
 	}
 
-	private void endTransition()
+	@Override
+	protected void onCreate(Bundle savedInstanceState) 
 	{
-	    finish();
-	    overridePendingTransition(R.anim.slide_right_left_out, R.anim.slide_right_left_in);
+		super.onCreate(savedInstanceState);
+		if (Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Settings activity loaded.");
+		
+		doStartUp();
 	}
 }
