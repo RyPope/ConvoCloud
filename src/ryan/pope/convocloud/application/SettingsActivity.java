@@ -20,7 +20,7 @@ public class SettingsActivity extends Activity
 		setContentView(R.layout.activity_settings);
 		
 		_settingsListener = new SettingsListenerManager();
-		_settingsListener.setUp(this);
+		_settingsListener.setup(this);
 	}
 
 	private void endTransition()

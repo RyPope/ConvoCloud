@@ -13,6 +13,7 @@ import ryan.pope.convocloud.cloud.objects.WordInfo;
 import ryan.pope.convocloud.objects.DataContact;
 import ryan.pope.convocloud.objects.DataFile;
 import ryan.pope.convocloud.objects.DataBase;
+import ryan.pope.convocloud.objects.DataType;
 import ryan.pope.convocloud.persistance.DataAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 import android.annotation.SuppressLint;
@@ -154,11 +155,11 @@ public class MainActivity extends Activity
 		{
 			if(requestCode == Globals.CONTACT_SELECT_CODE)
 			{
-				_dataAccess.fetchData(data, Globals.Type.CONTACT);
+				_dataAccess.fetchData(data, DataType.CONTACT);
 			}
 			if(requestCode == Globals.FILE_SELECT_CODE)
 			{
-	            _dataAccess.fetchData(data, Globals.Type.FILE);
+	            _dataAccess.fetchData(data, DataType.FILE);
 			}
 		}
 	}

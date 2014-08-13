@@ -8,6 +8,7 @@ import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.objects.DataContact;
 import ryan.pope.convocloud.objects.DataFile;
+import ryan.pope.convocloud.objects.DataType;
 import ryan.pope.convocloud.presentation.UIHelper;
 import android.content.Intent;
 import android.database.Cursor;
@@ -20,10 +21,10 @@ public class DataFetchThread implements Runnable
 	private MainActivity _mainActivity;
 	private Intent _data;
 	private boolean _running;
-	private Globals.Type _dataType;
+	private DataType _dataType;
 	private UIHelper _UIHelper;
 
-	public DataFetchThread(MainActivity mainActivity, Intent data, Globals.Type dataType) 
+	public DataFetchThread(MainActivity mainActivity, Intent data, DataType dataType) 
 	{
 		_mainActivity = mainActivity;
 		_UIHelper = new UIHelper(_mainActivity);
@@ -164,7 +165,7 @@ public class DataFetchThread implements Runnable
 	@Override
 	public void run() 
 	{
-		if(_dataType == Globals.Type.CONTACT)
+		if(_dataType == DataType.CONTACT)
 		{
 			_mainActivity.getProgressHelper().showContactProgressDialog("Fetching Conversation", "Finding conversation...");
 
@@ -184,7 +185,7 @@ public class DataFetchThread implements Runnable
 
 			_mainActivity.setDataStore(contact);
 		}
-		else if (_dataType == Globals.Type.FILE)
+		else if (_dataType == DataType.FILE)
 		{
 			_mainActivity.getProgressHelper().showContactProgressDialog("Fetching File", "Finding conversation...");
 

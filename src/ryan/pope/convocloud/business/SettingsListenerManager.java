@@ -8,17 +8,20 @@ import android.widget.Button;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.SettingsActivity;
+import ryan.pope.convocloud.persistance.SettingsAccess;
 import ryan.pope.convocloud.presentation.ColorPickerDialog;
 import ryan.pope.convocloud.presentation.ColorPickerDialog.OnColorSelectedListener;
 
 public class SettingsListenerManager
 {
 	private SettingsActivity _settingsActivity;
+	private SettingsAccess _settings;
 	private Button _backgroundColorButton;
 
-	public void setUp(SettingsActivity settingsActivity)
+	public void setup(SettingsActivity settingsActivity)
 	{
 		_settingsActivity = settingsActivity;
+		_settings = new SettingsAccess(_settingsActivity);
 		
 		if(_settingsActivity != null)
 		{

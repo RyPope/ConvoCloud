@@ -1,8 +1,8 @@
 package ryan.pope.convocloud.persistance;
 
 import android.content.Intent;
-import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
+import ryan.pope.convocloud.objects.DataType;
 
 public class DataAccess 
 {
@@ -15,7 +15,7 @@ public class DataAccess
 		_mainActivity = mainActivity;
 	}
 	
-	public void fetchData(Intent data, Globals.Type dataType)
+	public void fetchData(Intent data, DataType dataType)
 	{
 		try 
 		{
