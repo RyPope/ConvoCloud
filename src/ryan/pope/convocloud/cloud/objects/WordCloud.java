@@ -30,6 +30,7 @@ public class WordCloud
 	private ProgressDialogHelper _progressHelper;
 	private boolean _running = true;
 	private Canvas _bitmapCanvas;
+	private ArrayList<String> _excludedWords;
 
 	public WordCloud(ProgressDialogHelper progressHelper, int width, int height) 
 	{
@@ -40,6 +41,7 @@ public class WordCloud
 		_progressHelper = progressHelper;
 		_imageBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		_bitmapCanvas = new Canvas(_imageBitmap);
+		_excludedWords = new ArrayList<String>();
 	}
 
 	public void build(ArrayList<WordInfo> wordList) 
@@ -56,17 +58,20 @@ public class WordCloud
 			if(!_running)
 				break;
 			
-			Rect rect = maxRect.maximalRect(_imageBitmap);
-			/* If the biggest rectangle available is smaller than the minimum size, finish */
-			if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
-				break;
-
-			Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext(), false);
-			
-			draw(word);
-			
-			if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
-			
+			if(!_excludedWords.contains(wordToPlace.getWord()))
+			{
+				Rect rect = maxRect.maximalRect(_imageBitmap, _backgroundColor);
+				/* If the biggest rectangle available is smaller than the minimum size, finish */
+				if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
+					break;
+	
+				Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext(), false);
+				
+				draw(word);
+				
+				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
+			}
+		
 			_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + Globals.CLOUD_NOTE);
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size());
 			_numPlaced++;
@@ -101,7 +106,8 @@ public class WordCloud
 	private void insertWatermark() 
 	{
 		Rect rect = new Rect(_width - (_width / 2), _height - (_height / 15), _width, _height);
-		Word watermark = new Word("#ConvoCloud", _colorPalette.random(), rect, _mainTypeface, 0, true);
+		int wordColor = Color.rgb(255-Color.red(_backgroundColor), 255-Color.green(_backgroundColor), 255 - Color.blue(_backgroundColor));
+		Word watermark = new Word("#ConvoCloud", wordColor, rect, _mainTypeface, 0, true);
 		draw(watermark);
 	}
 
@@ -149,5 +155,11 @@ public class WordCloud
 
 			}
 		}
+	}
+
+	public void setExcludedWords(ArrayList<String> excludedWords)
+	{
+		_excludedWords = excludedWords;
+		
 	}
 }

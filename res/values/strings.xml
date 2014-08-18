@@ -21,4 +21,6 @@
     <string name="select_scheme_button">Select Scheme</string>
 	<string name="select_words_button">Select Excluded Words</string>
 	<string name="set">View/Set</string>
+	<string name="OK">OK</string>
+	<string name="excluded_notice">Please enter excluded words separated by a comma.</string>
 </resources>

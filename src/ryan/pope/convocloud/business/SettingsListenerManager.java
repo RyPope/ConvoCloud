@@ -15,6 +15,7 @@ import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.persistance.SettingsAccess;
 import ryan.pope.convocloud.presentation.ColorPickerDialog;
 import ryan.pope.convocloud.presentation.ColorPickerDialog.OnColorSelectedListener;
+import ryan.pope.convocloud.presentation.UIHelper;
 
 public class SettingsListenerManager
 {
@@ -23,14 +24,19 @@ public class SettingsListenerManager
 	private Button _backgroundColorButton;
 	private Button _saveButton;
 	private Button _cancelButton;
+	private Button _excludedButton;
+	private Button _excludedSaveButton;
+	private Button _excludedCancelButton;
 	private Spinner _schemeSpinner;
 	private Spinner _rotationSpinner;
+	private UIHelper _UIHelper;
 
 	public void setup(SettingsActivity settingsActivity, SettingsAccess settings)
 	{
 		_settingsActivity = settingsActivity;
 		_settings = settings;
 		_settings = new SettingsAccess(_settingsActivity);
+		_UIHelper = new UIHelper(settingsActivity);
 		
 		if(_settingsActivity != null)
 		{
@@ -39,7 +45,53 @@ public class SettingsListenerManager
 			setupSchemeListener();
 			setupCancelListener();
 			setupRotationListener();
+			setupExcludedListener();
+			setupExcludedDialogListeners();
 		}
+	}
+
+	private void setupExcludedDialogListeners()
+	{
+		_excludedCancelButton = (Button) _UIHelper.getExcludedDialog().findViewById(R.id.excluded_cancel_button);
+		_excludedCancelButton.setOnClickListener( new OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				_UIHelper.dismissExcludedDialog();
+			}
+		});
+		
+		_excludedSaveButton = (Button) _UIHelper.getExcludedDialog().findViewById(R.id.excluded_save_button);
+		_excludedSaveButton.setOnClickListener( new OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				_settings.setExcludedWords(_UIHelper.getExcludedWords());
+            	if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Excluded words: " + _UIHelper.getExcludedWords().toString());
+				_UIHelper.dismissExcludedDialog();
+			}
+		});
+		
+	}
+
+	private void setupExcludedListener()
+	{
+		_UIHelper.initExcludedDialog();
+		_excludedButton = (Button) _settingsActivity.findViewById(R.id.select_words_button);
+		_excludedButton.setOnClickListener( new OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				_UIHelper.displayExcludedDialog(_settings.getExcludedWords());
+			}
+		});
+		
 	}
 
 	private void setupCancelListener()

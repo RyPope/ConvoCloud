@@ -1,11 +1,14 @@
 package ryan.pope.convocloud.presentation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,6 +23,7 @@ public class UIHelper
 	private LinearLayout _buttonLayout;
 	private LinearLayout _statusLayout;
 	private Dialog _selectionDialog;
+	private Dialog _excludedDialog;
 	
 	private boolean _uiVisible = true;
 	private Spinner _colourSchemeSpinner;
@@ -154,6 +158,67 @@ public class UIHelper
         _rotationSpinner.setAdapter(rotationAdapter);
         _rotationSpinner.setSelection(rotationList.indexOf(selection.name()));
 		
+	}
+
+	public void displayExcludedDialog(ArrayList<String> excludedWords)
+	{
+		
+		EditText excludedBox = (EditText) _excludedDialog.findViewById(R.id.excluded_words);
+		
+		excludedBox.setText("");
+		
+		if(excludedWords != null)
+		{
+			for(String word : excludedWords)
+			{
+				excludedBox.append(word + ", ");
+			}
+		}
+			
+		
+		excludedBox.setSelection(excludedBox.getText().length());
+		
+		_excludedDialog.show();
+	}
+
+	public void initExcludedDialog()
+	{
+		_excludedDialog = new Dialog(_activity);
+		_excludedDialog.setContentView(R.layout.exclude_words_dialog);
+		_excludedDialog.setTitle("Excluded Words");
+		_excludedDialog.setCanceledOnTouchOutside(false);
+		_excludedDialog.setCancelable(true);
+	}
+	
+	public Dialog getExcludedDialog()
+	{
+		return _excludedDialog;
+	}
+
+	public void dismissExcludedDialog()
+	{
+		if(_excludedDialog != null && _excludedDialog.isShowing())
+		{
+			_excludedDialog.dismiss();
+		}
+	}
+
+	public ArrayList<String> getExcludedWords()
+	{
+		ArrayList<String> excludedWords = new ArrayList<String>();
+		if(_excludedDialog != null && _excludedDialog.isShowing())
+		{
+			EditText excludedBox = (EditText) _excludedDialog.findViewById(R.id.excluded_words);
+			
+			String text = excludedBox.getText().toString();
+			text = text.toUpperCase(Locale.getDefault()).replaceAll("[^A-Za-z0-9,]", "");
+			
+			String[] list = text.split(",");
+			excludedWords = new ArrayList<String>(Arrays.asList(list));
+			
+		}
+		
+		return excludedWords;
 	}
 
 }

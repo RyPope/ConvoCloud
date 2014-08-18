@@ -3,16 +3,17 @@ package ryan.pope.convocloud.cloud.objects;
 import java.util.Stack;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Rect;
 
 final class Cache 
 {
-	private int[] aggregateHeights;
+	private int[] _height;
+	private int _color;
 
-	Cache(final int size) 
+	Cache(final int size, final int color) 
 	{
-		aggregateHeights = new int[size + 1];
+		_height = new int[size + 1];
+		_color = color;
 	}
 
 	public void aggregate(final int[] row) 
@@ -21,20 +22,20 @@ final class Cache
 		{
 			final int element = row[col];
 
-			if(element != Color.WHITE) 
+			if(element != _color) 
 			{
-				aggregateHeights[col] = 0;
+				_height[col] = 0;
 			} 
 			else 
 			{
-				aggregateHeights[col] = aggregateHeights[col] + 1;
+				_height[col] = _height[col] + 1;
 			}
 		}
 	}
 
 	public int get(final int col) 
 	{
-		return aggregateHeights[col];
+		return _height[col];
 	}
 }
 
@@ -55,7 +56,7 @@ final class Cell
  public class MaximalRectangle
  {
 
-	public Rect maximalRect(Bitmap _imageBitmap)
+	public Rect maximalRect(Bitmap _imageBitmap, int color)
 	{
 		int bestArea = 0;
 		Cell bestLowerLeftCorner = new Cell(0, 0);
@@ -65,7 +66,7 @@ final class Cell
 		final int numRows = _imageBitmap.getHeight();
 
 		final Stack<Cell> stack = new Stack<Cell>();
-		final Cache rectangleHeightCache = new Cache(numColumns);
+		final Cache rectangleHeightCache = new Cache(numColumns, color);
 
 		for(int row = 0; row < numRows; row++) 
 		{

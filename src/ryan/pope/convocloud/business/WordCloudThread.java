@@ -3,9 +3,11 @@ package ryan.pope.convocloud.business;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.cloud.objects.WordCloud;
 import ryan.pope.convocloud.cloud.objects.WordInfo;
+import ryan.pope.convocloud.persistance.SettingsAccess;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.graphics.Typeface;
@@ -19,6 +21,7 @@ public class WordCloudThread implements Runnable
 {
 	private MainActivity _mainActivity;
 	private WordCloud _wordCloud;
+	private SettingsAccess _settings;
 	public WordCloudThread(MainActivity mainActivity) 
 	{
 		_mainActivity = mainActivity;
@@ -87,8 +90,12 @@ public class WordCloudThread implements Runnable
 		
 		ArrayList<WordInfo> wordFrequencies = _mainActivity.getWords();
 
+		_settings = new SettingsAccess(_mainActivity);
+		
 		_wordCloud = new WordCloud(_mainActivity.getProgressHelper(), width, height);
 		_wordCloud.setTypeface(Typeface.createFromAsset(_mainActivity.getAssets(), "neue.otf"));
+		_wordCloud.setBackgroundColor(_settings.getBackground());
+		_wordCloud.setExcludedWords(_settings.getExcludedWords());
 		_wordCloud.build(wordFrequencies);
 		
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
