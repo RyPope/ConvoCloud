@@ -30,6 +30,7 @@ public class SettingsActivity extends Activity
 		
 		_UIHelper = new UIHelper(this);
 		_UIHelper.setupSchemeSpinner(_settings.getSchemeList(), _settings.getScheme());
+		_UIHelper.setupRotationSpinner(_settings.getRotationList(), _settings.getRotation());
 		
 	}
 

@@ -64,14 +64,14 @@ public class SettingsAccess
 		{
 			_background = _sharedPrefs.getInt(BACKGROUND, Color.WHITE);
 			_scheme = Scheme.valueOf(_sharedPrefs.getString(SCHEME, Scheme.Default.name()));
-			_rotation = RotationType.valueOf(_sharedPrefs.getString(ROTATION, RotationType.RANDOM.name()));
+			_rotation = RotationType.valueOf(_sharedPrefs.getString(ROTATION, RotationType.Random.name()));
 			_excludedWords = new ArrayList<String>(_sharedPrefs.getStringSet(EXCLUDED, new HashSet<String>()));
 		}
 		catch(IllegalArgumentException e)
 		{
 			_background = Color.WHITE;
 			_scheme = Scheme.Default;
-			_rotation = RotationType.RANDOM;
+			_rotation = RotationType.Random;
 			_excludedWords = new ArrayList<String>();
 		}
 	}

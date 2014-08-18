@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import ryan.pope.convocloud.R;
+import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.objects.Scheme;
 
 public class UIHelper 
@@ -22,6 +23,7 @@ public class UIHelper
 	
 	private boolean _uiVisible = true;
 	private Spinner _colourSchemeSpinner;
+	private Spinner _rotationSpinner;
 	
 	public UIHelper(Activity activity)
 	{
@@ -139,6 +141,18 @@ public class UIHelper
          
         _colourSchemeSpinner.setAdapter(schemeAdapter);
         _colourSchemeSpinner.setSelection(schemeList.indexOf(selection.name()));
+		
+	}
+	
+	public void setupRotationSpinner(ArrayList<String> rotationList, RotationType selection)
+	{
+		_rotationSpinner = (Spinner) _activity.findViewById(R.id.select_rotation_spinner);
+        ArrayAdapter<String> rotationAdapter = new ArrayAdapter<String>(_activity, R.layout.spinner_item, rotationList);
+         
+        rotationAdapter.setDropDownViewResource(R.layout.spinner_item_drop);
+         
+        _rotationSpinner.setAdapter(rotationAdapter);
+        _rotationSpinner.setSelection(rotationList.indexOf(selection.name()));
 		
 	}
 

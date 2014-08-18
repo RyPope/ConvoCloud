@@ -11,6 +11,7 @@ import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.SettingsActivity;
 import ryan.pope.convocloud.objects.Scheme;
+import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.persistance.SettingsAccess;
 import ryan.pope.convocloud.presentation.ColorPickerDialog;
 import ryan.pope.convocloud.presentation.ColorPickerDialog.OnColorSelectedListener;
@@ -23,6 +24,7 @@ public class SettingsListenerManager
 	private Button _saveButton;
 	private Button _cancelButton;
 	private Spinner _schemeSpinner;
+	private Spinner _rotationSpinner;
 
 	public void setup(SettingsActivity settingsActivity, SettingsAccess settings)
 	{
@@ -36,6 +38,7 @@ public class SettingsListenerManager
 			setupSaveListener();
 			setupSchemeListener();
 			setupCancelListener();
+			setupRotationListener();
 		}
 	}
 
@@ -64,7 +67,30 @@ public class SettingsListenerManager
             {
 
             	_settings.setScheme(Scheme.valueOf(_settings.getSchemeList().get(position)));
-            	if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Scheme selected: " + _settings.getSchemeList().get(position));
+            	if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Rotation selected: " + _settings.getSchemeList().get(position));
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) 
+            {
+            	
+            }
+        });
+		
+	}
+	
+	private void setupRotationListener()
+	{
+		_rotationSpinner = (Spinner) _settingsActivity.findViewById(R.id.select_rotation_spinner);
+		_rotationSpinner.setOnItemSelectedListener(new OnItemSelectedListener() 
+		{
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) 
+            {
+
+            	_settings.setRotation(RotationType.valueOf(_settings.getRotationList().get(position)));
+            	if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Scheme selected: " + _settings.getRotationList().get(position));
 
             }
 
