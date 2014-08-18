@@ -1,6 +1,7 @@
 package ryan.pope.convocloud.persistance;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
+import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.objects.Scheme;
 
@@ -58,10 +60,20 @@ public class SettingsAccess
 	}
 	public void loadSettings()
 	{
-		_background = _sharedPrefs.getInt(BACKGROUND, Color.WHITE);
-		_scheme = Scheme.valueOf(_sharedPrefs.getString(SCHEME, Scheme.DEFAULT.name()));
-		_rotation = RotationType.valueOf(_sharedPrefs.getString(ROTATION, RotationType.RANDOM.name()));
-		_excludedWords = new ArrayList<String>(_sharedPrefs.getStringSet(EXCLUDED, new HashSet<String>()));
+		try
+		{
+			_background = _sharedPrefs.getInt(BACKGROUND, Color.WHITE);
+			_scheme = Scheme.valueOf(_sharedPrefs.getString(SCHEME, Scheme.Default.name()));
+			_rotation = RotationType.valueOf(_sharedPrefs.getString(ROTATION, RotationType.RANDOM.name()));
+			_excludedWords = new ArrayList<String>(_sharedPrefs.getStringSet(EXCLUDED, new HashSet<String>()));
+		}
+		catch(IllegalArgumentException e)
+		{
+			_background = Color.WHITE;
+			_scheme = Scheme.Default;
+			_rotation = RotationType.RANDOM;
+			_excludedWords = new ArrayList<String>();
+		}
 	}
 	public void saveSettings()
 	{
@@ -92,5 +104,15 @@ public class SettingsAccess
 	public void setScheme(Scheme scheme)
 	{
 		_scheme = scheme;
+	}
+
+	public ArrayList<String> getSchemeList()
+	{
+		return new ArrayList<String>(Arrays.asList(Globals.SCHEME_LIST));
+	}
+	
+	public ArrayList<String> getRotationList()
+	{
+		return new ArrayList<String>(Arrays.asList(Globals.ROTATION_LIST));
 	}
 }

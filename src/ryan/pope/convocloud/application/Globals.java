@@ -187,4 +187,6 @@ public final class Globals
 		"YOURSELVES"
 	};
 	public static final ArrayList<String> STOP_WORDS = new ArrayList<String>(Arrays.asList(wordArray));
+	public static final String[] SCHEME_LIST = { "Default", "Black", "White", "GrayScale", "Bright", "Dark" };
+	public static final String[] ROTATION_LIST = { "Random", "Vertical", "Horizontal" };
 }

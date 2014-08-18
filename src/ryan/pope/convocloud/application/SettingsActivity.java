@@ -3,6 +3,7 @@ package ryan.pope.convocloud.application;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.business.SettingsListenerManager;
 import ryan.pope.convocloud.persistance.SettingsAccess;
+import ryan.pope.convocloud.presentation.UIHelper;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,8 @@ public class SettingsActivity extends Activity
 {
 	private SettingsListenerManager _settingsListener;
 	private SettingsAccess _settings;
+	private UIHelper _UIHelper;
+	
 	private void doStartUp()
 	{
 		/* Remove title and menu bar */
@@ -24,6 +27,9 @@ public class SettingsActivity extends Activity
 		
 		_settingsListener = new SettingsListenerManager();
 		_settingsListener.setup(this, _settings);
+		
+		_UIHelper = new UIHelper(this);
+		_UIHelper.setupSchemeSpinner(_settings.getSchemeList(), _settings.getScheme());
 		
 	}
 

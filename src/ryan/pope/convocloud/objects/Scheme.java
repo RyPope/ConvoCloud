@@ -3,10 +3,10 @@ package ryan.pope.convocloud.objects;
 
 public enum Scheme
 {
-		DEFAULT,
-		BLACK,
-		WHITE,
-		GRAYSCALE,
-		BRIGHT,
-		DARK
+		Default,
+		Black,
+		White,
+		GrayScale,
+		Bright,
+		Dark
 }

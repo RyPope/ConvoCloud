@@ -115,14 +115,16 @@
             android:background="@color/gray"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp" />
-            <Button
-                android:id="@+id/select_scheme_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:background="?android:attr/selectableItemBackground"
-                android:text="@string/set" />
+
+        <Spinner
+            android:id="@+id/select_scheme_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:background="@android:color/darker_gray" />
+
         </LinearLayout>
+
         <View
             android:id="@+id/hor_rule3"
             android:layout_width="match_parent"
