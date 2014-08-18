@@ -126,7 +126,7 @@ public class ProgressDialogHelper
 				_cloudProgressDialog = new ProgressDialog(_mainActivity);
 				_cloudProgressDialog.setTitle(title);
 				_cloudProgressDialog.setMessage(message);
-				_cloudProgressDialog.setIcon(R.drawable.smallicon);
+				_cloudProgressDialog.setIcon(R.drawable.small_icon);
 				_cloudProgressDialog.setCanceledOnTouchOutside(false);
 				_cloudProgressDialog.setCancelable(false);
 				_cloudProgressDialog.setButton("Continue", new DialogInterface.OnClickListener() 
@@ -157,7 +157,7 @@ public class ProgressDialogHelper
 				_contactProgressDialog = new ProgressDialog(_mainActivity);
 				_contactProgressDialog.setTitle(title);
 				_contactProgressDialog.setMessage(message);
-				_contactProgressDialog.setIcon(R.drawable.smallicon);
+				_contactProgressDialog.setIcon(R.drawable.small_icon);
 				_contactProgressDialog.setCanceledOnTouchOutside(false);
 				_contactProgressDialog.setCancelable(false);
 				_contactProgressDialog.setButton("Continue", new DialogInterface.OnClickListener() 

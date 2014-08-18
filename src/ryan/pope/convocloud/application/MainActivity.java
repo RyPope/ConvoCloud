@@ -186,7 +186,7 @@ public class MainActivity extends Activity
 		{
 	        NotificationCompat.Builder builder =
 	                new NotificationCompat.Builder(this)
-	                        .setSmallIcon(R.drawable.smallicon)
+	                        .setSmallIcon(R.drawable.small_icon)
 	                        .setContentTitle("Convo Cloud")
 	                        .setContentText("Your Cloud has completed!");
 	
