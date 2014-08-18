@@ -15,6 +15,7 @@ import android.util.Log;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.cloud.colour.ColourPalette;
 import ryan.pope.convocloud.cloud.tools.AngleGenerator;
+import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.objects.Scheme;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 
@@ -24,7 +25,7 @@ public class WordCloud
 	protected int _width;
 	protected int _height;
 	protected int _backgroundColor = Color.WHITE;
-	protected AngleGenerator _angleGenerator = new AngleGenerator();
+	protected AngleGenerator _angleGenerator;
 	protected Bitmap _imageBitmap;
 	protected Typeface _mainTypeface;
 	protected ColourPalette _colorPalette;
@@ -32,6 +33,7 @@ public class WordCloud
 	private boolean _running = true;
 	private Canvas _bitmapCanvas;
 	private Scheme _scheme;
+	private RotationType _rotation;
 	private ArrayList<String> _excludedWords;
 
 	public WordCloud(ProgressDialogHelper progressHelper, int width, int height) 
@@ -45,12 +47,14 @@ public class WordCloud
 		_bitmapCanvas = new Canvas(_imageBitmap);
 		_excludedWords = new ArrayList<String>();
 		_scheme = Scheme.Default;
+		_rotation = RotationType.Random;
 	}
 
 	public void build(ArrayList<WordInfo> wordList) 
 	{
 		Collections.sort(wordList);
 		_colorPalette = new ColourPalette(_scheme);
+		_angleGenerator = new AngleGenerator(_rotation);
 		
 		drawBackgroundColor();
 		insertWatermark();
@@ -171,5 +175,10 @@ public class WordCloud
 	{
 		_excludedWords = excludedWords;
 		
+	}
+
+	public void setRotation(RotationType rotation)
+	{
+		_rotation = rotation;
 	}
 }

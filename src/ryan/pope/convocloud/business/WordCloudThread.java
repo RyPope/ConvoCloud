@@ -97,6 +97,7 @@ public class WordCloudThread implements Runnable
 		_wordCloud.setBackgroundColor(_settings.getBackground());
 		_wordCloud.setExcludedWords(_settings.getExcludedWords());
 		_wordCloud.setScheme(_settings.getScheme());
+		_wordCloud.setRotation(_settings.getRotation());
 		_wordCloud.build(wordFrequencies);
 		
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);

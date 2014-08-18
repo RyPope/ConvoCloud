@@ -2,6 +2,8 @@ package ryan.pope.convocloud.cloud.tools;
 
 import java.util.Random;
 
+import ryan.pope.convocloud.objects.RotationType;
+
 public class AngleGenerator 
 {
     private static final Random RANDOM = new Random();
@@ -9,23 +11,37 @@ public class AngleGenerator
     private double[] _thetas;
     private int next = 0;
 
-    public AngleGenerator() 
+    public AngleGenerator(RotationType _rotation) 
     {
-        _steps = 2;
-        _thetas = calculateThetas(0, 90);
+    	switch(_rotation)
+    	{
+    		case Random:
+    		{
+    	        _steps = 2;
+    	        _thetas = calculateThetas(0, 90);
+    			break;
+    		}
+    		case Horizontal:
+    		{
+    	        _steps = 1;
+    	        _thetas = new double[]{ 0 };
+    			break;
+    		}
+    		case Vertical:
+    		{
+    	        _steps = 1;
+    	        _thetas = new double[]{ degreesToRadians(90) };
+    			break;
+    		}
+    		default:
+    		{
+    	        _steps = 2;
+    	        _thetas = calculateThetas(0, 90);
+    			break;
+    		}
+    	}
     }
 
-    public AngleGenerator(double fromDegrees, double toDegrees, int steps) 
-    {
-        _steps = steps;
-        _thetas = calculateThetas(fromDegrees, toDegrees);
-    }
-
-    public AngleGenerator(int degrees) 
-    {
-        _steps = 1;
-        _thetas = new double[] { degreesToRadians(degrees) };
-    }
 
     private double[] calculateThetas(final double to, final double from) 
     {
