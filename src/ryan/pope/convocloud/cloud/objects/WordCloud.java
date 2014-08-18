@@ -15,6 +15,7 @@ import android.util.Log;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.cloud.colour.ColourPalette;
 import ryan.pope.convocloud.cloud.tools.AngleGenerator;
+import ryan.pope.convocloud.objects.Scheme;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 
 public class WordCloud 
@@ -26,10 +27,11 @@ public class WordCloud
 	protected AngleGenerator _angleGenerator = new AngleGenerator();
 	protected Bitmap _imageBitmap;
 	protected Typeface _mainTypeface;
-	protected ColourPalette _colorPalette = new ColourPalette();
+	protected ColourPalette _colorPalette;
 	private ProgressDialogHelper _progressHelper;
 	private boolean _running = true;
 	private Canvas _bitmapCanvas;
+	private Scheme _scheme;
 	private ArrayList<String> _excludedWords;
 
 	public WordCloud(ProgressDialogHelper progressHelper, int width, int height) 
@@ -42,11 +44,14 @@ public class WordCloud
 		_imageBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		_bitmapCanvas = new Canvas(_imageBitmap);
 		_excludedWords = new ArrayList<String>();
+		_scheme = Scheme.Default;
 	}
 
 	public void build(ArrayList<WordInfo> wordList) 
 	{
 		Collections.sort(wordList);
+		_colorPalette = new ColourPalette(_scheme);
+		
 		drawBackgroundColor();
 		insertWatermark();
 		int minimumFontPixelSize = _width / 35;
@@ -101,6 +106,11 @@ public class WordCloud
 	public Bitmap getBufferedImage() 
 	{
 		return _imageBitmap;
+	}
+	
+	public void setScheme(Scheme scheme)
+	{
+		_scheme = scheme;
 	}
 
 	private void insertWatermark() 
