@@ -189,6 +189,8 @@ public class MainActivity extends Activity
 	                        .setSmallIcon(R.drawable.small_icon)
 	                        .setContentTitle("Convo Cloud")
 	                        .setContentText("Your Cloud has completed!");
+	        builder.setAutoCancel(true);
+	        builder.setOnlyAlertOnce(true);
 	
 	        Intent targetIntent = new Intent(this, MainActivity.class);
 	        targetIntent.setAction("android.intent.action.MAIN");
@@ -234,7 +236,6 @@ public class MainActivity extends Activity
 				});
 	        }
 		}
-
 	}
 
 	public void setDataStore(DataBase dataToFetch)
@@ -258,5 +259,24 @@ public class MainActivity extends Activity
 				}
 			});
 		}
+	}
+	
+	public String getDataName()
+	{
+		String dataName = "None";
+		
+		if(_selectData != null)
+		{
+			if(_selectData instanceof DataContact)
+			{
+				dataName = ((DataContact)_selectData).getName();
+			}
+			else if(_selectData instanceof DataFile)
+			{
+				dataName = ((DataFile)_selectData).getFileName();
+			}
+		}
+		
+		return dataName;
 	}
 }

@@ -101,7 +101,7 @@ public class WordCloudThread implements Runnable
 		_wordCloud.build(wordFrequencies);
 		
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-		File file = new File(path, File.separator + "wordcloud.png");
+		File file = new File(path, File.separator + _mainActivity.getDataName() + "-convocloud.png");
 		_wordCloud.writeToFile(file.getAbsolutePath());
 		
 		_mainActivity.setBackground(file);
