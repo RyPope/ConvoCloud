@@ -2,7 +2,6 @@ package ryan.pope.convocloud.cloud.objects;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 import android.graphics.Bitmap;
@@ -17,6 +16,7 @@ import ryan.pope.convocloud.cloud.colour.ColourPalette;
 import ryan.pope.convocloud.cloud.tools.AngleGenerator;
 import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.objects.Scheme;
+import ryan.pope.convocloud.persistance.SettingsAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 
 public class WordCloud 
@@ -35,6 +35,7 @@ public class WordCloud
 	private Scheme _scheme;
 	private RotationType _rotation;
 	private ArrayList<String> _excludedWords;
+	private ArrayList<String> _wordsRemaining;
 
 	public WordCloud(ProgressDialogHelper progressHelper, int width, int height) 
 	{
@@ -46,44 +47,49 @@ public class WordCloud
 		_imageBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		_bitmapCanvas = new Canvas(_imageBitmap);
 		_excludedWords = new ArrayList<String>();
+		_wordsRemaining = new ArrayList<String>();
 		_scheme = Scheme.Default;
 		_rotation = RotationType.Random;
+		
 	}
 
-	public void build(ArrayList<WordInfo> wordList) 
+	public void build(ArrayList<String> wordList) 
 	{
-		Collections.sort(wordList);
+		_wordsRemaining = new ArrayList<String>(wordList);
 		_colorPalette = new ColourPalette(_scheme);
 		_angleGenerator = new AngleGenerator(_rotation);
 		
 		drawBackgroundColor();
 		insertWatermark();
+		
 		int minimumFontPixelSize = _width / 35;
 		int _numPlaced = 1;
 		
 		MaximalRectangle maxRect = new MaximalRectangle();
-		for (WordInfo wordToPlace : wordList)
+		for (String wordToPlace : wordList)
 		{
 			if(!_running)
 				break;
 			
-			if(!_excludedWords.contains(wordToPlace.getWord()))
+			if(!_excludedWords.contains(wordToPlace))
 			{
 				Rect rect = maxRect.maximalRect(_imageBitmap, _backgroundColor);
 				/* If the biggest rectangle available is smaller than the minimum size, finish */
 				if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
 					break;
 	
-				Word word = new Word(wordToPlace.getWord(), _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext(), false);
+				Word word = new Word(wordToPlace, _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext(), false);
 				
 				draw(word);
 				
 				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
 			}
 		
-			_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + Globals.CLOUD_NOTE);
+			if(_running)
+				_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + Globals.CLOUD_NOTE);
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size());
 			_numPlaced++;
+			_wordsRemaining.remove(wordToPlace);
 			
 		}
 	}
@@ -180,5 +186,17 @@ public class WordCloud
 	public void setRotation(RotationType rotation)
 	{
 		_rotation = rotation;
+	}
+
+	public void setBitmap(Bitmap imageBitmap)
+	{
+		_imageBitmap = imageBitmap.copy(Bitmap.Config.ARGB_8888, true);
+		_bitmapCanvas = new Canvas(_imageBitmap);
+		
+	}
+
+	public ArrayList<String> getRemaining()
+	{
+		return _wordsRemaining;
 	}
 }

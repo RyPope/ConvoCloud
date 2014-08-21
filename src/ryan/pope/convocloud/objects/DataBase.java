@@ -1,6 +1,7 @@
 package ryan.pope.convocloud.objects;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -39,25 +40,22 @@ public class DataBase
 		return _allWords.size();
 	}
 
-	public ArrayList<WordInfo> getWordFrequencies() 
+	public ArrayList<String> getWords() 
 	{
-		ArrayList<WordInfo> _wordFreqList = new ArrayList<WordInfo>();
+		ArrayList<WordInfo> wordFreqList = new ArrayList<WordInfo>();
+		ArrayList<String> wordList = new ArrayList<String>();
 		for (Map.Entry<String, Integer> entry : _allWords.entrySet())
 		{
-			_wordFreqList.add(new WordInfo(entry.getKey(), entry.getValue()));
+			wordFreqList.add(new WordInfo(entry.getKey(), entry.getValue()));
 		}
 		
-		return _wordFreqList;
-	}
-
-	public String getWords()
-	{
-		String allMessages = "";
-		for (Map.Entry<String, Integer> entry : _allWords.entrySet())
+		/* Sort word list and return arraylist */
+		Collections.sort(wordFreqList);
+		
+		for(WordInfo info : wordFreqList)
 		{
-			allMessages = allMessages + entry.getKey() + ":" + entry.getValue() + " ";
+			wordList.add(info.getWord());
 		}
-		
-		return allMessages;
+		return wordList;
 	}
 }

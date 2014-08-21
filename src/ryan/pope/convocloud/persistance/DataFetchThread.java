@@ -110,8 +110,6 @@ public class DataFetchThread implements Runnable
 				}
 			}
 
-			if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, contactToFetch.getWords());
-
 		}
 		else
 		{

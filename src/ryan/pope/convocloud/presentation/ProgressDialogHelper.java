@@ -65,6 +65,7 @@ public class ProgressDialogHelper
 					_cloudProgressDialog.dismiss();
 					setScreenFlag(false);
 				}
+
 			}
 		});
 	}
@@ -85,7 +86,7 @@ public class ProgressDialogHelper
 		});
 	}
 
-	public void end() 
+	public void kill() 
 	{
 		try
 		{
@@ -96,10 +97,11 @@ public class ProgressDialogHelper
 		{
 			_cloudProgressDialog = null;
 			_contactProgressDialog = null;
+			e.printStackTrace();
 		}
 		
 	}
-
+	
 	public boolean isShowing()
 	{
 		if(_cloudProgressDialog != null)
