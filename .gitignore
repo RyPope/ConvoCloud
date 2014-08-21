@@ -42,8 +42,8 @@ gen/
 
 *.apk
 *.keystore
+*.psd
+*.db
 assets/crashlytics-build.properties
 crashlytics.properties
 res/values/com_crashlytics_export_strings.xml
-misc/mmssms.db
-misc/main_image.psd

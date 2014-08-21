@@ -87,8 +87,16 @@ public class ProgressDialogHelper
 
 	public void end() 
 	{
-		dismissCloudProgressDialog();
-		dismissContactProgressDialog();
+		try
+		{
+			dismissCloudProgressDialog();
+			dismissContactProgressDialog();
+		}
+		catch(Exception e)
+		{
+			_cloudProgressDialog = null;
+			_contactProgressDialog = null;
+		}
 		
 	}
 
