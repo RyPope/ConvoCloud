@@ -186,7 +186,7 @@ public class MainListenerManager
 					}
 					else if(_mainActivity.getDataStore() instanceof DataFile)
 					{
-						shareMessage = "My Convo Cloud. Made with <TODO INSERT URL> for Android #ConvoCloud";	
+						shareMessage = "My Convo Cloud. Made for Android #ConvoCloud. https://play.google.com/store/apps/details?id=ryan.pope.convocloud";	
 					}
 					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
 					shareIntent.setType("*/*");
@@ -196,7 +196,7 @@ public class MainListenerManager
 				{
 					Intent shareIntent = new Intent();
 					shareIntent.setAction(Intent.ACTION_SEND);
-					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out ConvoCloud for Android, TODO: LINK #ConvoCloud");
+					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out ConvoCloud for Android, #ConvoCloud. https://play.google.com/store/apps/details?id=ryan.pope.convocloud");
 					shareIntent.setType("text/plain");
 					_mainActivity.startActivity(Intent.createChooser(shareIntent, "Share ConvoCloud with..."));
 				}

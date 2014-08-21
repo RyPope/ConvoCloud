@@ -195,6 +195,7 @@ public class MainActivity extends Activity
 	        Intent targetIntent = new Intent(this, MainActivity.class);
 	        targetIntent.setAction("android.intent.action.MAIN");
 	        targetIntent.addCategory("android.intent.category.LAUNCHER");
+	        targetIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 	        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	        builder.setContentIntent(contentIntent);
 	        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
