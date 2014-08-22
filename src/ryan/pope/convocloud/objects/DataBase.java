@@ -12,10 +12,22 @@ import ryan.pope.convocloud.cloud.objects.WordInfo;
 public class DataBase 
 {
 	private HashMap<String, Integer> _allWords;
+	private String _name;
 	
 	public DataBase()
 	{
 		_allWords = new HashMap<String, Integer>();
+		_name = "None";
+	}
+	
+	public String getName()
+	{
+		return _name;
+	}
+	
+	public void setName(String name)
+	{
+		_name = name;
 	}
 
 	public void addWords(String sms) 

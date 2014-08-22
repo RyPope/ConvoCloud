@@ -9,8 +9,6 @@ import java.util.List;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.business.MainListenerManager;
 import ryan.pope.convocloud.business.WordCloudManager;
-import ryan.pope.convocloud.objects.DataContact;
-import ryan.pope.convocloud.objects.DataFile;
 import ryan.pope.convocloud.objects.DataBase;
 import ryan.pope.convocloud.objects.DataType;
 import ryan.pope.convocloud.persistance.DataAccess;
@@ -286,14 +284,7 @@ public class MainActivity extends Activity
 				@Override
 				public void run() 
 				{
-					if(_selectData instanceof DataContact)
-					{
-						_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nContact: " + ((DataContact)_selectData).getName());
-					}
-					else if(_selectData instanceof DataFile)
-					{
-						_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nSelected File: " + ((DataFile)_selectData).getFileName());
-					}
+					_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nName: " + _selectData.getName());
 				}
 			});
 		}
@@ -305,16 +296,23 @@ public class MainActivity extends Activity
 		
 		if(_selectData != null)
 		{
-			if(_selectData instanceof DataContact)
-			{
-				dataName = ((DataContact)_selectData).getName();
-			}
-			else if(_selectData instanceof DataFile)
-			{
-				dataName = ((DataFile)_selectData).getFileName();
-			}
+
+			dataName = _selectData.getName();
+
 		}
 		
 		return dataName;
+	}
+	
+	public int getDataCount()
+	{
+		int count = 0;
+		
+		if(_selectData != null)
+		{
+			count = _selectData.getWordCount();
+		}
+		
+		return count;
 	}
 }

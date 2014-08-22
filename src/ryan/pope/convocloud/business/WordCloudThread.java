@@ -134,12 +134,16 @@ public class WordCloudThread implements Runnable
 			      @Override
 			      public void run()
 			      {
-			  		_mainActivity.getProgressHelper().dismissCloudProgressDialog();
+			    	  _mainActivity.getProgressHelper().dismissCloudProgressDialog();
 			      }
 			});
 			
-			_settings.setInProgress(false);
+			_settings.clearImageProgress();
 			_settings.saveSettings();
+			
+			file = new File(path, File.separator + "tmp.png");
+			file.delete();
+			
 			_mainActivity.sendNotification("Your Cloud has completed!");
 		}
 		else
@@ -151,6 +155,8 @@ public class WordCloudThread implements Runnable
 			_settings.setImagePath(file);
 			_settings.setInProgress(true);
 			_settings.setRemainingWords(_wordCloud.getRemaining());
+			_settings.setImageName(_mainActivity.getDataName());
+			_settings.setImageCount(_mainActivity.getDataCount());
 			_settings.saveSettings();
 		}
 

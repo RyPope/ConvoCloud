@@ -8,24 +8,18 @@ import android.provider.OpenableColumns;
 public class DataFile extends DataBase
 {
 	private Uri _filePath;
-	private String _fileName;
 	private MainActivity _mainActivity;
 	public DataFile(MainActivity mainActivity, Uri filePath)
 	{
 		super();
 		_mainActivity = mainActivity;
 		_filePath = filePath;
-		_fileName = parseFileForName();
+		super.setName(parseFileForName());
 	}
 	
 	public Uri getFile()
 	{
 		return _filePath;
-	}
-
-	public String getFileName()
-	{
-		return _fileName;
 	}
 	
 	private String parseFileForName()

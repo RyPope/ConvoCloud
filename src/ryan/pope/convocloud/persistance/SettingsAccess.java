@@ -195,4 +195,14 @@ public class SettingsAccess
 	{
 		_imageWords = imageWords;
 	}
+
+	public void clearImageProgress()
+	{
+		_inProgress = false;
+		_imagePath = new File("");
+		_imageName = "";
+		_imageCount = 0;
+		_imageWords = new ArrayList<String>();
+		
+	}
 }
