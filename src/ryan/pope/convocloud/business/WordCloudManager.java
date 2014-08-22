@@ -48,5 +48,21 @@ public class WordCloudManager
 			e.printStackTrace();
 		}
 	}
+	
+	public void stop()
+	{
+		try 
+		{
+			if(_cloudThread != null)
+			{
+				_wordCloudThread.stop();
+				_cloudThread.join();
+			}
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	}
 
 }
