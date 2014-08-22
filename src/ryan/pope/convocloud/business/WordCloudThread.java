@@ -6,11 +6,10 @@ import java.util.ArrayList;
 
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.cloud.objects.WordCloud;
+import ryan.pope.convocloud.cloud.objects.WordInfo;
 import ryan.pope.convocloud.persistance.SettingsAccess;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Environment;
@@ -23,12 +22,9 @@ public class WordCloudThread implements Runnable
 	private MainActivity _mainActivity;
 	private WordCloud _wordCloud;
 	private SettingsAccess _settings;
-	private boolean _forceStopped;
-	
 	public WordCloudThread(MainActivity mainActivity) 
 	{
 		_mainActivity = mainActivity;
-		_forceStopped = false;
 	}
 
 	public void kill()
@@ -39,20 +35,10 @@ public class WordCloudThread implements Runnable
 		}
 	}
 	
-	public void stop()
-	{
-		if(_wordCloud != null)
-		{
-			_forceStopped = true;
-			_wordCloud.kill();
-		}
-	}
-	
 	@SuppressLint("NewApi")
 	@Override
 	public void run() 
 	{
-		android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 		_mainActivity.runOnUiThread(new Runnable() 
 		{
 		      @Override
@@ -101,8 +87,10 @@ public class WordCloudThread implements Runnable
             width = metrics.widthPixels;
             height = metrics.heightPixels;
 	    }
+		
+		ArrayList<WordInfo> wordFrequencies = _mainActivity.getWords();
 
-		_settings = new SettingsAccess(_mainActivity);	
+		_settings = new SettingsAccess(_mainActivity);
 		
 		_wordCloud = new WordCloud(_mainActivity.getProgressHelper(), width, height);
 		_wordCloud.setTypeface(Typeface.createFromAsset(_mainActivity.getAssets(), "neue.otf"));
@@ -110,49 +98,24 @@ public class WordCloudThread implements Runnable
 		_wordCloud.setExcludedWords(_settings.getExcludedWords());
 		_wordCloud.setScheme(_settings.getScheme());
 		_wordCloud.setRotation(_settings.getRotation());
-		
-		ArrayList<String> wordList;
-		if(!_settings.getInProgress())
-		{
-			wordList = _mainActivity.getWords();
-			_wordCloud.setBitmap(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
-		}
-		else
-		{
-			wordList = _settings.getRemainingWords();
-			_wordCloud.setBitmap(BitmapFactory.decodeFile(_settings.getImagePath().getAbsolutePath()));
-		}
-
-		
-		_wordCloud.build(wordList);
+		_wordCloud.build(wordFrequencies);
 		
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 		File file = new File(path, File.separator + _mainActivity.getDataName() + "-convocloud.png");
 		_wordCloud.writeToFile(file.getAbsolutePath());
 		
-		if(!_forceStopped)
+		_mainActivity.setBackground(file);
+		
+		_mainActivity.runOnUiThread(new Runnable() 
 		{
-			_mainActivity.setBackground(file);
-			
-			_mainActivity.runOnUiThread(new Runnable() 
-			{
-			      @Override
-			      public void run()
-			      {
-			  		_mainActivity.getProgressHelper().dismissCloudProgressDialog();
-			      }
-			});
-			
-			_settings.setInProgress(false);
-			_mainActivity.sendNotification();
-		}
-		else
-		{
-			_settings.setImagePath(file);
-			_settings.setInProgress(true);
-			_settings.setRemainingWords(_wordCloud.getRemaining());
-			_settings.saveSettings();
-		}
+		      @Override
+		      public void run()
+		      {
+		  		_mainActivity.getProgressHelper().dismissCloudProgressDialog();
+		      }
+		});
+		
+		_mainActivity.sendNotification();
 
 	}
 }

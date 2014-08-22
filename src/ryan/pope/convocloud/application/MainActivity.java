@@ -9,12 +9,12 @@ import java.util.List;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.business.MainListenerManager;
 import ryan.pope.convocloud.business.WordCloudManager;
+import ryan.pope.convocloud.cloud.objects.WordInfo;
 import ryan.pope.convocloud.objects.DataContact;
 import ryan.pope.convocloud.objects.DataFile;
 import ryan.pope.convocloud.objects.DataBase;
 import ryan.pope.convocloud.objects.DataType;
 import ryan.pope.convocloud.persistance.DataAccess;
-import ryan.pope.convocloud.persistance.SettingsAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -50,7 +50,6 @@ public class MainActivity extends Activity
 
 	private DataBase _selectData;
 	private WordCloudManager _wordCloudManager;
-	private SettingsAccess _settings;
 	private boolean _smsCapable;
 
 	private void doStartUp() 
@@ -67,7 +66,6 @@ public class MainActivity extends Activity
 		_listenerManager.setup(this, _wordCloudManager);
 
 		_dataAccess = new DataAccess(this);
-		_settings = new SettingsAccess(this);
 
 		_progressHelper = new ProgressDialogHelper(this);
 
@@ -108,9 +106,9 @@ public class MainActivity extends Activity
 		return _wordCloudManager;
 	}
 
-	public ArrayList<String> getWords() 
+	public ArrayList<WordInfo> getWords() 
 	{
-		return _selectData.getWords();
+		return _selectData.getWordFrequencies();
 	}
 
 	public boolean hasDataStoreLoaded() 
@@ -179,43 +177,8 @@ public class MainActivity extends Activity
 	protected void onStop()
 	{
 		super.onStop();
-
-		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onStop()");
+		_progressHelper.end();
 	}
-	
-	@Override
-	protected void onPause()
-	{
-
-		super.onPause();
-		
-		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onPause()");
-	}
-	
-	@Override
-	protected void onDestroy()
-	{
-		super.onDestroy();
-		
-		_wordCloudManager.stop();
-		_progressHelper.kill();
-
-		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onDestroy()");
-	}
-	
-	@Override
-	protected void onResume()
-	{
-		super.onResume();
-
-		if(_settings.getInProgress())
-		{
-			_wordCloudManager.createCloud();
-		}
-		
-		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onResume()");
-	}
-	
 
 	public void sendNotification()
 	{
