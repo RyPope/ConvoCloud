@@ -1,10 +1,13 @@
 package ryan.pope.convocloud.cloud.objects;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,7 +19,6 @@ import ryan.pope.convocloud.cloud.colour.ColourPalette;
 import ryan.pope.convocloud.cloud.tools.AngleGenerator;
 import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.objects.Scheme;
-import ryan.pope.convocloud.persistance.SettingsAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
 
 public class WordCloud 
@@ -36,6 +38,7 @@ public class WordCloud
 	private RotationType _rotation;
 	private ArrayList<String> _excludedWords;
 	private ArrayList<String> _wordsRemaining;
+	private boolean _fresh;
 
 	public WordCloud(ProgressDialogHelper progressHelper, int width, int height) 
 	{
@@ -50,6 +53,7 @@ public class WordCloud
 		_wordsRemaining = new ArrayList<String>();
 		_scheme = Scheme.Default;
 		_rotation = RotationType.Random;
+		_fresh = true;
 		
 	}
 
@@ -59,8 +63,11 @@ public class WordCloud
 		_colorPalette = new ColourPalette(_scheme);
 		_angleGenerator = new AngleGenerator(_rotation);
 		
-		drawBackgroundColor();
-		insertWatermark();
+		if(_fresh)
+		{
+			drawBackgroundColor();
+			insertWatermark();
+		}
 		
 		int minimumFontPixelSize = _width / 35;
 		int _numPlaced = 1;
@@ -86,8 +93,8 @@ public class WordCloud
 			}
 		
 			if(_running)
-				_progressHelper.changeCloudDialogMessage("Placing " + _numPlaced + " of " + wordList.size() + Globals.CLOUD_NOTE);
-			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size());
+				_progressHelper.changeCloudDialogMessage((wordList.size() - _numPlaced) + " possible words remaining." + Globals.CLOUD_NOTE);
+			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size() + " Word: " + wordToPlace);
 			_numPlaced++;
 			_wordsRemaining.remove(wordToPlace);
 			
@@ -188,10 +195,37 @@ public class WordCloud
 		_rotation = rotation;
 	}
 
-	public void setBitmap(Bitmap imageBitmap)
-	{
-		_imageBitmap = imageBitmap.copy(Bitmap.Config.ARGB_8888, true);
-		_bitmapCanvas = new Canvas(_imageBitmap);
+	public void setBitmap(String path)
+	{ 
+		_fresh = false;
+        FileInputStream in;
+        BufferedInputStream buf;
+        try 
+        {
+       	    in = new FileInputStream(path);
+            buf = new BufferedInputStream(in);
+            Bitmap bMap = BitmapFactory.decodeStream(buf);
+            
+    		if(bMap != null)
+    		{
+    			_bitmapCanvas.drawBitmap(bMap, 0, 0, null);
+    			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Loaded partial bitmap ");
+    		}
+    		
+            if (in != null) 
+            {
+            	
+            	in.close();
+            }
+            if (buf != null) 
+            {
+            	buf.close();
+            }
+        } 
+        catch (Exception e) 
+        {
+            e.printStackTrace();
+        }
 		
 	}
 

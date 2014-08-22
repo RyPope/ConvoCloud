@@ -115,7 +115,7 @@ public class MainActivity extends Activity
 
 	public ArrayList<String> getWords() 
 	{
-		return _selectData.getWords();
+		return _settings.getInProgress() ? _settings.getRemainingWords() : _selectData.getWords();
 	}
 
 	public boolean hasDataStoreLoaded() 

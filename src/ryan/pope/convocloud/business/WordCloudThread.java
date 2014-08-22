@@ -3,18 +3,17 @@ package ryan.pope.convocloud.business;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-
+import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.cloud.objects.WordCloud;
 import ryan.pope.convocloud.persistance.SettingsAccess;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -35,6 +34,7 @@ public class WordCloudThread implements Runnable
 	{
 		if(_wordCloud != null)
 		{
+			_forceStopped = false;
 			_wordCloud.kill();
 		}
 	}
@@ -111,27 +111,22 @@ public class WordCloudThread implements Runnable
 		_wordCloud.setScheme(_settings.getScheme());
 		_wordCloud.setRotation(_settings.getRotation());
 		
-		ArrayList<String> wordList;
-		if(!_settings.getInProgress())
+		ArrayList<String> wordList = _mainActivity.getWords();
+		
+		if(_settings.getInProgress())
 		{
-			wordList = _mainActivity.getWords();
-			_wordCloud.setBitmap(Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888));
-		}
-		else
-		{
-			wordList = _settings.getRemainingWords();
-			_wordCloud.setBitmap(BitmapFactory.decodeFile(_settings.getImagePath().getAbsolutePath()));
+			_wordCloud.setBitmap(_settings.getImagePath().getAbsolutePath());
 		}
 
-		
 		_wordCloud.build(wordList);
 		
 		File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-		File file = new File(path, File.separator + _mainActivity.getDataName() + "-convocloud.png");
-		_wordCloud.writeToFile(file.getAbsolutePath());
 		
 		if(!_forceStopped)
 		{
+			File file = new File(path, File.separator + _mainActivity.getDataName() + "-convocloud.png");
+			_wordCloud.writeToFile(file.getAbsolutePath());
+			
 			_mainActivity.setBackground(file);
 			
 			_mainActivity.runOnUiThread(new Runnable() 
@@ -144,10 +139,15 @@ public class WordCloudThread implements Runnable
 			});
 			
 			_settings.setInProgress(false);
+			_settings.saveSettings();
 			_mainActivity.sendNotification("Your Cloud has completed!");
 		}
 		else
-		{
+		{ 
+			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Saved partial bitmap ");
+			File file = new File(path, File.separator + "tmp.png");
+			_wordCloud.writeToFile(file.getAbsolutePath());
+			
 			_settings.setImagePath(file);
 			_settings.setInProgress(true);
 			_settings.setRemainingWords(_wordCloud.getRemaining());
