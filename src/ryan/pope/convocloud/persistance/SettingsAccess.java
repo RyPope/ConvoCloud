@@ -27,19 +27,23 @@ public class SettingsAccess
 	private static String COUNT = "Count";
 	private static String WORDS = "Words";
 	
+	private static String DATATYPE = "DataType";
+	private static String DATA = "Data";
+	
 	private Context _context;
 	private Scheme _scheme;
 	private int _background;
+	private ArrayList<String> _excludedWords;
+	private RotationType _rotation;
 	
 	private boolean _inProgress;
 	private File _imagePath;
 	private String _imageName;
 	private int _imageCount;
 	private ArrayList<String> _imageWords;
-
-	private ArrayList<String> _excludedWords;
-
-	private RotationType _rotation;
+	
+	private String _dataType;
+	private String _data;
 
 	private SharedPreferences _sharedPrefs;
 
@@ -85,6 +89,8 @@ public class SettingsAccess
 			_imageCount = _sharedPrefs.getInt(COUNT, 0);
 			_imageWords = new ArrayList<String>(_sharedPrefs.getStringSet(WORDS, new HashSet<String>()));
 			
+			_dataType = _sharedPrefs.getString(DATATYPE, "");
+			_data = _sharedPrefs.getString(DATA, "");
 		}
 		catch(IllegalArgumentException e)
 		{
@@ -98,6 +104,9 @@ public class SettingsAccess
 			_imageName = "";
 			_imageCount = 0;
 			_imageWords = new ArrayList<String>();
+			
+			_dataType = "";
+			_data = "";
 		}
 	}
 	public void saveSettings()
@@ -114,6 +123,9 @@ public class SettingsAccess
 		prefsEditor.putInt(COUNT, _imageCount);
 		prefsEditor.putString(PATH, _imagePath.getAbsolutePath());
 		prefsEditor.putStringSet(WORDS, new HashSet<String>(_imageWords));
+		
+		prefsEditor.putString(DATATYPE, _dataType);
+		prefsEditor.putString(DATA, _data);
 		
 		prefsEditor.apply();
 	}
@@ -203,6 +215,40 @@ public class SettingsAccess
 		_imageName = "";
 		_imageCount = 0;
 		_imageWords = new ArrayList<String>();
-		
 	}
+//	
+//	public void setDataType(String dataType)
+//	{
+//		_dataType = dataType;
+//	}
+//	
+//	public void setData(DataBase data)
+//	{
+//		Gson gson = new Gson();
+//		String json = gson.toJson(data);
+//		_data = json;
+//	}
+//	
+//	public String getDataType()
+//	{
+//		return _dataType;
+//	}
+//	
+//	public DataBase getData()
+//	{
+//		DataBase data = null;
+//		Gson gson = new Gson();
+//		Type type = new TypeToken<DataBase>(){}.getType();
+//		
+//		try
+//		{
+//			data = gson.fromJson(_data, type);
+//		}
+//		catch(Exception e)
+//		{
+//			e.printStackTrace();
+//		}
+//		
+//		return data;
+//	}
 }

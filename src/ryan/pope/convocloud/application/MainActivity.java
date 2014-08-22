@@ -80,6 +80,12 @@ public class MainActivity extends Activity
         
 		if(_settings.getInProgress())
 		{
+			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Restoring Selected data");
+			
+			DataBase newBase = new DataBase();
+			newBase.setName(_settings.getImageName());
+			newBase.setFauxWordCount(_settings.getImageCount());
+			setDataStore(newBase);
 			_wordCloudManager.createCloud();
 		}
 		
@@ -118,7 +124,7 @@ public class MainActivity extends Activity
 
 	public boolean hasDataStoreLoaded() 
 	{
-		return _selectData != null ? true: false;
+		return (_selectData != null && _selectData.isLoaded());
 	}
 
 	public boolean hasPhotoLoaded() 
@@ -201,8 +207,11 @@ public class MainActivity extends Activity
 	{
 		super.onDestroy();
 
-		_wordCloudManager.stop();
-		sendNotification("Convo Cloud paused. Click to resume.");
+		if(_wordCloudManager.isRunning())
+		{
+			_wordCloudManager.stop();
+			sendNotification("Convo Cloud paused. Click to resume.");
+		}
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onDestroy()");
 	}
 	

@@ -124,7 +124,7 @@ public class DataFetchThread implements Runnable
 
 	private DataFile fetchFile() 
 	{
-		DataFile fileToFetch = new DataFile(_mainActivity, _data.getData());	
+		DataFile fileToFetch = new DataFile(_mainActivity.getContentResolver(), _data.getData());	
 		InputStream is = null;
 		try 
 		{

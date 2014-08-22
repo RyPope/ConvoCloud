@@ -13,11 +13,13 @@ public class DataBase
 {
 	private HashMap<String, Integer> _allWords;
 	private String _name;
+	private int _count;
 	
 	public DataBase()
 	{
 		_allWords = new HashMap<String, Integer>();
 		_name = "None";
+		_count = 0;
 	}
 	
 	public String getName()
@@ -49,7 +51,7 @@ public class DataBase
 	
 	public int getWordCount()
 	{
-		return _allWords.size();
+		return _count == 0 ? _allWords.size() : _count;
 	}
 
 	public ArrayList<String> getWords() 
@@ -69,5 +71,20 @@ public class DataBase
 			wordList.add(info.getWord());
 		}
 		return wordList;
+	}
+
+	public void setFauxWordCount(int count)
+	{
+		_count = count;
+	}
+	
+	public int getFauxWordCount()
+	{
+		return _count;
+	}
+
+	public boolean isLoaded()
+	{
+		return _count == 0;
 	}
 }

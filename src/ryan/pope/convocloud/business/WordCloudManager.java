@@ -7,10 +7,12 @@ public class WordCloudManager
 	private MainActivity _mainActivity;
 	private WordCloudThread _wordCloudThread;
 	private Thread _cloudThread;
+	private boolean _running;
 
 	public WordCloudManager(MainActivity mainActivity)
 	{
 		_mainActivity = mainActivity;
+		_running = false;
 	}
 
 	public void createCloud() 
@@ -31,6 +33,8 @@ public class WordCloudManager
 		
 		_cloudThread = new Thread(_wordCloudThread);
 		_cloudThread.start();
+		
+		_running = true;
 	}
 	
 	public void kill()
@@ -41,6 +45,7 @@ public class WordCloudManager
 			{
 				_wordCloudThread.kill();
 				_cloudThread.join();
+				_running = false;
 			}
 		} 
 		catch (Exception e) 
@@ -57,12 +62,18 @@ public class WordCloudManager
 			{
 				_wordCloudThread.stop();
 				_cloudThread.join();
+				_running = false;
 			}
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public boolean isRunning()
+	{
+		return _running;
 	}
 
 }

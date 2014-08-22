@@ -1,6 +1,6 @@
 package ryan.pope.convocloud.objects;
 
-import ryan.pope.convocloud.application.MainActivity;
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
@@ -8,11 +8,11 @@ import android.provider.OpenableColumns;
 public class DataFile extends DataBase
 {
 	private Uri _filePath;
-	private MainActivity _mainActivity;
-	public DataFile(MainActivity mainActivity, Uri filePath)
+	private ContentResolver _resolver;
+	public DataFile(ContentResolver resolver, Uri filePath)
 	{
 		super();
-		_mainActivity = mainActivity;
+		_resolver = resolver;
 		_filePath = filePath;
 		super.setName(parseFileForName());
 	}
@@ -27,7 +27,7 @@ public class DataFile extends DataBase
 		String fileName = _filePath.getLastPathSegment();
 		try
 		{
-		    Cursor returnCursor = _mainActivity.getContentResolver().query(_filePath, null, null, null, null);
+		    Cursor returnCursor = _resolver.query(_filePath, null, null, null, null);
 		    int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
 		    returnCursor.moveToFirst();
 		    fileName = returnCursor.getString(nameIndex);
