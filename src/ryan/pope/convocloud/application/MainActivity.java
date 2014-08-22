@@ -80,6 +80,11 @@ public class MainActivity extends Activity
 		TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         _smsCapable = manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE ? false : true;
         
+		if(_settings.getInProgress())
+		{
+			_wordCloudManager.createCloud();
+		}
+		
         if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _smsCapable ? "SMS" : "No SMS");
 	}
 	
@@ -180,6 +185,7 @@ public class MainActivity extends Activity
 	{
 		super.onStop();
 
+		_progressHelper.kill();
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onStop()");
 	}
 	
@@ -196,10 +202,9 @@ public class MainActivity extends Activity
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		
-		_wordCloudManager.stop();
-		_progressHelper.kill();
 
+		_wordCloudManager.stop();
+		sendNotification("Convo Cloud paused. Click to resume.");
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onDestroy()");
 	}
 	
@@ -207,17 +212,12 @@ public class MainActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-
-		if(_settings.getInProgress())
-		{
-			_wordCloudManager.createCloud();
-		}
 		
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onResume()");
 	}
 	
 
-	public void sendNotification()
+	public void sendNotification(String message)
 	{
 		if(!isInForeground())
 		{
@@ -225,7 +225,7 @@ public class MainActivity extends Activity
 	                new NotificationCompat.Builder(this)
 	                        .setSmallIcon(R.drawable.small_icon)
 	                        .setContentTitle("Convo Cloud")
-	                        .setContentText("Your Cloud has completed!");
+	                        .setContentText(message);
 	        builder.setAutoCancel(true);
 	        builder.setOnlyAlertOnce(true);
 	

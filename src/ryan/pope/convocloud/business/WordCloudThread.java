@@ -144,7 +144,7 @@ public class WordCloudThread implements Runnable
 			});
 			
 			_settings.setInProgress(false);
-			_mainActivity.sendNotification();
+			_mainActivity.sendNotification("Your Cloud has completed!");
 		}
 		else
 		{
