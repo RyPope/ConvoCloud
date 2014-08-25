@@ -94,7 +94,7 @@ public class WordCloud
 		
 			if(_running)
 			{
-				_progressHelper.changeCloudDialogMessage((wordList.size() - _numPlaced) + " placeable words remaining." + Globals.CLOUD_NOTE);
+				_progressHelper.updateCloudDialogMessage(wordList.size() - _numPlaced);
 			}
 				
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size() + " Word: " + wordToPlace);

@@ -3,6 +3,8 @@ package ryan.pope.convocloud.business;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
+import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.cloud.objects.WordCloud;
@@ -58,7 +60,7 @@ public class WordCloudThread implements Runnable
 		      @Override
 		      public void run()
 		      {
-		    	  _mainActivity.getProgressHelper().showCloudProgressDialog("Creating ConvoCloud", "Creating Canvas.");
+		    	  _mainActivity.getProgressHelper().showCloudProgressDialog(_mainActivity.getString(R.string.creating_cloud), _mainActivity.getString(R.string.creating_canvas));
 		      }
 		});
 		
@@ -145,7 +147,7 @@ public class WordCloudThread implements Runnable
 			file = new File(path, File.separator + "tmp.png");
 			file.delete();
 			
-			_mainActivity.sendNotification("Your Cloud has completed!");
+			_mainActivity.sendNotification(_mainActivity.getString(R.string.cloud_complete));
 		}
 		else
 		{ 

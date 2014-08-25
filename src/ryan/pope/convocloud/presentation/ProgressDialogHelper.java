@@ -139,11 +139,11 @@ public class ProgressDialogHelper
 				_cloudProgressDialog.setIcon(R.drawable.small_icon);
 				_cloudProgressDialog.setCanceledOnTouchOutside(false);
 				_cloudProgressDialog.setCancelable(false);
-				_cloudProgressDialog.setButton("Continue", new DialogInterface.OnClickListener() 
+				_cloudProgressDialog.setButton(_mainActivity.getString(R.string.continue_text), new DialogInterface.OnClickListener() 
 			    {
 			        public void onClick(DialogInterface dialog, int which) 
 			        {
-			    		changeCloudDialogMessage("Ending ConvoCloud early...");
+			    		changeCloudDialogMessage(_mainActivity.getString(R.string.end_early));
 			        	_mainActivity.getWordCloudManager().kill();
 			        	return;
 			        }
@@ -170,11 +170,11 @@ public class ProgressDialogHelper
 				_contactProgressDialog.setIcon(R.drawable.small_icon);
 				_contactProgressDialog.setCanceledOnTouchOutside(false);
 				_contactProgressDialog.setCancelable(false);
-				_contactProgressDialog.setButton("Continue", new DialogInterface.OnClickListener() 
+				_contactProgressDialog.setButton(_mainActivity.getString(R.string.continue_text), new DialogInterface.OnClickListener() 
 			    {
 			        public void onClick(DialogInterface dialog, int which) 
 			        {
-			    		changeContactDialogMessage("Ending Search early...");
+			    		changeContactDialogMessage(_mainActivity.getString(R.string.end_early));
 			        	_mainActivity.getDataManager().kill();
 			        	return;
 			        }
@@ -184,6 +184,24 @@ public class ProgressDialogHelper
 				setScreenFlag(true);
 			}
 		});
+	}
+
+	public void updateCloudDialogMessage(final int i)
+	{
+		_mainActivity.runOnUiThread(new Runnable() 
+		{
+			@Override
+			public void run()
+			{
+				if(_cloudProgressDialog != null)
+				{
+					if(!_cloudProgressDialog.isShowing())
+						_cloudProgressDialog.show();
+					_cloudProgressDialog.setMessage(i + _mainActivity.getString(R.string.placeable_words) + "\n" + _mainActivity.getString(R.string.app_note));
+				}
+			}
+		});
+		
 	}
 
 }

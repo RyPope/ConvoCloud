@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.objects.DataContact;
@@ -106,7 +107,7 @@ public class DataFetchThread implements Runnable
 				if(i % 10 == 0)
 				{
 					int msgCount = i;
-					_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching message " + msgCount + " of " + findThreadCursor.getCount());
+					_mainActivity.getProgressHelper().changeContactDialogMessage(_mainActivity.getString(R.string.fetch_message) + msgCount + _mainActivity.getString(R.string.of) + findThreadCursor.getCount());
 				}
 			}
 
@@ -140,7 +141,7 @@ public class DataFetchThread implements Runnable
 
 				if(i % 10 == 0)
 				{
-					_mainActivity.getProgressHelper().changeContactDialogMessage("Fetching line " + i);
+					_mainActivity.getProgressHelper().changeContactDialogMessage(_mainActivity.getString(R.string.fetch_line) + i);
 				}
 			}
 
@@ -165,7 +166,7 @@ public class DataFetchThread implements Runnable
 	{
 		if(_dataType == DataType.CONTACT)
 		{
-			_mainActivity.getProgressHelper().showContactProgressDialog("Fetching Conversation", "Finding conversation...");
+			_mainActivity.getProgressHelper().showContactProgressDialog(_mainActivity.getString(R.string.fetch_convo), _mainActivity.getString(R.string.find_convo));
 
 			DataContact contact = fetchContact();
 
@@ -185,7 +186,7 @@ public class DataFetchThread implements Runnable
 		}
 		else if (_dataType == DataType.FILE)
 		{
-			_mainActivity.getProgressHelper().showContactProgressDialog("Fetching File", "Finding conversation...");
+			_mainActivity.getProgressHelper().showContactProgressDialog(_mainActivity.getString(R.string.fetch_file), _mainActivity.getString(R.string.find_file));
 
 			DataFile dataFile = fetchFile();
 			_mainActivity.setDataStore(dataFile);

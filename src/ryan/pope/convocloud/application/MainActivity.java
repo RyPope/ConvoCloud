@@ -231,7 +231,7 @@ public class MainActivity extends Activity
 			
 			_settings.loadSettings();
 			if(_settings.getInProgress())
-				sendNotification("Convo Cloud paused. Click to resume.");
+				sendNotification(getString(R.string.paused_text));
 		}
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onDestroy()");
 	}
@@ -241,9 +241,16 @@ public class MainActivity extends Activity
 	{
 		super.onResume();
 		
+		clearNotifications();
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onResume()");
 	}
 	
+
+	private void clearNotifications()
+	{
+		NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		nMgr.cancelAll();
+	}
 
 	public void sendNotification(String message)
 	{
@@ -323,7 +330,7 @@ public class MainActivity extends Activity
 				@Override
 				public void run() 
 				{
-					_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nName: " + _selectData.getName());
+					_statusTextView.setText(getString(R.string.word_count_text) + _selectData.getWordCount() + "\n" + getString(R.string.name_text) + _selectData.getName());
 				}
 			});
 			

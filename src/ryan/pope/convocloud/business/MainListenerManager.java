@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
@@ -112,7 +111,7 @@ public class MainListenerManager
 			    	_mainActivity.startActivityForResult(Intent.createChooser(intent, "Select a File"), Globals.FILE_SELECT_CODE);
 			    } catch (android.content.ActivityNotFoundException ex) 
 			    {
-			        Toast.makeText(_mainActivity, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+			    	_UIHelper.displayNoFile();
 			    }
 			}
 			
@@ -182,23 +181,23 @@ public class MainListenerManager
 					
 					if(_mainActivity.getDataStore() instanceof DataContact)
 					{
-						shareMessage = "My Convo Cloud with " + ((DataContact)_mainActivity.getDataStore()).getName() + ". Made with <TODO INSERT URL> for Android #ConvoCloud";	
+						shareMessage = _mainActivity.getString(R.string.my_cloud_with) + ((DataContact)_mainActivity.getDataStore()).getName() + ". " + _mainActivity.getString(R.string.made_with);	
 					}
 					else if(_mainActivity.getDataStore() instanceof DataFile)
 					{
-						shareMessage = "My Convo Cloud. Made for Android #ConvoCloud. https://play.google.com/store/apps/details?id=ryan.pope.convocloud";	
+						shareMessage = _mainActivity.getString(R.string.made_with_file);	
 					}
 					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareMessage);
 					shareIntent.setType("*/*");
-					_mainActivity.startActivity(Intent.createChooser(shareIntent, "Share ConvoCloud with..."));
+					_mainActivity.startActivity(Intent.createChooser(shareIntent, _mainActivity.getString(R.string.share_with)));
 				}
 				else
 				{
 					Intent shareIntent = new Intent();
 					shareIntent.setAction(Intent.ACTION_SEND);
-					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Check out ConvoCloud for Android, #ConvoCloud. https://play.google.com/store/apps/details?id=ryan.pope.convocloud");
+					shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, _mainActivity.getString(R.string.made_with_none));
 					shareIntent.setType("text/plain");
-					_mainActivity.startActivity(Intent.createChooser(shareIntent, "Share ConvoCloud with..."));
+					_mainActivity.startActivity(Intent.createChooser(shareIntent, _mainActivity.getString(R.string.share_with)));
 				}
 			}
 

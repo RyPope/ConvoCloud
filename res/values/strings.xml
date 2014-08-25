@@ -10,6 +10,18 @@
     <string name="select_file">Select File&#8230;</string>
     <string name="create_convocloud">Create ConvoCloud</string>
     <string name="status_text">Begin by selecting cloud source</string>
+    <string name="paused_text">Convo Cloud paused. Click to resume.</string>
+    <string name="word_count_text">"Word Count: "</string>
+    <string name="name_text">"Name: "</string>
+    <string name="cloud_complete">Your Cloud has completed!</string>
+    <string name="creating_cloud">Creating Convo Cloud</string>
+    <string name="creating_canvas">Initializing Canvas&#8230;</string>
+    <string name="no_file_app">Please install a File Manager.</string>
+    <string name="share_with">Share ConvoCloud with&#8230;</string>
+    <string name="my_cloud_with">"My Convo Cloud with "</string>
+    <string name="made_with">Made with Convo Cloud for Android #ConvoCloud. https://play.google.com/store/apps/details?id=ryan.pope.convocloud</string>
+    <string name="made_with_file">My Convo Cloud. Made with Android #ConvoCloud. https://play.google.com/store/apps/details?id=ryan.pope.convocloud</string>
+    <string name="made_with_none">Check out ConvoCloud for Android, #ConvoCloud. https://play.google.com/store/apps/details?id=ryan.pope.convocloud</string>
     
     <!-- Settings activity -->
     <string name="save">Save</string>
@@ -23,4 +35,24 @@
 	<string name="set">View/Set</string>
 	<string name="OK">OK</string>
 	<string name="excluded_notice">Please enter excluded words separated by a comma.</string>
+
+	<!-- UI Helper -->
+	<string name="excluded_words">Excluded Words</string>
+	<string name="no_sms">You do not have an SMS enabled device.</string>
+	<string name="no_messages">"No messages found with "</string>
+	<string name="reselect">Please (re)select source.</string>
+	
+	<!-- Progress Helper -->
+	<string name="end_early">Ending ConvoCloud early&#8230;</string>
+	<string name="continue_text">Continue</string>
+	
+	<string name="fetch_message">"Fetching message "</string>
+	<string name="of">" of "</string>
+	<string name="fetch_line">"Fetching line "</string>
+	<string name="fetch_convo">Fetching Conversation</string>
+	<string name="find_convo">Finding Conversation&#8230;</string>
+	<string name="fetch_file">Fetching File</string>
+	<string name="find_file">Finding File&#8230;</string>
+	<string name="placeable_words">" placeable words remaining."</string>
+	<string name="app_note">Words are placed until a sufficient percent of space is filled. Words with low counts may not be placed.\nConvoCloud will continue to run upon minimization until completion or pause.</string>
 </resources>

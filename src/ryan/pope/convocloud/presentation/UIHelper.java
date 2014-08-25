@@ -61,7 +61,7 @@ public class UIHelper
 	{
 		_selectionDialog = new Dialog(_activity);
 		_selectionDialog.setContentView(R.layout.selection_dialog);
-		_selectionDialog.setTitle("Select source...");
+		_selectionDialog.setTitle(_activity.getString(R.string.select_source));
 		_selectionDialog.setCanceledOnTouchOutside(false);
 		_selectionDialog.setCancelable(true);
 
@@ -87,7 +87,7 @@ public class UIHelper
 			@Override
 			public void run()
 			{
-				Toast.makeText(_activity, "Please (re)select source.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(_activity, _activity.getString(R.string.reselect), Toast.LENGTH_SHORT).show();
 			}
 		});
 		
@@ -100,7 +100,7 @@ public class UIHelper
 			@Override
 			public void run()
 			{
-				Toast.makeText(_activity, "No messages found with " + contactName, Toast.LENGTH_SHORT).show();
+				Toast.makeText(_activity, _activity.getString(R.string.no_messages) + contactName, Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -112,7 +112,7 @@ public class UIHelper
 			@Override
 			public void run()
 			{
-				Toast.makeText(_activity, "You do not have an SMS enabled device.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(_activity, _activity.getString(R.string.no_sms), Toast.LENGTH_SHORT).show();
 	
 			}
 		});
@@ -185,7 +185,7 @@ public class UIHelper
 	{
 		_excludedDialog = new Dialog(_activity);
 		_excludedDialog.setContentView(R.layout.exclude_words_dialog);
-		_excludedDialog.setTitle("Excluded Words");
+		_excludedDialog.setTitle(_activity.getString(R.string.excluded_words));
 		_excludedDialog.setCanceledOnTouchOutside(false);
 		_excludedDialog.setCancelable(true);
 	}
@@ -219,6 +219,19 @@ public class UIHelper
 		}
 		
 		return excludedWords;
+	}
+
+	public void displayNoFile()
+	{
+		_activity.runOnUiThread(new Runnable() 
+		{
+			@Override
+			public void run()
+			{
+				Toast.makeText(_activity, _activity.getString(R.string.no_file_app), Toast.LENGTH_SHORT).show();
+			}
+		});
+		
 	}
 
 }
