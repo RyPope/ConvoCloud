@@ -99,10 +99,13 @@ public class MainActivity extends Activity
 		}
 		else
 		{
-			DataBase newBase = new DataBase();
-			newBase.setName(_settings.getImageName());
-			newBase.setFauxWordCount(_settings.getImageCount());
-			setDataStore(newBase);
+			if(_settings.getImageCount() != 0)
+			{
+				DataBase newBase = new DataBase();
+				newBase.setName(_settings.getImageName());
+				newBase.setFauxWordCount(_settings.getImageCount());
+				setDataStore(newBase);
+			}
 		}
 		
 	}
@@ -225,7 +228,10 @@ public class MainActivity extends Activity
 		if(_wordCloudManager.isRunning())
 		{
 			_wordCloudManager.stop();
-			sendNotification("Convo Cloud paused. Click to resume.");
+			
+			_settings.loadSettings();
+			if(_settings.getInProgress())
+				sendNotification("Convo Cloud paused. Click to resume.");
 		}
 		if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "onDestroy()");
 	}
@@ -320,6 +326,13 @@ public class MainActivity extends Activity
 					_statusTextView.setText("Word Count: " + _selectData.getWordCount() + "\nName: " + _selectData.getName());
 				}
 			});
+			
+			if(_selectData.isLoaded())
+			{
+				_settings.setImageName(_selectData.getName());
+				_settings.setImageCount(_selectData.getWordCount());
+				_settings.save();
+			}
 		}
 	}
 	

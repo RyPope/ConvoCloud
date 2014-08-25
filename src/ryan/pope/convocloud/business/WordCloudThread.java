@@ -160,6 +160,5 @@ public class WordCloudThread implements Runnable
 			_settings.setImageCount(_mainActivity.getDataCount());
 			_settings.save();
 		}
-
 	}
 }

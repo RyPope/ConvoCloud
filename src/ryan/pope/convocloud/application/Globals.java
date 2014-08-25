@@ -7,8 +7,7 @@ public final class Globals
 {
 	public static final boolean DEBUG = true;
 	public static final String DEBUG_TAG = "TEXTCLOUD";
-	public static final String CLOUD_NOTE = "\nNot all words may be placed, you may also press continue to end the cloud early.\nIf you minimize the application, you will receive a notification upon completion.";
-	public static final double BUTTON_OPACITY = 0.5;
+	public static final String CLOUD_NOTE = "\nWords are placed until a sufficient percent of space is filled. Words with low counts may not be placed.\nConvoCloud will continue to run upon minimization until completion or pause.";
 	public static final int MIN_MESSAGE_SIZE = 3;
 	public static final int CONTACT_SELECT_CODE = 0;
 	public static final int FILE_SELECT_CODE = 1;

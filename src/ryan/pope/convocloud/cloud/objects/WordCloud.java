@@ -94,10 +94,10 @@ public class WordCloud
 		
 			if(_running)
 			{
-				_progressHelper.changeCloudDialogMessage((wordList.size() - _numPlaced) + " usable words remaining." + Globals.CLOUD_NOTE);
+				_progressHelper.changeCloudDialogMessage((wordList.size() - _numPlaced) + " placeable words remaining." + Globals.CLOUD_NOTE);
 			}
 				
-				if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size() + " Word: " + wordToPlace);
+			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Placing " + _numPlaced + " of " + wordList.size() + " Word: " + wordToPlace);
 			_numPlaced++;
 			_wordsRemaining.remove(wordToPlace);
 			
