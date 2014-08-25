@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.objects.Scheme;
@@ -27,10 +28,8 @@ public class SettingsAccess
 	private static String COUNT = "Count";
 	private static String WORDS = "Words";
 	
-	private static String DATATYPE = "DataType";
-	private static String DATA = "Data";
+	private static String RECENT = "Recent";
 	
-	private Context _context;
 	private Scheme _scheme;
 	private int _background;
 	private ArrayList<String> _excludedWords;
@@ -42,15 +41,13 @@ public class SettingsAccess
 	private int _imageCount;
 	private ArrayList<String> _imageWords;
 	
-	private String _dataType;
-	private String _data;
+	private File _recentImage;
 
 	private SharedPreferences _sharedPrefs;
 
 	public SettingsAccess(Context context)
 	{
-		_context = context;
-		_sharedPrefs = PreferenceManager.getDefaultSharedPreferences(_context);
+		_sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
 		loadSettings();
 	}
@@ -89,8 +86,7 @@ public class SettingsAccess
 			_imageCount = _sharedPrefs.getInt(COUNT, 0);
 			_imageWords = new ArrayList<String>(_sharedPrefs.getStringSet(WORDS, new HashSet<String>()));
 			
-			_dataType = _sharedPrefs.getString(DATATYPE, "");
-			_data = _sharedPrefs.getString(DATA, "");
+			_recentImage = new File(_sharedPrefs.getString(RECENT, ""));
 		}
 		catch(IllegalArgumentException e)
 		{
@@ -105,11 +101,10 @@ public class SettingsAccess
 			_imageCount = 0;
 			_imageWords = new ArrayList<String>();
 			
-			_dataType = "";
-			_data = "";
+			_recentImage = new File("");
 		}
 	}
-	public void saveSettings()
+	public void save()
 	{
 		Editor prefsEditor = _sharedPrefs.edit();
 		
@@ -123,9 +118,8 @@ public class SettingsAccess
 		prefsEditor.putInt(COUNT, _imageCount);
 		prefsEditor.putString(PATH, _imagePath.getAbsolutePath());
 		prefsEditor.putStringSet(WORDS, new HashSet<String>(_imageWords));
-		
-		prefsEditor.putString(DATATYPE, _dataType);
-		prefsEditor.putString(DATA, _data);
+
+		prefsEditor.putString(RECENT, _recentImage.getAbsolutePath());
 		
 		prefsEditor.apply();
 	}
@@ -212,43 +206,16 @@ public class SettingsAccess
 	{
 		_inProgress = false;
 		_imagePath = new File("");
-		_imageName = "";
-		_imageCount = 0;
 		_imageWords = new ArrayList<String>();
 	}
-//	
-//	public void setDataType(String dataType)
-//	{
-//		_dataType = dataType;
-//	}
-//	
-//	public void setData(DataBase data)
-//	{
-//		Gson gson = new Gson();
-//		String json = gson.toJson(data);
-//		_data = json;
-//	}
-//	
-//	public String getDataType()
-//	{
-//		return _dataType;
-//	}
-//	
-//	public DataBase getData()
-//	{
-//		DataBase data = null;
-//		Gson gson = new Gson();
-//		Type type = new TypeToken<DataBase>(){}.getType();
-//		
-//		try
-//		{
-//			data = gson.fromJson(_data, type);
-//		}
-//		catch(Exception e)
-//		{
-//			e.printStackTrace();
-//		}
-//		
-//		return data;
-//	}
+	
+	public void setRecentImage(File filePath)
+	{
+		_recentImage = filePath;
+	}
+	
+	public File getRecentImage()
+	{
+		return _recentImage;
+	}
 }

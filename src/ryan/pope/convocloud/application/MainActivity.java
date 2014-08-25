@@ -77,7 +77,16 @@ public class MainActivity extends Activity
 		
 		TelephonyManager manager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         _smsCapable = manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE ? false : true;
-        
+		
+		reloadProgress();
+		
+        if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _smsCapable ? "SMS" : "No SMS");
+	}
+	
+	private void reloadProgress()
+	{
+		setBackground(_settings.getRecentImage());
+
 		if(_settings.getInProgress())
 		{
 			if(Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Restoring Selected data");
@@ -88,10 +97,16 @@ public class MainActivity extends Activity
 			setDataStore(newBase);
 			_wordCloudManager.createCloud();
 		}
+		else
+		{
+			DataBase newBase = new DataBase();
+			newBase.setName(_settings.getImageName());
+			newBase.setFauxWordCount(_settings.getImageCount());
+			setDataStore(newBase);
+		}
 		
-        if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, _smsCapable ? "SMS" : "No SMS");
 	}
-	
+
 	public DataAccess getDataManager() 
 	{
 		return _dataAccess;
@@ -250,36 +265,45 @@ public class MainActivity extends Activity
 	@SuppressWarnings("deprecation")
 	public void setBackground(File file) 
 	{
-		if(file != null)
+		if(file != null && file.exists() && !file.isDirectory())
 		{
 			_photoFile = file;
-			Resources res = getResources();
-			Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-			final BitmapDrawable bd = new BitmapDrawable(res, bitmap);
-			final View view = findViewById(R.id.main_layout);
+			final View background = findViewById(R.id.main_layout);
 			
-	        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-	        {
-				runOnUiThread(new Runnable() 
-				{
-					@Override
-					public void run() 
+			try
+			{
+				Resources res = getResources();
+				Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+				final BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+				
+		        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+		        {
+					runOnUiThread(new Runnable() 
 					{
-						view.setBackground(bd);
-					}
-				});
-	        }
-	        else
-	        {
-				runOnUiThread(new Runnable() 
-				{
-					@Override
-					public void run() 
+						@Override
+						public void run() 
+						{
+							background.setBackground(bd);
+						}
+					});
+		        }
+		        else
+		        {
+					runOnUiThread(new Runnable() 
 					{
-						view.setBackgroundDrawable(bd);
-					}
-				});
-	        }
+						@Override
+						public void run() 
+						{
+							background.setBackgroundDrawable(bd);
+						}
+					});
+		        }
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				background.setBackgroundResource(R.drawable.main_logo);
+			}
 		}
 	}
 

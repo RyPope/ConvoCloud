@@ -164,7 +164,7 @@ public class SettingsListenerManager
 			@Override
 			public void onClick(View v) 
 			{
-				_settings.saveSettings();
+				_settings.save();
 				_settingsActivity.onBackPressed();
 			}
 		});

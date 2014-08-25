@@ -87,7 +87,7 @@ public class UIHelper
 			@Override
 			public void run()
 			{
-				Toast.makeText(_activity, "Please reload source.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(_activity, "Please (re)select source.", Toast.LENGTH_SHORT).show();
 			}
 		});
 		
