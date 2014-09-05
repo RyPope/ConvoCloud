@@ -20,20 +20,11 @@ https://play.google.com/store/apps/details?id=ryan.pope.convocloud
 
 ## Want to help?
 
-### Issues
+### Issues & Improvements
 
-- Some devices return no messages found when selecting a contact (unconfirmed)
-- Word scaling sometimes leaves a small gap between the actual outermost pixels and the max available rectangle resulting in boxes where words must be extremely small to fit.
+I will try to keep the issues page updated with any issues or enhancements. Please feel free to submit your own.
 
-
-### Improvements
-
-- App is written to be rotatable but is currently disabled from doing so
-- **Cloud generation is painfully slow**
-- Save cloud generation time as well as other statistics for viewing once complete
-- Notify user where the image is saved
-- Allow option to not save cloud until indicated
-- **Look into message parsing for Google hangouts, skype, whatsapp etc.**
+https://github.com/RyPope/ConvoCloud/issues
 
 
 ### License<hr/>
