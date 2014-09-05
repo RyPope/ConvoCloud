@@ -26,6 +26,10 @@ I will try to keep the issues page updated with any issues or enhancements. Plea
 
 https://github.com/RyPope/ConvoCloud/issues
 
+### Contact
+
+You can contact me at <a href='m&#97;i&#108;to&#58;ryan&#37;&#52;0&#114;&#37;79&#97;npop&#101;&#46;%63%6Fm'>ryan&#64;&#114;&#121;anp&#111;p&#101;&#46;&#99;&#111;m</a>
+
 
 ### License<hr/>
 ConvoCloud®
