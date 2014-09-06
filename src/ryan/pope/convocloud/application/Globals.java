@@ -1,7 +1,7 @@
 package ryan.pope.convocloud.application;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 public final class Globals 
 {
@@ -184,7 +184,14 @@ public final class Globals
 		"YOURSELF",
 		"YOURSELVES"
 	};
-	public static final ArrayList<String> STOP_WORDS = new ArrayList<String>(Arrays.asList(wordArray));
+	
+	public static HashSet<String> getStopWords()
+	{
+		HashSet<String> words = new HashSet<String>(Arrays.asList(wordArray));
+		
+		return words;
+	}
+	
 	public static final String[] SCHEME_LIST = { "Default", "Black", "White", "GrayScale", "Bright", "Dark" };
 	public static final String[] ROTATION_LIST = { "Random", "Vertical", "Horizontal" };
 }

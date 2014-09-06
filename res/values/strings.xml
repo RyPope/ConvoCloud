@@ -8,7 +8,7 @@
     <string name="select_source">Select Source</string>
     <string name="select_cancel">Cancel</string>
     <string name="select_file">Select File&#8230;</string>
-    <string name="create_convocloud">Create ConvoCloud</string>
+    <string name="create_convocloud">Create Convo Cloud</string>
     <string name="status_text">Begin by selecting cloud source</string>
     <string name="paused_text">Convo Cloud paused. Click to resume.</string>
     <string name="word_count_text">"Word Count: "</string>
@@ -46,6 +46,7 @@
 	<string name="end_early">Ending ConvoCloud early&#8230;</string>
 	<string name="continue_text">Continue</string>
 	
+	<!-- Threads/Misc -->
 	<string name="fetch_message">"Fetching message "</string>
 	<string name="of">" of "</string>
 	<string name="fetch_line">"Fetching line "</string>

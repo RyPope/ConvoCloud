@@ -69,7 +69,7 @@ public class WordCloud
 			insertWatermark();
 		}
 		
-		int minimumFontPixelSize = _width / 35;
+		double minPixels = _width * .05;
 		int _numPlaced = 1;
 		
 		MaximalRectangle maxRect = new MaximalRectangle();
@@ -80,16 +80,16 @@ public class WordCloud
 			
 			if(!_excludedWords.contains(wordToPlace))
 			{
-				Rect rect = maxRect.maximalRect(_imageBitmap, _backgroundColor);
+				Rect rect = maxRect.maximalRect(_imageBitmap, _backgroundColor, minPixels);
 				/* If the biggest rectangle available is smaller than the minimum size, finish */
-				if(rect.width() < minimumFontPixelSize && rect.height() < minimumFontPixelSize)
+				if(rect.width() <= minPixels && rect.height() <= minPixels)
 					break;
 	
 				Word word = new Word(wordToPlace, _colorPalette.random(), rect, _mainTypeface, _angleGenerator.randomNext(), false);
 				
 				draw(word);
 				
-				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
+				//if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "left: " + rect.left + " top: " + rect.top + " right: " + rect.right + " bottom: " + rect.bottom + " area: " + rect.width() * rect.height()); 
 			}
 		
 			if(_running)

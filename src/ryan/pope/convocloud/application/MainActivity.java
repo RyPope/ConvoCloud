@@ -14,6 +14,7 @@ import ryan.pope.convocloud.objects.DataType;
 import ryan.pope.convocloud.persistance.DataAccess;
 import ryan.pope.convocloud.persistance.SettingsAccess;
 import ryan.pope.convocloud.presentation.ProgressDialogHelper;
+import ryan.pope.convocloud.presentation.UIHelper;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -22,21 +23,15 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+@SuppressWarnings("unused")
 @SuppressLint("NewApi")
 public class MainActivity extends Activity 
 {
@@ -44,12 +39,12 @@ public class MainActivity extends Activity
 	private DataAccess _dataAccess;
 	private ProgressDialogHelper _progressHelper;
 	private TextView _statusTextView;
-	private File _photoFile;
 
 	private DataBase _selectData;
 	private WordCloudManager _wordCloudManager;
 	private SettingsAccess _settings;
 	private boolean _smsCapable;
+	private UIHelper _UIHelper;
 
 	private void doStartUp() 
 	{
@@ -59,6 +54,8 @@ public class MainActivity extends Activity
 
 		setContentView(R.layout.activity_main);
 
+		_UIHelper = new UIHelper(this);
+		
 		/* Create all click listeners */
 		_wordCloudManager = new WordCloudManager(this);
 		_listenerManager = new MainListenerManager();
@@ -70,7 +67,6 @@ public class MainActivity extends Activity
 		_progressHelper = new ProgressDialogHelper(this);
 
 		_selectData = null;
-		_photoFile = null;
 
 		/* Initialize views */
 		_statusTextView = (TextView) findViewById(R.id.status_text);
@@ -85,7 +81,7 @@ public class MainActivity extends Activity
 	
 	private void reloadProgress()
 	{
-		setBackground(_settings.getRecentImage());
+		_UIHelper.setBackground(_settings.getRecentImage());
 
 		if(_settings.getInProgress())
 		{
@@ -120,11 +116,6 @@ public class MainActivity extends Activity
 		return _selectData;
 	}
 	
-	public Uri getPhotoURI() 
-	{
-		return Uri.fromFile(_photoFile);
-	}
-	
 	public ProgressDialogHelper getProgressHelper()
 	{
 		return _progressHelper;
@@ -143,11 +134,6 @@ public class MainActivity extends Activity
 	public boolean hasDataStoreLoaded() 
 	{
 		return (_selectData != null && _selectData.isLoaded());
-	}
-
-	public boolean hasPhotoLoaded() 
-	{
-		return _photoFile != null ? true : false;
 	}
 
 	public boolean hasSMS()
@@ -272,51 +258,6 @@ public class MainActivity extends Activity
 	        builder.setContentIntent(contentIntent);
 	        NotificationManager nManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	        nManager.notify(1, builder.build());
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	public void setBackground(File file) 
-	{
-		if(file != null && file.exists() && !file.isDirectory())
-		{
-			_photoFile = file;
-			final View background = findViewById(R.id.main_layout);
-			
-			try
-			{
-				Resources res = getResources();
-				Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-				final BitmapDrawable bd = new BitmapDrawable(res, bitmap);
-				
-		        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-		        {
-					runOnUiThread(new Runnable() 
-					{
-						@Override
-						public void run() 
-						{
-							background.setBackground(bd);
-						}
-					});
-		        }
-		        else
-		        {
-					runOnUiThread(new Runnable() 
-					{
-						@Override
-						public void run() 
-						{
-							background.setBackgroundDrawable(bd);
-						}
-					});
-		        }
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-				background.setBackgroundResource(R.drawable.main_logo);
-			}
 		}
 	}
 

@@ -9,6 +9,7 @@ import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
 import ryan.pope.convocloud.cloud.objects.WordCloud;
 import ryan.pope.convocloud.persistance.SettingsAccess;
+import ryan.pope.convocloud.presentation.UIHelper;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.graphics.Typeface;
@@ -25,11 +26,13 @@ public class WordCloudThread implements Runnable
 	private WordCloud _wordCloud;
 	private SettingsAccess _settings;
 	private boolean _forceStopped;
+	private UIHelper _UIHelper;
 	
 	public WordCloudThread(MainActivity mainActivity) 
 	{
 		_mainActivity = mainActivity;
 		_forceStopped = false;
+		_UIHelper = new UIHelper(_mainActivity);
 	}
 
 	public void kill()
@@ -129,7 +132,7 @@ public class WordCloudThread implements Runnable
 			File file = new File(path, File.separator + _mainActivity.getDataName() + "-convocloud.png");
 			_wordCloud.writeToFile(file.getAbsolutePath());
 			
-			_mainActivity.setBackground(file);
+			_UIHelper.setBackground(file);
 			
 			_mainActivity.runOnUiThread(new Runnable() 
 			{

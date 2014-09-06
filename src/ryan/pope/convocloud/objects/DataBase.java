@@ -3,10 +3,8 @@ package ryan.pope.convocloud.objects;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
-import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.cloud.objects.WordInfo;
 
 public class DataBase 
@@ -31,22 +29,13 @@ public class DataBase
 	{
 		_name = name;
 	}
-
-	public void addWords(String sms) 
+	
+	public void addWord(String word)
 	{
-		/* Parse each word and count them */
-		String parsedSMS = sms.replaceAll("[^A-Za-z0-9 ]+", "");
-		String[] splitSMS = parsedSMS.toUpperCase(Locale.getDefault()).split("\\s+");
-		for(String s : splitSMS)
-		{
-			if(s.length() >= Globals.MIN_MESSAGE_SIZE && !Globals.STOP_WORDS.contains(s))
-			{
-				if(_allWords.get(s) == null)
-					_allWords.put(s, 1);
-				else
-					_allWords.put(s, _allWords.get(s) + 1);
-			}
-		}
+		if(_allWords.get(word) == null)
+			_allWords.put(word, 1);
+		else
+			_allWords.put(word, _allWords.get(word) + 1);
 	}
 	
 	public int getWordCount()

@@ -3,10 +3,13 @@ package ryan.pope.convocloud.persistance;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashSet;
+import java.util.Locale;
 
 import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.application.Globals;
 import ryan.pope.convocloud.application.MainActivity;
+import ryan.pope.convocloud.objects.DataBase;
 import ryan.pope.convocloud.objects.DataContact;
 import ryan.pope.convocloud.objects.DataFile;
 import ryan.pope.convocloud.objects.DataType;
@@ -24,6 +27,7 @@ public class DataFetchThread implements Runnable
 	private boolean _running;
 	private DataType _dataType;
 	private UIHelper _UIHelper;
+	private HashSet<String> _stopWords;
 
 	public DataFetchThread(MainActivity mainActivity, Intent data, DataType dataType) 
 	{
@@ -32,6 +36,7 @@ public class DataFetchThread implements Runnable
 		_data = data;
 		_dataType = dataType;
 		_running = true;
+		_stopWords = Globals.getStopWords();
 	}
 
 	private DataContact fetchContact() 
@@ -101,7 +106,9 @@ public class DataFetchThread implements Runnable
 				if(sms != null)
 				{
 					if (Globals.DEBUG) Log.i(Globals.DEBUG_TAG, "Message: " + sms);
-					contactToFetch.addWords(sms);
+					
+					parsePhrase(sms, contactToFetch);
+					//contactToFetch.addWords(sms);
 				}
 
 				if(i % 10 == 0)
@@ -123,6 +130,22 @@ public class DataFetchThread implements Runnable
 		}
 	}
 
+	private void parsePhrase(String sms, DataBase contactToFetch)
+	{
+		/* Parse each word and count them */
+		String parsedPhrase = sms.replaceAll("[^A-Za-z0-9 ]+", "");
+		String[] wordsArray = parsedPhrase.toUpperCase(Locale.getDefault()).split("\\s+");
+		for(String word : wordsArray)
+		{
+			if(word.length() >= Globals.MIN_MESSAGE_SIZE && !_stopWords.contains(word))
+			{
+				contactToFetch.addWord(word);
+			}
+			
+		}
+		
+	}
+
 	private DataFile fetchFile() 
 	{
 		DataFile fileToFetch = new DataFile(_mainActivity.getContentResolver(), _data.getData());	
@@ -137,7 +160,7 @@ public class DataFetchThread implements Runnable
 			while ((line = r.readLine()) != null) 
 			{
 				i++;
-				fileToFetch.addWords(line);
+				parsePhrase(line, fileToFetch);
 
 				if(i % 10 == 0)
 				{

@@ -56,7 +56,7 @@ final class Cell
  public class MaximalRectangle
  {
 
-	public Rect maximalRect(Bitmap _imageBitmap, int color)
+	public Rect maximalRect(Bitmap _imageBitmap, int color, double minPixels)
 	{
 		int bestArea = 0;
 		Cell bestLowerLeftCorner = new Cell(0, 0);
@@ -94,7 +94,7 @@ final class Cell
 						rectStartCell = stack.pop();
 						final int rectWidth = col - rectStartCell.col;
 						final int area = currentRectHeight * rectWidth;
-						if(area > bestArea && currentRectHeight > 1 && rectWidth > 1) 
+						if(area > bestArea && currentRectHeight > minPixels && rectWidth > minPixels) 
 						{
 							bestArea = area;
 							bestLowerLeftCorner = new Cell(rectStartCell.col, row);

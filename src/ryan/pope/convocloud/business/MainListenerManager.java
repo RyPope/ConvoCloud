@@ -172,12 +172,12 @@ public class MainListenerManager
 			public void onClick(View v) 
 			{
 				if(Globals.DEBUG)Log.i(Globals.DEBUG_TAG, "Share Button clicked"); 
-				if(_mainActivity.hasPhotoLoaded() && _mainActivity.hasDataStoreLoaded())
+				if(_UIHelper.hasPhotoLoaded() && _mainActivity.hasDataStoreLoaded())
 				{
 					String shareMessage = "";
 					Intent shareIntent = new Intent();
 					shareIntent.setAction(Intent.ACTION_SEND);
-					shareIntent.putExtra(Intent.EXTRA_STREAM, _mainActivity.getPhotoURI());
+					shareIntent.putExtra(Intent.EXTRA_STREAM, _UIHelper.getPhotoURI());
 					
 					if(_mainActivity.getDataStore() instanceof DataContact)
 					{

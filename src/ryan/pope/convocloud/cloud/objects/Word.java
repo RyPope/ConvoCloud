@@ -56,21 +56,23 @@ public class Word
 
         canvas.drawText(word, 0, height, _textPaint);
 
-        if(theta == 0)
+        if(hold)
         {
-	        _pos.setX(rect.left + (rect.width() - width));
-        	if(!hold)
-		        _pos.setY(randInt(rect.top, (rect.top + (rect.height() - height))));
-        	else
-        		_pos.setY(rect.top + (rect.height() - height));
+        	_pos.setX(rect.left + (rect.width() - width));
+        	_pos.setY(rect.top + (rect.height() - height));
         }
         else
         {
-        	_imageBitmap = ImageRotation.rotate(_imageBitmap, theta);
-            _pos.setY(rect.top);
-            _pos.setX(rect.left);
+        	if(theta != 0)
+        	{
+        		_imageBitmap = ImageRotation.rotate(_imageBitmap, theta);
+        		width = _imageBitmap.getWidth();
+        		height = _imageBitmap.getHeight();
+        	}
+        	
+    		_pos.setY(randInt(rect.top, (rect.top + (rect.height() - height))));
+    		_pos.setX(randInt(rect.left, (rect.left + (rect.width() - width))));
         }
-
     }
 	
 	private void adjustTextSize(String word, Paint textPaint, Rect rect, double theta) 

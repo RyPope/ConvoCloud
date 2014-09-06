@@ -1,11 +1,19 @@
 package ryan.pope.convocloud.presentation;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -16,6 +24,7 @@ import ryan.pope.convocloud.R;
 import ryan.pope.convocloud.objects.RotationType;
 import ryan.pope.convocloud.objects.Scheme;
 
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class UIHelper 
 {
 	private Activity _activity;
@@ -29,11 +38,69 @@ public class UIHelper
 	private Spinner _colourSchemeSpinner;
 	private Spinner _rotationSpinner;
 	
+	private File _photoFile;
+	
 	public UIHelper(Activity activity)
 	{
 		_activity = activity;
+		_photoFile = null;
 		initViews();
 		initDialogs();
+	}
+	
+	public Uri getPhotoURI() 
+	{
+		return Uri.fromFile(_photoFile);
+	}
+	
+	public boolean hasPhotoLoaded() 
+	{
+		return _photoFile != null ? true : false;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void setBackground(File file) 
+	{
+		if(file != null && file.exists() && !file.isDirectory())
+		{
+			_photoFile = file;
+			final View background = _activity.findViewById(R.id.main_layout);
+			
+			try
+			{
+				Resources res = _activity.getResources();
+				Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+				final BitmapDrawable bd = new BitmapDrawable(res, bitmap);
+				
+		        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+		        {
+		        	_activity.runOnUiThread(new Runnable() 
+					{
+						@Override
+						public void run() 
+						{
+							background.setBackground(bd);
+						}
+					});
+		        }
+		        else
+		        {
+		        	_activity.runOnUiThread(new Runnable() 
+					{
+						@Override
+						public void run() 
+						{
+							background.setBackgroundDrawable(bd);
+						}
+					});
+		        }
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				background.setBackgroundResource(R.drawable.main_logo);
+			}
+		}
 	}
 
 	public void dismissSelectionDialog()
