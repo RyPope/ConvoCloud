@@ -42,13 +42,13 @@ final class Cache
 final class Cell 
 {
 
-	final int col;
-	final int row;
+	final int _col;
+	final int _row;
 
 	Cell(final int col, final int row) 
 	{
-		this.col = col;
-		this.row = row;
+		_col = col;
+		_row = row;
 	}
 
 }
@@ -77,7 +77,7 @@ final class Cell
 			}
 
 			rectangleHeightCache.aggregate(width);
-			for(int col = 0, currentRectHeight = 0; col <= numColumns; col++) 
+			for(int col = 0, currentRectHeight = 0; col <= numColumns; col += 2) 
 			{
 				final int aggregateRectHeight = rectangleHeightCache.get(col);
 
@@ -92,15 +92,15 @@ final class Cell
 					Cell rectStartCell;
 					do {
 						rectStartCell = stack.pop();
-						final int rectWidth = col - rectStartCell.col;
+						final int rectWidth = col - rectStartCell._col;
 						final int area = currentRectHeight * rectWidth;
 						if(area > bestArea && currentRectHeight > minPixels && rectWidth > minPixels) 
 						{
 							bestArea = area;
-							bestLowerLeftCorner = new Cell(rectStartCell.col, row);
+							bestLowerLeftCorner = new Cell(rectStartCell._col, row);
 							bestUpperRightCorner = new Cell(col - 1, row - currentRectHeight + 1);
 						}
-						currentRectHeight = rectStartCell.row;
+						currentRectHeight = rectStartCell._row;
 					} while(aggregateRectHeight < currentRectHeight);
 
 					currentRectHeight = aggregateRectHeight;
@@ -112,6 +112,6 @@ final class Cell
 			}
 		}
 		
-		return new Rect(bestLowerLeftCorner.col, bestUpperRightCorner.row, bestUpperRightCorner.col, bestLowerLeftCorner.row);
+		return new Rect(bestLowerLeftCorner._col, bestUpperRightCorner._row, bestUpperRightCorner._col, bestLowerLeftCorner._row);
 	}
  }

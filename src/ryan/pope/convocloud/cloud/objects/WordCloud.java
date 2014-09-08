@@ -69,7 +69,7 @@ public class WordCloud
 			insertWatermark();
 		}
 		
-		double minPixels = _width * .05;
+		double minPixels = _width * .01;
 		int _numPlaced = 1;
 		
 		MaximalRectangle maxRect = new MaximalRectangle();
